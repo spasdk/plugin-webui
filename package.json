@@ -13,17 +13,14 @@
         "jsdoc": "jsdoc --destination doc *.js readme.md"
     },
     "dependencies": {
-        "spa-app": "spasdk/app",
-        "spa-keys": "spasdk/keys",
-
-        "spa-component-page": "spasdk/component-page",
-
         "extend": "3.*.*",
-        "bufferutil": "1.*.*",
-        "cjs-wamp": "1.*.*",
-        "debug": "2.*.*",
-        "utf-8-validate": "1.*.*",
-        "ws": "1.*.*"
+        "cjs-wamp": "1.*.*"
+    },
+    "devDependencies": {
+        "cjs-parse-query": "1.*.*",
+        "spa-app": "spasdk/app",
+        "spa-component-page": "spasdk/component-page",
+        "spa-keys": "spasdk/keys"
     },
     "license": "GPL-3.0"
 }
