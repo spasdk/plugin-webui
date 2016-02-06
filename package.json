@@ -1,0 +1,29 @@
+{
+    "name": "spa-plugin-webui",
+    "version": "1.0.0",
+    "description": "Web Application for plugins and tasks management.",
+    "author": {
+        "name": "Stanislav Kalashnik",
+        "email": "darkpark.main@gmail.com"
+    },
+    "repository": "spasdk/plugin-webui",
+    "scripts": {
+        "start": "spasdk",
+        "lint": "eslint *.js",
+        "jsdoc": "jsdoc --destination doc *.js readme.md"
+    },
+    "dependencies": {
+        "spa-app": "spasdk/app",
+        "spa-keys": "spasdk/keys",
+
+        "spa-component-page": "spasdk/component-page",
+
+        "extend": "3.*.*",
+        "bufferutil": "1.*.*",
+        "cjs-wamp": "1.*.*",
+        "debug": "2.*.*",
+        "utf-8-validate": "1.*.*",
+        "ws": "1.*.*"
+    },
+    "license": "GPL-3.0"
+}
