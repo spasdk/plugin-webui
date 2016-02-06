@@ -8,7 +8,8 @@
     },
     "repository": "spasdk/plugin-webui",
     "scripts": {
-        "start": "spasdk",
+        "start": "spasdk wamp:serve:default",
+        "debug": "DEBUG=* spasdk wamp:serve:default",
         "lint": "eslint *.js",
         "jsdoc": "jsdoc --destination doc *.js readme.md"
     },
