@@ -8,13 +8,14 @@
     },
     "repository": "spasdk/plugin-webui",
     "scripts": {
-        "start": "spasdk wamp:serve:default",
-        "debug": "DEBUG=* spasdk wamp:serve:default",
+        "start": "spasdk webpack:watch:develop static:serve:default wamp:serve:default",
+        "debug": "DEBUG=* spasdk webpack:watch:develop static:serve:default wamp:serve:default",
         "lint": "eslint *.js",
         "jsdoc": "jsdoc --destination doc *.js readme.md"
     },
     "dependencies": {
         "extend": "3.*.*",
+        "cjs-async": "1.*.*",
         "cjs-wamp": "1.*.*"
     },
     "devDependencies": {
