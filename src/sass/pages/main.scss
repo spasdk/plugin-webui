@@ -1,5 +1,17 @@
 #pageMain {
+    font-family: Helvetica, Arial, sans-serif;
+    font-size: 14px;
+
+    //padding: 5px;
+
+    div {
+        box-sizing: border-box;
+    }
+
     .button {
+        &.running {
+            background-color: #caffc2;
+        }
         &:hover {
             background-color: #ddd;
             //color: white;
@@ -14,7 +26,20 @@
         padding: 0 10px;
         cursor: pointer;
         display: inline-block;
-        font-family: Helvetica, Arial, sans-serif;
-        font-size: 14px;
+    }
+
+    .group {
+        //padding: 0 5px 5px 5px;
+        border: 1px solid #ddd;
+        margin: 5px 5px 15px 5px;
+
+        > .title {
+            height: 35px;
+            line-height: 35px;
+            background-color: #faffd7;
+            padding: 0 10px;
+            border-bottom: 1px solid #ddd;
+            font-weight: bold;
+        }
     }
 }
