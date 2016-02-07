@@ -63,19 +63,34 @@ a {
             right: 50px;
             font-size: 50%; }
 
-#pageMain .button {
-    height: 35px;
-    line-height: 35px;
-    width: 175px;
-    border: 1px solid #ddd;
-    background-color: #eee;
-    margin: 5px;
-    padding: 0 10px;
-    cursor: pointer;
-    display: inline-block;
+#pageMain {
     font-family: Helvetica, Arial, sans-serif;
     font-size: 14px; }
-    #pageMain .button:hover {
-        background-color: #ddd; }
+    #pageMain div {
+        box-sizing: border-box; }
+    #pageMain .button {
+        height: 35px;
+        line-height: 35px;
+        width: 175px;
+        border: 1px solid #ddd;
+        background-color: #eee;
+        margin: 5px;
+        padding: 0 10px;
+        cursor: pointer;
+        display: inline-block; }
+        #pageMain .button.running {
+            background-color: #caffc2; }
+        #pageMain .button:hover {
+            background-color: #ddd; }
+    #pageMain .group {
+        border: 1px solid #ddd;
+        margin: 5px 5px 15px 5px; }
+        #pageMain .group > .title {
+            height: 35px;
+            line-height: 35px;
+            background-color: #faffd7;
+            padding: 0 10px;
+            border-bottom: 1px solid #ddd;
+            font-weight: bold; }
 
 /*# sourceMappingURL=develop.map */
