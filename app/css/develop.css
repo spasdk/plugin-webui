@@ -69,28 +69,36 @@ a {
     #pageMain div {
         box-sizing: border-box; }
     #pageMain .button {
-        height: 35px;
-        line-height: 35px;
-        width: 175px;
+        height: 32px;
+        line-height: 32px;
         border: 1px solid #ddd;
         background-color: #eee;
         margin: 5px;
         padding: 0 10px;
         cursor: pointer;
         display: inline-block; }
+        #pageMain .button.main {
+            font-weight: bold; }
+        #pageMain .button.default {
+            font-style: italic; }
+        #pageMain .button.develop {
+            text-decoration: underline; }
         #pageMain .button.running {
             background-color: #caffc2; }
         #pageMain .button:hover {
             background-color: #ddd; }
+            #pageMain .button:hover.running {
+                background-color: #84ff92; }
     #pageMain .group {
         border: 1px solid #ddd;
         margin: 5px 5px 15px 5px; }
         #pageMain .group > .title {
-            height: 35px;
-            line-height: 35px;
+            height: 40px;
+            line-height: 40px;
             background-color: #faffd7;
             padding: 0 10px;
             border-bottom: 1px solid #ddd;
-            font-weight: bold; }
+            font-size: 20px;
+            text-align: center; }
 
 /*# sourceMappingURL=develop.map */
