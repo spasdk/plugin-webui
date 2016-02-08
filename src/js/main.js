@@ -22,9 +22,6 @@ parallel([
     function ( done ) {
         require('./wamp')();
         app.once('wamp:open', done);
-    },
-    function () {
-        app.once('done', function () {});
     }
 ], function () {
     router.navigate('pageMain');

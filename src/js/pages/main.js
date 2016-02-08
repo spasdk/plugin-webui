@@ -44,11 +44,17 @@ page.addListener('show', function load () {
             divGroup.appendChild(divTasks);
 
             groups[group].sort().forEach(function ( id ) {
-                var divTask = document.createElement('div');
+                var divTask = document.createElement('div'),
+                    parts   = id.split(':');
 
                 divTask.id = id;
-                divTask.innerText = id.split(':').slice(1).join(':');
-                divTask.className = 'button' + (data[id].running ? ' running' : '');
+                divTask.innerText = parts.slice(1).join(':');
+                divTask.className =
+                    'button' +
+                    (data[id].running ? ' running' : '') +
+                    (parts.length === 2 ? ' main' : '') +
+                    (parts[2] === 'develop' ? ' develop' : '') +
+                    (parts[2] === 'default' ? ' default' : '');
                 divTask.addEventListener('click', function () {
                     app.wamp.call('runTask', {id: divTask.id}, function ( error, data ) {
                         //console.log('run task', div.innerText, data);
@@ -59,20 +65,35 @@ page.addListener('show', function load () {
             });
         });
 
-        //Object.keys(data).forEach(function ( id ) {
-        //    var div = document.createElement('div');
-		//
-        //    div.id = id;
-        //    div.innerText = id;
-        //    div.className = 'button' + (data[id].running ? ' running' : '');
-        //    div.addEventListener('click', function () {
-        //        app.wamp.call('runTask', {id: div.innerText}, function ( error, data ) {
-        //            //console.log('run task', div.innerText, data);
-        //        });
-        //    });
-		//
-        //    page.$body.appendChild(div);
-        //});
+        ['general'].forEach(function ( group ) {
+            var divGroup = document.createElement('div'),
+                divTitle = document.createElement('div'),
+                divTasks = document.createElement('div');
+
+            divTitle.innerText = group;
+            divGroup.className = 'group';
+            divTitle.className = 'title';
+            divTasks.className = 'tasks';
+
+            page.$body.appendChild(divGroup);
+            divGroup.appendChild(divTitle);
+            divGroup.appendChild(divTasks);
+
+            general.sort().forEach(function ( id ) {
+                var divTask = document.createElement('div');
+
+                divTask.id = id;
+                divTask.innerText = id;
+                divTask.className = 'button' + (data[id].running ? ' running' : '');
+                divTask.addEventListener('click', function () {
+                    app.wamp.call('runTask', {id: divTask.id}, function ( error, data ) {
+                        //console.log('run task', div.innerText, data);
+                    });
+                });
+
+                divTasks.appendChild(divTask);
+            });
+        });
     });
 });
 

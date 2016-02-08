@@ -9,17 +9,29 @@
     }
 
     .button {
+        &.main {
+            font-weight: bold;
+        }
+        &.default {
+            font-style: italic;
+        }
+        &.develop {
+            text-decoration: underline;
+        }
         &.running {
             background-color: #caffc2;
         }
         &:hover {
             background-color: #ddd;
-            //color: white;
+
+            &.running {
+                background-color: #84ff92;
+            }
         }
 
-        height: 35px;
-        line-height: 35px;
-        width: 175px;
+        height: 32px;
+        line-height: 32px;
+        //width: 175px;
         border: 1px solid #ddd;
         background-color: #eee;
         margin: 5px;
@@ -34,12 +46,13 @@
         margin: 5px 5px 15px 5px;
 
         > .title {
-            height: 35px;
-            line-height: 35px;
+            height: 40px;
+            line-height: 40px;
             background-color: #faffd7;
             padding: 0 10px;
             border-bottom: 1px solid #ddd;
-            font-weight: bold;
+            font-size: 20px;
+            text-align: center;
         }
     }
 }

@@ -19,7 +19,7 @@ profiles.default = extend(true, {}, config, {
     source: path.join(__dirname, 'app'),
 
     // main entry point to load web page
-    target: 'index.html',
+    target: 'index.html?port=9000',
 
     // listening port (0 - random)
     port: 8000,
