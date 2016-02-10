@@ -8,8 +8,8 @@
     },
     "repository": "spasdk/plugin-webui",
     "scripts": {
-        "start": "spasdk jade:watch:develop sass:watch:develop webpack:watch:develop",
-        "debug": "DEBUG=* spasdk jade:watch:develop sass:watch:develop webpack:watch:develop",
+        "start": "spasdk jade:build:develop jade:watch:develop sass:build:develop sass:watch:develop webpack:watch:develop",
+        "debug": "DEBUG=* spasdk jade:build:develop jade:watch:develop sass:build:develop sass:watch:develop webpack:watch:develop",
         "lint": "eslint *.js",
         "jsdoc": "jsdoc --destination doc *.js readme.md"
     },
