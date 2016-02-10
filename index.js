@@ -26,7 +26,7 @@ var http   = require('http'),
 // create tasks for profiles
 plugin.profiles.forEach(function ( profile ) {
     var srcDir = path.resolve(profile.data.source),
-        server;
+        server, serverDone;
 
     // correct target
     //plugin.prepare(profile.name);
@@ -87,6 +87,7 @@ plugin.profiles.forEach(function ( profile ) {
         });
 
         server.listen(profile.data.port);
+        serverDone = done;
     });
 
     // open page in browser
@@ -102,6 +103,7 @@ plugin.profiles.forEach(function ( profile ) {
             });
 
             server.close();
+            serverDone();
         }
     });
 });
