@@ -17,6 +17,7 @@ function wamp () {
     // ready
     app.wamp.socket.onopen = function () {
         console.log('wamp is ready!');
+        document.body.style.opacity = 1;
 
         // info
 
@@ -61,6 +62,7 @@ function wamp () {
 
     // try to reconnect in 5 seconds on disconnect
     app.wamp.socket.onclose = function () {
+        document.body.style.opacity = 0.2;
         setTimeout(wamp, 5000);
     };
 }
