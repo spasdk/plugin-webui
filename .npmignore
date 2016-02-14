@@ -1,2 +1,4 @@
 .idea
 .sdk
+src/js/.cache
+src/sass/.cache
