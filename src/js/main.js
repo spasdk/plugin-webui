@@ -12,6 +12,7 @@ var app      = require('spa-app'),
 parallel([
     function () {
         app.once('load', function () {
+            console.log('app.once load');
             // set pages
             router.init([
                 require('./pages/init'),
@@ -23,6 +24,7 @@ parallel([
         require('./wamp')();
         app.once('wamp:open', done);
     }
-], function () {
+], function ( error ) {
+    console.log('error', error);
     router.navigate('pageMain');
 });
