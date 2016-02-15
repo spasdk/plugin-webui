@@ -21,8 +21,7 @@
     "devDependencies": {
         "cjs-parse-query": "1.*.*",
         "spa-app": "spasdk/app",
-        "spa-component-page": "spasdk/component-page",
-        "spa-keys": "spasdk/keys"
+        "spa-component-page": "spasdk/component-page"
     },
     "license": "GPL-3.0"
 }
