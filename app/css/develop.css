@@ -1,9 +1,9 @@
-/*************************/
-/* current SPA variables */
-/*************************/
-/**********************/
-/* general SPA styles */
-/**********************/
+/* spa-app: variables */
+/* spa-component-page: variables */
+/* spa-component: variables */
+/* spa-develop: variables */
+/* application variables */
+/* spa-app: production */
 html, body {
     width: 100%;
     height: 100%;
@@ -27,14 +27,12 @@ table {
 a {
     text-decoration: none; }
 
-/* spa-component */
-.component.hidden {
-    display: none !important; }
+/* spa-app: development */
+body.develop {
+    outline: 1px dashed #005000;
+    outline-offset: 1px; }
 
-.component div {
-    box-sizing: border-box; }
-
-/* spa-component-page */
+/* spa-component-page: production */
 .component.page {
     width: 100%;
     height: 100%;
@@ -46,9 +44,22 @@ a {
     .component.page.active {
         visibility: inherit; }
 
-/**********************/
-/* current SPA styles */
-/**********************/
+/* spa-component: production */
+.component.hidden {
+    display: none !important; }
+
+.component div {
+    box-sizing: border-box; }
+
+/* spa-component: development */
+body.develop .component {
+    outline: 1px dashed #005000;
+    outline-offset: -1px; }
+    body.develop .component.focus {
+        outline: 1px dashed red; }
+
+/* spa-develop: general */
+/* application styles */
 #pageInit {
     display: table; }
     #pageInit > .cell {
