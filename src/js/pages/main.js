@@ -4,10 +4,19 @@
 
 'use strict';
 
-var app  = require('spa-app'),
-    Page = require('spa-component-page'),
-    page = new Page({$node: window.pageMain});
+var app    = require('spa-app'),
+    Page   = require('spa-component-page'),
+    Button = require('spa-component-button'),
+    page   = new Page({$node: window.pageMain});
 
+
+page.addListener('load', function load () {
+    var buttonSystem = new Button({
+        value: 'system'
+    });
+
+    page.$body.appendChild(buttonSystem.$node);
+});
 
 page.addListener('show', function load () {
     app.wamp.call('getTasks', {}, function ( error, data ) {
