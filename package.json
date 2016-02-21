@@ -10,16 +10,21 @@
     "scripts": {
         "start": "spasdk default",
         "build": "spasdk jade:build webpack:build sass:cache sass:build",
+        "watch": "spasdk jade:watch:develop webpack:watch:develop sass:watch:cache:develop sass:watch:scss:develop",
         "lint": "eslint *.js"
+    },
+    "config": {
+        "static.default.port" : "8080"
     },
     "dependencies": {
         "extend": "3.*.*",
         "cjs-async": "cjssdk/async",
-        "cjs-wamp": "1.*.*"
+        "cjs-wamp": "cjssdk/wamp"
     },
     "devDependencies": {
         "cjs-parse-query": "1.*.*",
         "spa-app": "spasdk/app",
+        "spa-component-button": "spasdk/component-button",
         "spa-component-page": "spasdk/component-page"
     },
     "license": "GPL-3.0"
