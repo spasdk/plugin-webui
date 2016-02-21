@@ -25,6 +25,10 @@ function wamp () {
             console.log('info', data);
         });
 
+        app.wamp.call('getMemoryUsage', {}, function ( error, data ) {
+            console.log('memory usage', data);
+        });
+
         app.wamp.call('getClients', {}, function ( error, data ) {
             console.log('clients', data);
         });
