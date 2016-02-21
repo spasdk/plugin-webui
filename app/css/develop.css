@@ -1,4 +1,5 @@
 /* spa-app: variables */
+/* spa-component-button: variables */
 /* spa-component-page: variables */
 /* spa-component: variables */
 /* spa-develop: variables */
@@ -31,6 +32,31 @@ a {
 body.develop {
     outline: 1px dashed #005000;
     outline-offset: 1px; }
+
+/* spa-component-button: production */
+.component.button {
+    background-color: #dde9ff;
+    display: inline-table;
+    height: 32px;
+    cursor: pointer; }
+    .component.button:hover {
+        background-color: #bbd3ff; }
+    .component.button.focus {
+        background-color: #bbd3ff; }
+    .component.button.click {
+        background-color: #a8c9ff; }
+    .component.button .icon {
+        height: 32px;
+        width: 32px;
+        display: table-cell;
+        background: no-repeat center center; }
+    .component.button .text {
+        display: table-cell;
+        padding: 2px 10px;
+        vertical-align: middle;
+        text-align: center; }
+        .component.button .text:empty {
+            padding: 0; }
 
 /* spa-component-page: production */
 .component.page {
@@ -79,27 +105,6 @@ body.develop .component {
     font-size: 14px; }
     #pageMain div {
         box-sizing: border-box; }
-    #pageMain .button {
-        height: 32px;
-        line-height: 32px;
-        border: 1px solid #ddd;
-        background-color: #eee;
-        margin: 5px;
-        padding: 0 10px;
-        cursor: pointer;
-        display: inline-block; }
-        #pageMain .button.main {
-            font-weight: bold; }
-        #pageMain .button.default {
-            font-style: italic; }
-        #pageMain .button.develop {
-            text-decoration: underline; }
-        #pageMain .button.running {
-            background-color: #caffc2; }
-        #pageMain .button:hover {
-            background-color: #ddd; }
-            #pageMain .button:hover.running {
-                background-color: #84ff92; }
     #pageMain .group {
         border: 1px solid #ddd;
         margin: 5px 5px 15px 5px; }
@@ -111,5 +116,26 @@ body.develop .component {
             border-bottom: 1px solid #ddd;
             font-size: 20px;
             text-align: center; }
+        #pageMain .group .button {
+            height: 32px;
+            line-height: 32px;
+            border: 1px solid #ddd;
+            background-color: #eee;
+            margin: 5px;
+            padding: 0 10px;
+            cursor: pointer;
+            display: inline-block; }
+            #pageMain .group .button.main {
+                font-weight: bold; }
+            #pageMain .group .button.default {
+                font-style: italic; }
+            #pageMain .group .button.develop {
+                text-decoration: underline; }
+            #pageMain .group .button.running {
+                background-color: #caffc2; }
+            #pageMain .group .button:hover {
+                background-color: #ddd; }
+                #pageMain .group .button:hover.running {
+                    background-color: #84ff92; }
 
 /*# sourceMappingURL=develop.map */
