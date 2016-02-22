@@ -138,4 +138,11 @@ body.develop .component {
                 #pageMain .group .button:hover.running {
                     background-color: #84ff92; }
 
+#pageMainHeader {
+    padding: 5px; }
+
+#pageMainHeaderLink {
+    float: right;
+    line-height: 32px; }
+
 /*# sourceMappingURL=develop.map */
