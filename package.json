@@ -22,7 +22,6 @@
         "cjs-wamp": "cjssdk/wamp"
     },
     "devDependencies": {
-        "cjs-parse-query": "1.*.*",
         "spa-app": "spasdk/app",
         "spa-component-button": "spasdk/component-button",
         "spa-component-page": "spasdk/component-page"
