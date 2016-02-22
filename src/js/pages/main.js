@@ -15,7 +15,28 @@ page.addListener('load', function load () {
         value: 'system'
     });
 
-    page.$body.appendChild(buttonSystem.$node);
+    window.pageMainHeader.appendChild(buttonSystem.$node);
+    window.pageMainHeaderLink.href = window.pageMainHeaderLink.innerText = 'http://192.168.1.57:8080/app/develop.html?wampPort=9000';
+
+    app.once('wamp:open', function () {
+        app.wamp.call('getTargets', {}, function ( error, data ) {
+            Object.keys(data).forEach(function ( id ) {
+                var target = data[id];
+
+                console.log('target', target);
+                window.pageMainHeader.appendChild(new Button({
+                    value: 'target #' + id + ' (' + target.host + ')'
+                }).$node);
+            });
+        });
+    });
+
+    app.wamp.addListener('eventTargetOnline', function ( event ) {
+        console.log('new target', event);
+        window.pageMainHeader.appendChild(new Button({
+            value: 'target #' + event.id + ' (' + event.host + ')'
+        }).$node);
+    });
 });
 
 page.addListener('show', function load () {

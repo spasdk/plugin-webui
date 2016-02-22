@@ -33,9 +33,9 @@ function wamp () {
             console.log('clients', data);
         });
 
-        app.wamp.call('getTargets', {}, function ( error, data ) {
+        /*app.wamp.call('getTargets', {}, function ( error, data ) {
             console.log('targets', data);
-        });
+        });*/
 
         app.wamp.call('getPlugins', {}, function ( error, data ) {
             console.log('plugins', data);
@@ -43,9 +43,9 @@ function wamp () {
 
         // notifications
 
-        app.wamp.addListener('eventTargetOnline', function ( event ) {
-            console.log('new target', event);
-        });
+        //app.wamp.addListener('eventTargetOnline', function ( event ) {
+        //    console.log('new target', event);
+        //});
 
         app.wamp.addListener('eventTaskStart', function ( event ) {
             console.log('task start', event);
