@@ -58,19 +58,23 @@
 	    router   = __webpack_require__(/*! spa-router */ 3);
 	
 	
+	// global application configuration
+	app.config = __webpack_require__(/*! ./config */ 15);
+	
+	
 	parallel([
 	    function () {
 	        app.once('load', function () {
 	            console.log('app.once load');
 	            // set pages
 	            router.init([
-	                __webpack_require__(/*! ./pages/init */ 15),
-	                __webpack_require__(/*! ./pages/main */ 18)
+	                __webpack_require__(/*! ./pages/init */ 16),
+	                __webpack_require__(/*! ./pages/main */ 19)
 	            ]);
 	        });
 	    },
 	    function ( done ) {
-	        __webpack_require__(/*! ./wamp */ 20)();
+	        __webpack_require__(/*! ./wamp */ 21)();
 	        app.once('wamp:open', done);
 	    }
 	], function ( error ) {
@@ -86,7 +90,7 @@
   \****************************/
 /***/ function(module, exports, __webpack_require__) {
 
-	/**
+	/* WEBPACK VAR INJECTION */(function(__filename) {/**
 	 * @author Stanislav Kalashnik <darkpark.main@gmail.com>
 	 * @license GNU GENERAL PUBLIC LICENSE Version 3
 	 */
@@ -232,7 +236,7 @@
 	        var page = router.current,
 	            activeComponent;
 	
-	        if ( false ) {
+	        if ( true ) {
 	            if ( !page ) { throw new Error(__filename + ': app should have at least one page'); }
 	        }
 	
@@ -306,7 +310,7 @@
 	    keypress: function ( event ) {
 	        var page = router.current;
 	
-	        if ( false ) {
+	        if ( true ) {
 	            if ( page === null || page === undefined ) { throw new Error(__filename + ': app should have at least one page'); }
 	        }
 	
@@ -358,7 +362,7 @@
 	
 	        //document.dispatchEvent(kbEvent);
 	
-	        if ( true ) {
+	        if ( false ) {
 	            // disable right click in release mode
 	            event.preventDefault();
 	        }
@@ -374,7 +378,7 @@
 	    mousewheel: function ( event ) {
 	        var page = router.current;
 	
-	        if ( false ) {
+	        if ( true ) {
 	            if ( page === null || page === undefined ) { throw new Error(__filename + ': app should have at least one page'); }
 	        }
 	
@@ -415,7 +419,8 @@
 	
 	// public
 	module.exports = app;
-
+	
+	/* WEBPACK VAR INJECTION */}.call(exports, "node_modules/spa-app/index.js"))
 
 /***/ },
 /* 2 */
@@ -424,7 +429,7 @@
   \********************************/
 /***/ function(module, exports, __webpack_require__) {
 
-	/**
+	/* WEBPACK VAR INJECTION */(function(__filename) {/**
 	 * @author Stanislav Kalashnik <darkpark.main@gmail.com>
 	 * @license GNU GENERAL PUBLIC LICENSE Version 3
 	 */
@@ -444,7 +449,7 @@
 	 * var emitter = new Emitter();
 	 */
 	function Emitter () {
-	    if ( false ) {
+	    if ( true ) {
 	        if ( typeof this !== 'object' ) { throw new Error(__filename + ': must be constructed via new'); }
 	    }
 	
@@ -483,7 +488,7 @@
 	     * emitter.addListener('click', function ( data ) { ... });
 	     */
 	    addListener: function ( name, callback ) {
-	        if ( false ) {
+	        if ( true ) {
 	            if ( arguments.length !== 2 ) { throw new Error(__filename + ': wrong arguments number'); }
 	            if ( typeof name !== 'string' || name.length === 0 ) { throw new Error(__filename + ': wrong or empty name'); }
 	            if ( typeof callback !== 'function' ) { throw new Error(__filename + ': wrong callback type'); }
@@ -510,7 +515,7 @@
 	        // current execution context
 	        var self = this;
 	
-	        if ( false ) {
+	        if ( true ) {
 	            if ( arguments.length !== 2 ) { throw new Error(__filename + ': wrong arguments number'); }
 	            if ( typeof name !== 'string' || name.length === 0 ) { throw new Error(__filename + ': wrong or empty name'); }
 	            if ( typeof callback !== 'function' ) { throw new Error(__filename + ': wrong callback type'); }
@@ -540,7 +545,7 @@
 	    addListeners: function ( callbacks ) {
 	        var name;
 	
-	        if ( false ) {
+	        if ( true ) {
 	            if ( arguments.length !== 1 ) { throw new Error(__filename + ': wrong arguments number'); }
 	            if ( typeof callbacks !== 'object' ) { throw new Error(__filename + ': wrong callbacks type'); }
 	            if ( Object.keys(callbacks).length === 0 ) { throw new Error(__filename + ': no callbacks given'); }
@@ -564,7 +569,7 @@
 	     * emitter.removeListener('click', func1);
 	     */
 	    removeListener: function ( name, callback ) {
-	        if ( false ) {
+	        if ( true ) {
 	            if ( arguments.length !== 2 ) { throw new Error(__filename + ': wrong arguments number'); }
 	            if ( typeof name !== 'string' || name.length === 0 ) { throw new Error(__filename + ': wrong or empty name'); }
 	            if ( typeof callback !== 'function' ) { throw new Error(__filename + ': wrong callback type'); }
@@ -593,9 +598,11 @@
 	     * @example
 	     * emitter.removeAllListeners('click');
 	     * emitter.removeAllListeners();
+	     *
+	     * @deprecated
 	     */
 	    removeAllListeners: function ( name ) {
-	        if ( false ) {
+	        if ( true ) {
 	            if ( arguments.length !== 0 && (typeof name !== 'string' || name.length === 0) ) {
 	                throw new Error(__filename + ': wrong or empty name');
 	            }
@@ -606,7 +613,7 @@
 	            // no arguments so remove everything
 	            this.events = {};
 	        } else if ( name ) {
-	            if ( false ) {
+	            if ( true ) {
 	                if ( this.events[name] ) { throw new Error(__filename + ': event is not removed'); }
 	            }
 	
@@ -636,19 +643,19 @@
 	        var event = this.events[name],
 	            index;
 	
-	        if ( false ) {
+	        if ( true ) {
 	            if ( arguments.length < 1 ) { throw new Error(__filename + ': wrong arguments number'); }
 	            if ( typeof name !== 'string' || name.length === 0 ) { throw new Error(__filename + ': wrong or empty name'); }
 	        }
 	
 	        // the event exists and should have some callbacks
 	        if ( event ) {
-	            if ( false ) {
+	            if ( true ) {
 	                if ( !Array.isArray(event) ) { throw new Error(__filename + ': wrong event type'); }
 	            }
 	
 	            for ( index = 0; index < event.length; index++ ) {
-	                if ( false ) {
+	                if ( true ) {
 	                    if ( typeof event[index] !== 'function' ) { throw new Error(__filename + ': wrong event callback type'); }
 	                }
 	
@@ -666,7 +673,8 @@
 	
 	// public
 	module.exports = Emitter;
-
+	
+	/* WEBPACK VAR INJECTION */}.call(exports, "node_modules/cjs-emitter/index.js"))
 
 /***/ },
 /* 3 */
@@ -675,7 +683,7 @@
   \*******************************/
 /***/ function(module, exports, __webpack_require__) {
 
-	/**
+	/* WEBPACK VAR INJECTION */(function(__filename) {/**
 	 * @author Stanislav Kalashnik <darkpark.main@gmail.com>
 	 * @license GNU GENERAL PUBLIC LICENSE Version 3
 	 */
@@ -745,7 +753,7 @@
 	    var index, length, item;
 	
 	    if ( pages ) {
-	        if ( false ) {
+	        if ( true ) {
 	            if ( !Array.isArray(pages) ) { throw new Error(__filename + ': wrong pages type'); }
 	        }
 	
@@ -912,7 +920,7 @@
 	    var pageFrom = this.current,
 	        pageTo   = this.ids[name];
 	
-	    if ( false ) {
+	    if ( true ) {
 	        if ( router.pages.length > 0 ) {
 	            if ( !pageTo || typeof pageTo !== 'object' ) { throw new Error(__filename + ': wrong pageTo type'); }
 	            if ( !('active' in pageTo) ) { throw new Error(__filename + ': missing field "active" in pageTo'); }
@@ -994,7 +1002,8 @@
 	
 	// public
 	module.exports = router;
-
+	
+	/* WEBPACK VAR INJECTION */}.call(exports, "node_modules/spa-router/index.js"))
 
 /***/ },
 /* 4 */
@@ -3087,6 +3096,24 @@
 
 /***/ },
 /* 15 */
+/*!**************************!*\
+  !*** ./src/js/config.js ***!
+  \**************************/
+/***/ function(module, exports) {
+
+	/**
+	 * Global application configuration.
+	 * Can store run-time options, API urls, paths, execution flags and so on.
+	 */
+	
+	'use strict';
+	
+	// public
+	module.exports = {};
+
+
+/***/ },
+/* 16 */
 /*!******************************!*\
   !*** ./src/js/pages/init.js ***!
   \******************************/
@@ -3098,7 +3125,7 @@
 	
 	'use strict';
 	
-	var Page = __webpack_require__(/*! spa-component-page */ 16),
+	var Page = __webpack_require__(/*! spa-component-page */ 17),
 	    page = new Page({$node: window.pageInit});
 	
 	
@@ -3107,13 +3134,13 @@
 
 
 /***/ },
-/* 16 */
+/* 17 */
 /*!***************************************!*\
   !*** ./~/spa-component-page/index.js ***!
   \***************************************/
 /***/ function(module, exports, __webpack_require__) {
 
-	/**
+	/* WEBPACK VAR INJECTION */(function(__filename) {/**
 	 * @author Stanislav Kalashnik <darkpark.main@gmail.com>
 	 * @license GNU GENERAL PUBLIC LICENSE Version 3
 	 */
@@ -3122,7 +3149,7 @@
 	
 	'use strict';
 	
-	var Component = __webpack_require__(/*! spa-component */ 17);
+	var Component = __webpack_require__(/*! spa-component */ 18);
 	
 	
 	/**
@@ -3150,7 +3177,7 @@
 	    // sanitize
 	    config = config || {};
 	
-	    if ( false ) {
+	    if ( true ) {
 	        if ( typeof config !== 'object' ) { throw new Error(__filename + ': wrong config type'); }
 	        // init parameters checks
 	        if ( config.className && typeof config.className !== 'string' ) { throw new Error(__filename + ': wrong or empty config.className'); }
@@ -3198,16 +3225,17 @@
 	
 	// public
 	module.exports = Page;
-
+	
+	/* WEBPACK VAR INJECTION */}.call(exports, "node_modules/spa-component-page/index.js"))
 
 /***/ },
-/* 17 */
+/* 18 */
 /*!**********************************!*\
   !*** ./~/spa-component/index.js ***!
   \**********************************/
 /***/ function(module, exports, __webpack_require__) {
 
-	/**
+	/* WEBPACK VAR INJECTION */(function(__filename) {/**
 	 * @author Stanislav Kalashnik <darkpark.main@gmail.com>
 	 * @license GNU GENERAL PUBLIC LICENSE Version 3
 	 */
@@ -3265,7 +3293,7 @@
 	    // sanitize
 	    config = config || {};
 	
-	    if ( false ) {
+	    if ( true ) {
 	        if ( typeof config !== 'object' ) { throw new Error(__filename + ': wrong config type'); }
 	        // init parameters checks
 	        if ( config.id        && typeof config.id !== 'string'         ) { throw new Error(__filename + ': wrong or empty config.id'); }
@@ -3366,7 +3394,7 @@
 	        // sanitize
 	        config.events = config.events || {};
 	
-	        if ( false ) {
+	        if ( true ) {
 	            if ( typeof config.events !== 'object' ) { throw new Error(__filename + ': wrong config.events type'); }
 	            if ( typeof this.defaultEvents !== 'object' ) { throw new Error(__filename + ': wrong this.defaultEvents type'); }
 	        }
@@ -3410,7 +3438,7 @@
 	            }
 	        }
 	
-	        if ( false ) {
+	        if ( true ) {
 	            // middle mouse button
 	            if ( event.button === 1 ) {
 	                debug.inspect(self, 0);
@@ -3423,7 +3451,7 @@
 	        event.stopPropagation();
 	    });
 	
-	    if ( false ) {
+	    if ( true ) {
 	        // expose inner ID to global scope
 	        window[self.id] = self.$node;
 	
@@ -3468,7 +3496,7 @@
 	    for ( index = 0; index < arguments.length; index++ ) {
 	        child = arguments[index];
 	
-	        if ( false ) {
+	        if ( true ) {
 	            if ( !(child instanceof Component) ) { throw new Error(__filename + ': wrong child type'); }
 	        }
 	
@@ -3540,7 +3568,7 @@
 	Component.prototype.remove = function () {
 	    // really inserted somewhere
 	    if ( this.parent ) {
-	        if ( false ) {
+	        if ( true ) {
 	            if ( !(this.parent instanceof Component) ) { throw new Error(__filename + ': wrong this.parent type'); }
 	        }
 	
@@ -3554,14 +3582,16 @@
 	
 	    // remove all children
 	    this.children.forEach(function ( child ) {
-	        if ( false ) {
+	        if ( true ) {
 	            if ( !(child instanceof Component) ) { throw new Error(__filename + ': wrong child type'); }
 	        }
 	
 	        child.remove();
 	    });
 	
-	    this.removeAllListeners();
+	    // remove all listeners
+	    this.events = {};
+	
 	    this.$node.parentNode.removeChild(this.$node);
 	
 	    // there are some listeners
@@ -3735,10 +3765,11 @@
 	
 	// public
 	module.exports = Component;
-
+	
+	/* WEBPACK VAR INJECTION */}.call(exports, "node_modules/spa-component/index.js"))
 
 /***/ },
-/* 18 */
+/* 19 */
 /*!******************************!*\
   !*** ./src/js/pages/main.js ***!
   \******************************/
@@ -3751,8 +3782,8 @@
 	'use strict';
 	
 	var app    = __webpack_require__(/*! spa-app */ 1),
-	    Page   = __webpack_require__(/*! spa-component-page */ 16),
-	    Button = __webpack_require__(/*! spa-component-button */ 19),
+	    Page   = __webpack_require__(/*! spa-component-page */ 17),
+	    Button = __webpack_require__(/*! spa-component-button */ 20),
 	    page   = new Page({$node: window.pageMain});
 	
 	
@@ -3879,13 +3910,13 @@
 
 
 /***/ },
-/* 19 */
+/* 20 */
 /*!*****************************************!*\
   !*** ./~/spa-component-button/index.js ***!
   \*****************************************/
 /***/ function(module, exports, __webpack_require__) {
 
-	/**
+	/* WEBPACK VAR INJECTION */(function(__filename) {/**
 	 * @module stb/ui/button
 	 * @author Stanislav Kalashnik <sk@infomir.eu>
 	 * @license GNU GENERAL PUBLIC LICENSE Version 3
@@ -3895,7 +3926,7 @@
 	
 	'use strict';
 	
-	var Component = __webpack_require__(/*! spa-component */ 17);
+	var Component = __webpack_require__(/*! spa-component */ 18);
 	
 	
 	/**
@@ -3938,7 +3969,7 @@
 	    // sanitize
 	    config = config || {};
 	
-	    if ( false ) {
+	    if ( true ) {
 	        if ( typeof config !== 'object' ) { throw new Error(__filename + ': wrong config type'); }
 	        // init parameters checks
 	        if ( config.className && typeof config.className !== 'string' ) { throw new Error(__filename + ': wrong or empty config.className'); }
@@ -4027,10 +4058,11 @@
 	
 	// public
 	module.exports = Button;
-
+	
+	/* WEBPACK VAR INJECTION */}.call(exports, "node_modules/spa-component-button/index.js"))
 
 /***/ },
-/* 20 */
+/* 21 */
 /*!************************!*\
   !*** ./src/js/wamp.js ***!
   \************************/
