@@ -19,7 +19,8 @@
     "dependencies": {
         "extend": "3.*.*",
         "cjs-async": "cjssdk/async",
-        "cjs-wamp": "cjssdk/wamp"
+        "cjs-wamp": "cjssdk/wamp",
+        "spa-plugin": "spasdk/plugin"
     },
     "devDependencies": {
         "spa-app": "spasdk/app",
