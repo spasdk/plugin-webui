@@ -8,10 +8,10 @@
     },
     "repository": "spasdk/plugin-webui",
     "scripts": {
-        "start": "spasdk default",
-        "build": "spasdk jade:build webpack:build sass:cache sass:build",
-        "watch": "spasdk jade:watch:develop webpack:watch:develop sass:watch:cache:develop sass:watch:scss:develop",
-        "lint": "eslint *.js"
+        "start": "spasdk",
+        "build": "spasdk build",
+        "watch": "spasdk watch",
+        "serve": "spasdk serve"
     },
     "config": {
         "static.default.port" : "8080"
