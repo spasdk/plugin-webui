@@ -9,10 +9,6 @@ var app      = require('spa-app'),
     router   = require('spa-router');
 
 
-// global application configuration
-app.config = require('./config');
-
-
 parallel([
     function () {
         app.once('load', function () {
