@@ -2,7 +2,7 @@
 html, body {
     height: 100%;
     width: 100%;
-    font-size: 15px;
+    font-size: 14px;
     font-family: arial, sans-serif;
     overflow: hidden;
     margin: 0;
@@ -97,8 +97,8 @@ a {
         font-size: 20px;
         text-align: center; }
     #pageMain .group .button {
-        height: 32px;
-        line-height: 32px;
+        height: 28px;
+        line-height: 28px;
         border: 1px solid #ddd;
         background-color: #eee;
         margin: 5px;

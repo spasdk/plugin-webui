@@ -2,7 +2,7 @@
 html, body {
     height: 100%;
     width: 100%;
-    font-size: 15px;
+    font-size: 14px;
     font-family: arial, sans-serif;
     overflow: hidden;
     margin: 0;
@@ -26,8 +26,8 @@ a {
 
 /* spa-app: develop */
 body.develop {
-    outline: 1px dashed #005000;
-    outline-offset: 1px; }
+    outline: 1px solid yellow;
+    outline-offset: -1px; }
 
 /* spa-component: release */
 .component {
@@ -109,8 +109,8 @@ body.develop .component {
         font-size: 20px;
         text-align: center; }
     #pageMain .group .button {
-        height: 32px;
-        line-height: 32px;
+        height: 28px;
+        line-height: 28px;
         border: 1px solid #ddd;
         background-color: #eee;
         margin: 5px;
@@ -137,4 +137,3 @@ body.develop .component {
     float: right;
     line-height: 32px; }
 
-/*# sourceMappingURL=develop.map */
