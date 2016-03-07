@@ -1,1 +1,127 @@
-html,body{width:100%;height:100%;overflow:hidden;margin:0;padding:0}table{border:0;border-collapse:collapse;border-spacing:0}table td{padding:0}.maxh{height:100%}.maxw{width:100%}a{text-decoration:none}.component.button{background-color:#dde9ff;display:inline-table;height:32px;cursor:pointer}.component.button:hover{background-color:#bbd3ff}.component.button.focus{background-color:#bbd3ff}.component.button.click{background-color:#a8c9ff}.component.button .icon{height:32px;width:32px;display:table-cell;background:no-repeat center center}.component.button .text{display:table-cell;padding:2px 10px;vertical-align:middle;text-align:center}.component.button .text:empty{padding:0}.component.page{width:100%;height:100%;position:absolute;left:0;top:0;visibility:hidden;overflow:hidden}.component.page.active{visibility:inherit}.component.hidden{display:none !important}.component div{box-sizing:border-box}#pageInit{display:table}#pageInit>.cell{display:table-cell;position:relative;text-align:center;vertical-align:middle;font-size:150%}#pageInit>.cell>.version{position:absolute;bottom:50px;right:50px;font-size:50%}#pageMain{font-family:Helvetica, Arial, sans-serif;font-size:14px}#pageMain div{box-sizing:border-box}#pageMain .group{border:1px solid #ddd;margin:5px 5px 15px 5px}#pageMain .group>.title{height:40px;line-height:40px;background-color:#faffd7;padding:0 10px;border-bottom:1px solid #ddd;font-size:20px;text-align:center}#pageMain .group .button{height:32px;line-height:32px;border:1px solid #ddd;background-color:#eee;margin:5px;padding:0 10px;cursor:pointer;display:inline-block}#pageMain .group .button.main{font-weight:bold}#pageMain .group .button.default{font-style:italic}#pageMain .group .button.develop{text-decoration:underline}#pageMain .group .button.running{background-color:#caffc2}#pageMain .group .button:hover{background-color:#ddd}#pageMain .group .button:hover.running{background-color:#84ff92}#pageMainHeader{padding:5px}#pageMainHeaderLink{float:right;line-height:32px}
+/* spa-app: release */
+html, body {
+    height: 100%;
+    width: 100%;
+    font-size: 15px;
+    font-family: arial, sans-serif;
+    overflow: hidden;
+    margin: 0;
+    padding: 0; }
+
+table {
+    border: 0;
+    border-collapse: collapse;
+    border-spacing: 0; }
+    table td {
+        padding: 0; }
+
+.maxh {
+    height: 100%; }
+
+.maxw {
+    width: 100%; }
+
+a {
+    text-decoration: none; }
+
+/* spa-component: release */
+.component {
+    box-sizing: border-box; }
+    .component.hidden {
+        display: none !important; }
+
+/* spa-component-button: release */
+.component.button {
+    background-color: #dde9ff;
+    display: inline-table;
+    height: 32px;
+    cursor: pointer; }
+    .component.button:hover {
+        background-color: #bbd3ff; }
+    .component.button.focus {
+        background-color: #bbd3ff; }
+    .component.button.click {
+        background-color: #a8c9ff; }
+    .component.button .icon {
+        height: 32px;
+        width: 32px;
+        display: table-cell;
+        background: no-repeat center center; }
+    .component.button .text {
+        display: table-cell;
+        padding: 2px 10px;
+        vertical-align: middle;
+        text-align: center; }
+        .component.button .text:empty {
+            padding: 0; }
+
+/* spa-component-page: release */
+.component.page {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    visibility: hidden;
+    overflow: hidden; }
+    .component.page.active {
+        visibility: inherit; }
+
+/* application: release */
+#pageInit {
+    display: table; }
+    #pageInit > .cell {
+        display: table-cell;
+        position: relative;
+        text-align: center;
+        vertical-align: middle;
+        font-size: 150%; }
+        #pageInit > .cell > .version {
+            position: absolute;
+            bottom: 50px;
+            right: 50px;
+            font-size: 50%; }
+
+#pageMain div {
+    box-sizing: border-box; }
+
+#pageMain .group {
+    border: 1px solid #ddd;
+    margin: 5px 5px 15px 5px; }
+    #pageMain .group > .title {
+        height: 40px;
+        line-height: 40px;
+        background-color: #faffd7;
+        padding: 0 10px;
+        border-bottom: 1px solid #ddd;
+        font-size: 20px;
+        text-align: center; }
+    #pageMain .group .button {
+        height: 32px;
+        line-height: 32px;
+        border: 1px solid #ddd;
+        background-color: #eee;
+        margin: 5px;
+        padding: 0 10px;
+        cursor: pointer;
+        display: inline-block; }
+        #pageMain .group .button.main {
+            font-weight: bold; }
+        #pageMain .group .button.default {
+            font-style: italic; }
+        #pageMain .group .button.develop {
+            text-decoration: underline; }
+        #pageMain .group .button.running {
+            background-color: #caffc2; }
+        #pageMain .group .button:hover {
+            background-color: #ddd; }
+            #pageMain .group .button:hover.running {
+                background-color: #84ff92; }
+
+#pageMainHeader {
+    padding: 5px; }
+
+#pageMainHeaderLink {
+    float: right;
+    line-height: 32px; }
+
