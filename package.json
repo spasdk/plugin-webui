@@ -25,7 +25,8 @@
     "devDependencies": {
         "spa-app": "spasdk/app",
         "spa-component-button": "spasdk/component-button",
-        "spa-component-page": "spasdk/component-page"
+        "spa-component-page": "spasdk/component-page",
+        "spa-eslint-config": "spasdk/eslint-config"
     },
     "license": "GPL-3.0"
 }
