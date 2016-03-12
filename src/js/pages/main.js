@@ -10,7 +10,7 @@ var app    = require('spa-app'),
     page   = new Page({$node: window.pageMain});
 
 
-page.addListener('load', function load () {
+app.addListener('load', function load () {
     var buttonSystem = new Button({
         value: 'system'
     });
