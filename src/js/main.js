@@ -6,7 +6,6 @@
 
 var app      = require('spa-app'),
     parallel = require('cjs-async/parallel');
-    //router   = require('spa-router');
 
 
 parallel([
@@ -21,11 +20,6 @@ parallel([
             };
 
             done();
-            // set pages
-            /*router.init([
-                require('./pages/init'),
-                require('./pages/main')
-            ]);*/
         });
     },
     function ( done ) {
@@ -34,10 +28,7 @@ parallel([
     }
 ], function ( error ) {
     console.log('error', error);
-    //router.navigate('pageMain');
 
     // show the main page
-    //app.route(app.pages.main);
+    app.route(app.pages.main);
 });
-
-console.log(123);
