@@ -1,0 +1,57 @@
+/* application: develop */
+#pageInit {
+    display: table; }
+    #pageInit > .cell {
+        display: table-cell;
+        position: relative;
+        text-align: center;
+        vertical-align: middle;
+        font-size: 150%; }
+        #pageInit > .cell > .version {
+            position: absolute;
+            bottom: 50px;
+            right: 50px;
+            font-size: 50%; }
+
+#pageMain div {
+    box-sizing: border-box; }
+
+#pageMain .group {
+    border: 1px solid #ddd;
+    margin: 5px 5px 15px 5px; }
+    #pageMain .group > .title {
+        height: 40px;
+        line-height: 40px;
+        background-color: #faffd7;
+        padding: 0 10px;
+        border-bottom: 1px solid #ddd;
+        font-size: 20px;
+        text-align: center; }
+    #pageMain .group .button {
+        height: 28px;
+        line-height: 28px;
+        border: 1px solid #ddd;
+        background-color: #eee;
+        margin: 5px;
+        padding: 0 10px;
+        cursor: pointer;
+        display: inline-block; }
+        #pageMain .group .button.main {
+            font-weight: bold; }
+        #pageMain .group .button.default {
+            font-style: italic; }
+        #pageMain .group .button.develop {
+            text-decoration: underline; }
+        #pageMain .group .button.running {
+            background-color: #caffc2; }
+        #pageMain .group .button:hover {
+            background-color: #ddd; }
+            #pageMain .group .button:hover.running {
+                background-color: #84ff92; }
+
+#pageMainHeader {
+    padding: 5px; }
+
+#pageMainHeaderLink {
+    float: right;
+    line-height: 32px; }
