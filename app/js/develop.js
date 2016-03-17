@@ -3347,7 +3347,7 @@
 	//Component.prototype.insert = function ( child, index ) {
 	//    var prevIndex = this.children.indexOf(child);
 	//
-	//    if ( DEBUG ) {
+	//    if ( DEVELOP ) {
 	//        if ( arguments.length !== 2 ) { throw new Error(__filename + ': wrong arguments number'); }
 	//        if ( !(child instanceof Component) ) { throw new Error(__filename + ': wrong child type'); }
 	//    }
