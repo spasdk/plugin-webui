@@ -101,7 +101,7 @@
 	
 	var Emitter = __webpack_require__(/*! cjs-emitter */ 2),
 	    //router  = require('spa-router'),
-	    parse   = __webpack_require__(/*! cjs-parse-query */ 3),
+	    parse   = __webpack_require__(/*! cjs-query */ 3).parse,
 	    app     = new Emitter();
 	
 	
@@ -586,9 +586,11 @@
 	 * var emitter = new Emitter();
 	 */
 	function Emitter () {
-	    if ( true ) {
-	        if ( typeof this !== 'object' ) { throw new Error(__filename + ': must be constructed via new'); }
-	    }
+	    console.assert(typeof this === 'object', 'must be constructed via new');
+	
+	    // if ( DEVELOP ) {
+	    //     if ( typeof this !== 'object' ) { throw new Error(__filename + ': must be constructed via new'); }
+	    // }
 	
 	    /**
 	     * Inner hash table for event names and linked callbacks.
@@ -625,11 +627,16 @@
 	     * emitter.addListener('click', function ( data ) { ... });
 	     */
 	    addListener: function ( name, callback ) {
-	        if ( true ) {
-	            if ( arguments.length !== 2 ) { throw new Error(__filename + ': wrong arguments number'); }
-	            if ( typeof name !== 'string' || name.length === 0 ) { throw new Error(__filename + ': wrong or empty name'); }
-	            if ( typeof callback !== 'function' ) { throw new Error(__filename + ': wrong callback type'); }
-	        }
+	        console.assert(arguments.length === 2, 'wrong arguments number');
+	        console.assert(typeof name === 'string', 'wrong name type');
+	        console.assert(name.length > 0, 'empty name');
+	        console.assert(typeof callback === 'function', 'callback should be a function');
+	
+	        // if ( DEVELOP ) {
+	        //     if ( arguments.length !== 2 ) { throw new Error(__filename + ': wrong arguments number'); }
+	        //     if ( typeof name !== 'string' || name.length === 0 ) { throw new Error(__filename + ': wrong or empty name'); }
+	        //     if ( typeof callback !== 'function' ) { throw new Error(__filename + ': wrong callback type'); }
+	        // }
 	
 	        // initialization may be required
 	        this.events[name] = this.events[name] || [];
@@ -738,8 +745,8 @@
 	     *
 	     * @deprecated
 	     */
-	    removeAllListeners: function ( name ) {
-	        if ( true ) {
+	    /*removeAllListeners: function ( name ) {
+	        if ( DEVELOP ) {
 	            if ( arguments.length !== 0 && (typeof name !== 'string' || name.length === 0) ) {
 	                throw new Error(__filename + ': wrong or empty name');
 	            }
@@ -750,7 +757,7 @@
 	            // no arguments so remove everything
 	            this.events = {};
 	        } else if ( name ) {
-	            if ( true ) {
+	            if ( DEVELOP ) {
 	                if ( this.events[name] ) { throw new Error(__filename + ': event is not removed'); }
 	            }
 	
@@ -758,7 +765,7 @@
 	            // but object structure modification should be avoided
 	            this.events[name] = undefined;
 	        }
-	    },
+	    },*/
 	
 	
 	    /**
@@ -815,9 +822,9 @@
 
 /***/ },
 /* 3 */
-/*!*********************************************************!*\
-  !*** /home/dp/Projects/sdk/cjssdk/parse-query/index.js ***!
-  \*********************************************************/
+/*!***************************************************!*\
+  !*** /home/dp/Projects/sdk/cjssdk/query/index.js ***!
+  \***************************************************/
 /***/ function(module, exports) {
 
 	/**
@@ -827,31 +834,39 @@
 	
 	'use strict';
 	
+	module.exports = {
+	    /**
+	     * Parse the given location search string into object.
+	     *
+	     * @param {string} query string to parse
+	     *
+	     * @return {Object.<string, string>} result data
+	     */
+	    parse: function ( query ) {
+	        var data = {};
 	
-	/**
-	 * Parse the given location search string into object.
-	 *
-	 * @param {string} query string to parse
-	 *
-	 * @return {Object.<string, string>} result data
-	 *
-	 * @example
-	 * console.log(parseQuery(document.location.search.substring(1)));
-	 * console.log(parseQuery('param=value&another_param=another_value'));
-	 */
-	module.exports = function ( query ) {
-	    var data = {};
+	        // parse and fill the data
+	        query.split('&').forEach(function ( part ) {
+	            part = part.split('=');
+	            // valid number on params
+	            if ( part.length === 2 ) {
+	                data[part[0]] = decodeURIComponent(part[1]);
+	            }
+	        });
 	
-	    // parse and fill the data
-	    query.split('&').forEach(function ( part ) {
-	        part = part.split('=');
-	        // valid number on params
-	        if ( part.length === 2 ) {
-	            data[part[0]] = decodeURIComponent(part[1]);
-	        }
-	    });
+	        return data;
+	    },
 	
-	    return data;
+	
+	    stringify: function ( params ) {
+	        var data = [];
+	
+	        Object.keys(params).forEach(function ( name ) {
+	            data.push(name + '=' + encodeURIComponent(params[name]));
+	        });
+	
+	        return data.join('&');
+	    }
 	};
 
 
@@ -2572,6 +2587,8 @@
 	function Wamp ( socket ) {
 	    var self = this;
 	
+	    console.assert(typeof this === 'object', 'must be constructed via new');
+	    
 	    // parent constructor call
 	    Emitter.call(this);
 	
@@ -2631,6 +2648,7 @@
 	            error: {code: -32700, message: 'Parse error'},
 	            id: null
 	        });
+	
 	        return;
 	    }
 	
@@ -2986,6 +3004,8 @@
 	    // sanitize
 	    config = config || {};
 	
+	    console.assert(typeof this === 'object', 'must be constructed via new');
+	    
 	    if ( true ) {
 	        if ( typeof config !== 'object' ) { throw new Error(__filename + ': wrong config type'); }
 	        // init parameters checks
@@ -3102,6 +3122,8 @@
 	    // sanitize
 	    config = config || {};
 	
+	    console.assert(typeof this === 'object', 'must be constructed via new');
+	    
 	    if ( true ) {
 	        if ( typeof config !== 'object' ) { throw new Error(__filename + ': wrong config type'); }
 	        // init parameters checks
@@ -3778,6 +3800,8 @@
 	    // sanitize
 	    config = config || {};
 	
+	    console.assert(typeof this === 'object', 'must be constructed via new');
+	    
 	    if ( true ) {
 	        if ( typeof config !== 'object' ) { throw new Error(__filename + ': wrong config type'); }
 	        // init parameters checks
@@ -3885,7 +3909,7 @@
 	
 	var app   = __webpack_require__(/*! spa-app */ 1),
 	    Wamp  = __webpack_require__(/*! cjs-wamp */ 11),
-	    parse = __webpack_require__(/*! cjs-parse-query */ 3);
+	    parse = __webpack_require__(/*! cjs-query */ 3).parse;
 	
 	
 	function wamp () {
