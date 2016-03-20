@@ -6,7 +6,7 @@
 
 var app   = require('spa-app'),
     Wamp  = require('cjs-wamp'),
-    parse = require('cjs-parse-query');
+    parse = require('cjs-query').parse;
 
 
 function wamp () {
