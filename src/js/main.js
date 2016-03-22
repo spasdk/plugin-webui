@@ -5,6 +5,7 @@
 'use strict';
 
 var app      = require('spa-app'),
+    Wamp     = require('spa-wamp'),
     parallel = require('cjs-async/parallel');
 
 
@@ -23,8 +24,11 @@ parallel([
         });
     },
     function ( done ) {
-        require('./wamp')();
-        app.once('wamp:open', done);
+        app.wamp = new Wamp('ws://' + (app.query.wampHost || location.hostname) + ':' + app.query.wampPort + '/client');
+
+        //require('./wamp')();
+        app.wamp.once('wamp:open', done);
+        //setTimeout(done, 1000);
     }
 ], function ( error ) {
     console.log('error', error);
