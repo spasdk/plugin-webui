@@ -26,17 +26,17 @@ parallel([
     function ( done ) {
         app.wamp = new Wamp('ws://' + (app.query.wampHost || location.hostname) + ':' + app.query.wampPort + '/client');
 
-        //require('./wamp')();
-        app.wamp.once('wamp:open', done);
-        //setTimeout(done, 1000);
-
-        app.wamp.addListener('wamp:open', function () {
+        app.wamp.addListener('connection:open', function () {
+            document.body.style.opacity = 1;
             console.log('wamp open ' + app.wamp.socket.url);
         });
 
-        app.wamp.addListener('wamp:close', function () {
+        app.wamp.addListener('connection:close', function () {
+            document.body.style.opacity = 0.2;
             console.log('wamp close ' + app.wamp.socket.url);
         });
+
+        app.wamp.once('connection:open', done);
     }
 ], function ( error ) {
     console.log('error', error);
