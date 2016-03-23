@@ -29,6 +29,14 @@ parallel([
         //require('./wamp')();
         app.wamp.once('wamp:open', done);
         //setTimeout(done, 1000);
+
+        app.wamp.addListener('wamp:open', function () {
+            console.log('wamp open ' + app.wamp.socket.url);
+        });
+
+        app.wamp.addListener('wamp:close', function () {
+            console.log('wamp close ' + app.wamp.socket.url);
+        });
     }
 ], function ( error ) {
     console.log('error', error);
