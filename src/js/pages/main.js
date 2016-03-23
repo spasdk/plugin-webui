@@ -18,7 +18,49 @@ app.addListener('load', function load () {
     window.pageMainHeader.appendChild(buttonSystem.$node);
     window.pageMainHeaderLink.href = window.pageMainHeaderLink.innerText = 'http://192.168.1.57:8080/app/develop.html?wampPort=9000';
 
-    app.once('wamp:open', function () {
+    app.wamp.once('connection:open', function () {
+        // info
+
+        app.wamp.call('getInfo', {}, function ( error, data ) {
+            console.log('info', data);
+        });
+
+        app.wamp.call('getMemoryUsage', {}, function ( error, data ) {
+            console.log('memory usage', data);
+        });
+
+        app.wamp.call('getClients', {}, function ( error, data ) {
+            console.log('clients', data);
+        });
+
+        /*app.wamp.call('getTargets', {}, function ( error, data ) {
+         console.log('targets', data);
+         });*/
+
+        app.wamp.call('getPlugins', {}, function ( error, data ) {
+            console.log('plugins', data);
+        });
+
+        // notifications
+
+        //app.wamp.addListener('eventTargetOnline', function ( event ) {
+        //    console.log('new target', event);
+        //});
+
+        app.wamp.addListener('eventTaskStart', function ( event ) {
+            console.log('task start', event);
+            window[event.id].classList.add('running');
+        });
+
+        app.wamp.addListener('eventTaskFinish', function ( event ) {
+            console.log('task finish', event);
+            window[event.id].classList.remove('running');
+        });
+
+        app.wamp.addListener('message', function ( event ) {
+            console.log('message', event);
+        });
+
         app.wamp.call('getTargets', {}, function ( error, data ) {
             Object.keys(data).forEach(function ( id ) {
                 var target = data[id];
