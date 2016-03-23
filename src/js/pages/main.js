@@ -57,9 +57,13 @@ app.addListener('load', function load () {
             window[event.id].classList.remove('running');
         });
 
-        app.wamp.addListener('message', function ( event ) {
-            console.log('message', event);
+        app.wamp.addListener('eventTargetMessage', function ( event ) {
+            console.log('target message', event);
         });
+
+        /*app.wamp.addListener('message', function ( event ) {
+            console.log('message', event);
+        });*/
 
         app.wamp.call('getTargets', {}, function ( error, data ) {
             Object.keys(data).forEach(function ( id ) {
