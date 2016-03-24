@@ -96,11 +96,11 @@ app.addListener('load', function load () {
             });
 
             info.className = 'info';
-            info.innerText = event.time + ' :: ' + event.info + (event.data ? ' :: ' + JSON.stringify(event.data) : '');
+            info.innerText = new Date(event.time).toTimeString() + ' :: ' + event.info + (event.data ? ' :: ' + JSON.stringify(event.data) : '');
 
             item.appendChild(info);
 
-            console.log('target message', event);
+            //console.log('target message', event);
 
             window.pageMainTabTargetList.appendChild(item);
         });
