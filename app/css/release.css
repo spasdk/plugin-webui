@@ -82,46 +82,91 @@ a {
             right: 50px;
             font-size: 50%; }
 
-#pageMain div {
+#pageMain {
     box-sizing: border-box; }
-
-#pageMain .group {
-    border: 1px solid #ddd;
-    margin: 5px 5px 15px 5px; }
-    #pageMain .group > .title {
+    #pageMain > table {
+        width: 100%;
+        height: 100%; }
+    #pageMain td.header {
+        padding: 5px;
+        height: 20px;
+        background-color: #fdfdfd;
+        border-bottom: 1px solid #eee; }
+    #pageMain td.content {
+        padding: 5px;
+        vertical-align: top; }
+    #pageMain td.footer {
+        padding: 5px;
         height: 28px;
-        line-height: 28px;
-        background-color: #faffd7;
-        padding: 0 10px;
-        border-bottom: 1px solid #ddd;
-        font-size: 18px;
-        text-align: center; }
-    #pageMain .group .button {
-        height: 25px;
-        line-height: 25px;
+        text-align: center;
+        border-top: 1px solid #eee;
+        background-color: #fdfdfd; }
+    #pageMain .group {
         border: 1px solid #ddd;
-        background-color: #eee;
-        margin: 1px;
-        padding: 0 5px;
-        cursor: pointer;
-        display: inline-block; }
-        #pageMain .group .button.main {
-            font-weight: bold; }
-        #pageMain .group .button.default {
-            font-style: italic; }
-        #pageMain .group .button.develop {
-            text-decoration: underline; }
-        #pageMain .group .button.running {
-            background-color: #caffc2; }
-        #pageMain .group .button:hover {
-            background-color: #ddd; }
-            #pageMain .group .button:hover.running {
-                background-color: #84ff92; }
-
-#pageMainHeader {
-    padding: 5px; }
+        margin-bottom: 15px; }
+        #pageMain .group > .title {
+            height: 28px;
+            line-height: 28px;
+            background-color: #faffd7;
+            padding: 0 10px;
+            border-bottom: 1px solid #ddd;
+            font-size: 18px;
+            text-align: center; }
+        #pageMain .group .button {
+            height: 25px;
+            line-height: 25px;
+            border: 1px solid #ddd;
+            background-color: #eee;
+            margin: 1px;
+            padding: 0 5px;
+            cursor: pointer;
+            display: inline-block; }
+            #pageMain .group .button.main {
+                font-weight: bold; }
+            #pageMain .group .button.default {
+                font-style: italic; }
+            #pageMain .group .button.develop {
+                text-decoration: underline; }
+            #pageMain .group .button.running {
+                background-color: #caffc2; }
+            #pageMain .group .button:hover {
+                background-color: #ddd; }
+                #pageMain .group .button:hover.running {
+                    background-color: #84ff92; }
 
 #pageMainHeaderLink {
     float: right;
     line-height: 32px; }
+
+#pageMainTabTarget {
+    display: none;
+    position: relative; }
+
+#pageMainTabTargetList {
+    border: 1px solid #ddd; }
+    #pageMainTabTargetList .item {
+        height: 24px;
+        border-bottom: 1px solid #eee; }
+        #pageMainTabTargetList .item:hover {
+            background-color: #fdfdfd; }
+        #pageMainTabTargetList .item:last-of-type {
+            border-bottom: none; }
+        #pageMainTabTargetList .item.fail {
+            background-color: #fffbfb; }
+        #pageMainTabTargetList .item.warn {
+            background-color: #fffffb; }
+        #pageMainTabTargetList .item > .info {
+            height: 24px;
+            line-height: 24px;
+            padding: 0 5px; }
+        #pageMainTabTargetList .item > .tag {
+            cursor: pointer;
+            height: 20px;
+            line-height: 20px;
+            float: right;
+            background-color: #eee;
+            padding: 0 6px;
+            margin: 2px 2px 2px 0; }
+            #pageMainTabTargetList .item > .tag:hover {
+                background-color: #bfdfff; }
 
