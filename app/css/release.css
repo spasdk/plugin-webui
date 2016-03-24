@@ -143,8 +143,9 @@ a {
     position: relative; }
 
 #pageMainTabTargetList {
-    border: 1px solid #ddd; }
+    border: 1px solid #eee; }
     #pageMainTabTargetList .item {
+        font-size: 13px;
         height: 24px;
         border-bottom: 1px solid #eee; }
         #pageMainTabTargetList .item:hover {
@@ -152,19 +153,21 @@ a {
         #pageMainTabTargetList .item:last-of-type {
             border-bottom: none; }
         #pageMainTabTargetList .item.fail {
-            background-color: #fffbfb; }
+            background-color: #fff0f0; }
         #pageMainTabTargetList .item.warn {
-            background-color: #fffffb; }
+            background-color: #fffff0; }
         #pageMainTabTargetList .item > .info {
             height: 24px;
             line-height: 24px;
-            padding: 0 5px; }
+            padding: 0 5px;
+            font-family: monospace; }
         #pageMainTabTargetList .item > .tag {
             cursor: pointer;
-            height: 20px;
-            line-height: 20px;
+            height: 18px;
+            line-height: 18px;
             float: right;
-            background-color: #eee;
+            background-color: #eeffee;
+            border: 1px solid #eee;
             padding: 0 6px;
             margin: 2px 2px 2px 0; }
             #pageMainTabTargetList .item > .tag:hover {

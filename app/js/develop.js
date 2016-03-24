@@ -61,8 +61,6 @@
 	parallel([
 	    function ( done ) {
 	        app.once('load', function () {
-	            debug.info('app.once load');
-	
 	            // load pages
 	            app.pages = {
 	                init: __webpack_require__(/*! ./pages/init */ 16),
@@ -77,12 +75,12 @@
 	
 	        app.wamp.addListener('connection:open', function () {
 	            document.body.style.opacity = 1;
-	            debug.info('wamp open ' + app.wamp.socket.url);
+	            debug.info('wamp open ' + app.wamp.socket.url, null, {tags: ['open', 'wamp']});
 	        });
 	
 	        app.wamp.addListener('connection:close', function () {
 	            document.body.style.opacity = 0.2;
-	            debug.info('wamp close ' + app.wamp.socket.url);
+	            debug.info('wamp close ' + app.wamp.socket.url, null, {tags: ['close', 'wamp']});
 	        });
 	
 	        app.wamp.once('connection:open', done);
@@ -178,14 +176,16 @@
 	        page.active = true;
 	        app.activePage = page;
 	
+	        debug.info('show component ' + page.constructor.name + '#' + page.id, null, {
+	            tags: ['show', 'component', page.constructor.name, page.id]
+	        });
+	        //console.log('component ' + page.constructor.name + '.' + page.id + ' show', 'green');
+	
 	        // there are some listeners
 	        if ( page.events['show'] ) {
 	            // notify listeners
 	            page.emit('show', {page: page, data: data});
 	        }
-	
-	        //debug.log('component ' + page.constructor.name + '.' + page.id + ' show', 'green');
-	        console.log('component ' + page.constructor.name + '.' + page.id + ' show', 'green');
 	
 	        return true;
 	    }
@@ -210,14 +210,16 @@
 	        page.active  = false;
 	        app.activePage = null;
 	
+	        debug.info('hide component ' + page.constructor.name + '#' + page.id, null, {
+	            tags: ['hide', 'component', page.constructor.name, page.id]
+	        });
+	        //console.log('component ' + page.constructor.name + '.' + page.id + ' hide', 'grey');
+	
 	        // there are some listeners
 	        if ( page.events['hide'] ) {
 	            // notify listeners
 	            page.emit('hide', {page: page});
 	        }
-	
-	        //debug.log('component ' + page.constructor.name + '.' + page.id + ' hide', 'grey');
-	        console.log('component ' + page.constructor.name + '.' + page.id + ' hide', 'grey');
 	
 	        return true;
 	    }
@@ -249,7 +251,7 @@
 	    // valid not already active page
 	    if ( pageTo && !pageTo.active ) {
 	        //debug.log('router.navigate: ' + pageTo.id, pageTo === pageFrom ? 'grey' : 'green');
-	        console.log('router.navigate: ' + pageTo.id, pageTo === pageFrom ? 'grey' : 'green');
+	        debug.info('app route: ' + pageTo.id, null, {tags: ['route', 'page', pageTo.id]});
 	
 	        // update url
 	        //location.hash = this.stringify(name, data);
@@ -270,8 +272,8 @@
 	        return true;
 	    }
 	
-	    //debug.log('router.navigate: ' + pageTo.id, 'red');
-	    console.log('router.navigate: ' + pageTo.id, 'red');
+	    debug.warn('invalid page to route: ' + pageTo.id, null, {tags: ['route', 'page', pageTo.id]});
+	    //console.log('router.navigate: ' + pageTo.id, 'red');
 	
 	    // nothing was done
 	    return false;
@@ -281,13 +283,15 @@
 	app.defaultEvents = {
 	    DOMContentLoaded: function ( event ) {
 	        //debug.event(event);
-	        console.log(event);
+	        //console.log(event);
+	
+	        debug.info('app event: ' + event.type, null, {tags: [event.type, 'event']});
 	
 	        // there are some listeners
 	        if ( app.events['dom'] ) {
 	            // notify listeners
 	            app.emit('dom', event);
-	            console.log('DOMContentLoaded');
+	            //console.log('DOMContentLoaded');
 	        }
 	    },
 	
@@ -307,10 +311,12 @@
 	        //var path;
 	
 	        //debug.event(event);
-	        console.log(event);
+	        //console.log(event);
 	
 	        // time mark
 	        //app.data.time.load = event.timeStamp;
+	
+	        debug.info('app event: ' + event.type, null, {tags: [event.type, 'event']});
 	
 	        // global handler
 	        // there are some listeners
@@ -356,6 +362,8 @@
 	        //debug.event(event);
 	        console.log(event);
 	
+	        debug.info('app event: ' + event.type, null, {tags: [event.type, 'event']});
+	
 	        // global handler
 	        // there are some listeners
 	        if ( app.events[event.type] ) {
@@ -384,7 +392,8 @@
 	     */
 	    error: function ( event ) {
 	        //debug.event(event);
-	        console.log(event);
+	        //console.log(event);
+	        debug.info('app event: ' + event.type, event, {tags: [event.type, 'event']});
 	    },
 	
 	    /**
@@ -419,7 +428,8 @@
 	        //if ( event.altKey )   { event.code += 2000; }
 	
 	        //debug.event(event);
-	        console.log(event);
+	        //console.log(event);
+	        debug.info('app event: ' + event.type, null, {tags: [event.type, 'event']});
 	
 	        // page.activeComponent can be set to null in event handles
 	        activeComponent = page.activeComponent;
@@ -485,6 +495,7 @@
 	        }
 	
 	        //debug.event(event);
+	        debug.info('app event: ' + event.type, null, {tags: [event.type, 'event']});
 	
 	        // current component handler
 	        if ( page.activeComponent && page.activeComponent !== page ) {
@@ -505,7 +516,8 @@
 	     */
 	    click: function ( event ) {
 	        //debug.event(event);
-	        console.log(event);
+	        //console.log(event);
+	        debug.info('app event: ' + event.type, null, {tags: [event.type, 'event']});
 	    },
 	
 	    /**
@@ -521,7 +533,8 @@
 	        //var kbEvent = {}; //Object.create(document.createEvent('KeyboardEvent'));
 	
 	        //debug.event(event);
-	        console.log(event);
+	        //console.log(event);
+	        debug.info('app event: ' + event.type, null, {tags: [event.type, 'event']});
 	
 	        //kbEvent.type    = 'keydown';
 	        //kbEvent.keyCode = 8;
@@ -555,7 +568,8 @@
 	        }
 	
 	        //debug.event(event);
-	        console.log(event);
+	        //console.log(event);
+	        debug.info('app event: ' + event.type, null, {tags: [event.type, 'event']});
 	
 	        // current component handler
 	        if ( page.activeComponent && page.activeComponent !== page ) {
@@ -1045,7 +1059,18 @@
 	};
 	
 	
+	debug.warn = function ( info, data, config ) {
+	    config = prepareConfig(config);
+	    config.tags.push('warn');
+	
+	    debug.log(info, data, config);
+	};
+	
+	
 	debug.fail = function ( info, data, config ) {
+	    config = prepareConfig(config);
+	    config.tags.push('fail');
+	
 	    debug.log(info, data, config);
 	};
 	
@@ -1191,11 +1216,11 @@
 	    );
 	
 	    app.develop.wamp.addListener('connection:open', function () {
-	        debug.info('wamp open ' + app.develop.wamp.socket.url);
+	        debug.info('wamp open ' + app.develop.wamp.socket.url, null, {tags: ['open', 'wamp']});
 	    });
 	
 	    app.develop.wamp.addListener('connection:close', function () {
-	        debug.info('wamp close ' + app.develop.wamp.socket.url);
+	        debug.info('wamp close ' + app.develop.wamp.socket.url, null, {tags: ['close', 'wamp']});
 	    });
 	}
 
@@ -1485,7 +1510,7 @@
 	    // app instance
 	    //window.app = app = require('spa-app');
 	
-	    if ( app.query.wampPort ) {
+	    /*if ( app.query.wampPort ) {
 	        //console.log('connect to WAMP server');
 	        app.develop.wamp = new Wamp(
 	            //new WebSocket('ws://' + (app.query.wampHost || location.hostname) + ':' + app.query.wampPort + '/target')
@@ -1501,10 +1526,10 @@
 	        });
 	
 	        // ready
-	        /*window.app.wamp.socket.onopen = function () {
+	        /!*window.app.wamp.socket.onopen = function () {
 	            console.log('wamp is ready!');
-	        };*/
-	    }
+	        };*!/
+	    }*/
 	
 	    // export to globals div for develop HTML elements
 	    /*window.$develop = document.body.appendChild(document.createElement('div'));
@@ -1528,7 +1553,7 @@
 	    switch ( event.keyCode ) {
 	        // numpad 0
 	        case 96:
-	            debug.log('full document reload', 'red');
+	            debug.info('full app reload', null, {tags: ['reload']});
 	            location.hash = '';
 	            location.reload();
 	            break;
@@ -1604,14 +1629,14 @@
 	        // numpad 9
 	        case 105:
 	            // outline components and inner structures
-	            debug.log('toggle develop css layout', 'red');
+	            debug.info('toggle develop css layout', null, {tags: ['css', 'toggle']});
 	            document.body.classList.toggle('develop');
 	            break;
 	
 	        // numpad .
 	        case 110:
 	            // CSS reload
-	            debug.log('CSS reload', 'red');
+	            debug.info('CSS reload', null, {tags: ['css', 'reload']});
 	            // get through all css links
 	            Array.prototype.slice.call(document.head.getElementsByTagName('link')).forEach(function forEachLink ( tag ) {
 	                // get base name, modify and apply
@@ -3353,7 +3378,7 @@
 	        if ( true ) {
 	            // middle mouse button
 	            if ( event.button === 1 ) {
-	                debug.inspect(self, 0);
+	                //debug.inspect(self, 0);
 	                debug.info('"window.link" or "' + self.id + '.component"', 'this component is now available in global scope');
 	                window.link = self;
 	                self.$node.classList.toggle('wired');
@@ -3369,8 +3394,8 @@
 	
 	        // expose a link
 	        this.$node.component = this.$body.component = this;
-	        this.$node.title = 'component ' + this.constructor.name + '.' + this.id + ' (outer)';
-	        this.$body.title = 'component ' + this.constructor.name + '.' + this.id + ' (inner)';
+	        this.$node.title = 'component ' + this.constructor.name + '#' + this.id + ' (outer)';
+	        this.$body.title = 'component ' + this.constructor.name + '#' + this.id + ' (inner)';
 	    }
 	
 	    debug.info('create component ' + this.constructor.name + '#' + this.id, null, {
@@ -3425,10 +3450,8 @@
 	            this.$body.appendChild(child.$node);
 	        }
 	
-	        debug.info('add component ' + child.constructor.name + '#' + child.id, {
-	            parent: this.constructor.name + '#' + this.id
-	        }, {
-	            tags: ['add', 'component', this.constructor.name]
+	        debug.info('add component ' + child.constructor.name + '#' + child.id + ' to ' + this.constructor.name + '#' + this.id, null, {
+	            tags: ['add', 'component', this.constructor.name, this.id, child.constructor.name, child.id]
 	        });
 	
 	        // there are some listeners
@@ -3444,7 +3467,7 @@
 	            this.emit('add', {item: child});
 	        }
 	
-	        //debug.log('component ' + this.constructor.name + '.' + this.id + ' new child: ' + child.constructor.name + '.' + child.id);
+	        //debug.log('component ' + this.constructor.name + '#' + this.id + ' new child: ' + child.constructor.name + '#' + child.id);
 	    }
 	};
 	
@@ -3526,7 +3549,7 @@
 	        this.emit('remove');
 	    }
 	
-	    //debug.log('component ' + this.constructor.name + '.' + this.id + ' remove', 'red');
+	    //debug.log('component ' + this.constructor.name + '#' + this.id + ' remove', 'red');
 	    debug.info('remove component ' + this.constructor.name + '#' + this.id, null, {
 	        tags: ['remove', 'component', this.constructor.name, this.id]
 	    });
@@ -3559,7 +3582,7 @@
 	        activePage.activeComponent = activeItem = this;
 	        activeItem.$node.classList.add('focus');
 	
-	        //debug.log('component ' + this.constructor.name + '.' + this.id + ' focus');
+	        //debug.log('component ' + this.constructor.name + '#' + this.id + ' focus');
 	        debug.info('focus component ' + this.constructor.name + '#' + this.id, null, {
 	            tags: ['focus', 'component', this.constructor.name, this.id]
 	        });
@@ -3601,7 +3624,7 @@
 	    if ( this === activeItem ) {
 	        activePage.activeComponent = null;
 	
-	        //debug.log('component ' + this.constructor.name + '.' + this.id + ' blur', 'grey');
+	        //debug.log('component ' + this.constructor.name + '#' + this.id + ' blur', 'grey');
 	        debug.info('blur component ' + this.constructor.name + '#' + this.id, null, {
 	            tags: ['blur', 'component', this.constructor.name, this.id]
 	        });
@@ -3619,7 +3642,9 @@
 	        return true;
 	    }
 	
-	    debug.log('component ' + this.constructor.name + '.' + this.id + ' attempt to blur without link to a page', 'red');
+	    debug.warn('component ' + this.constructor.name + '#' + this.id + ' attempt to blur without link to a page', null, {
+	        tags: ['blur', 'component', this.constructor.name, this.id]
+	    });
 	
 	    // nothing was done
 	    return false;
@@ -3812,11 +3837,11 @@
 	            });
 	
 	            info.className = 'info';
-	            info.innerText = event.time + ' :: ' + event.info + (event.data ? ' :: ' + JSON.stringify(event.data) : '');
+	            info.innerText = new Date(event.time).toTimeString() + ' :: ' + event.info + (event.data ? ' :: ' + JSON.stringify(event.data) : '');
 	
 	            item.appendChild(info);
 	
-	            console.log('target message', event);
+	            //console.log('target message', event);
 	
 	            window.pageMainTabTargetList.appendChild(item);
 	        });
