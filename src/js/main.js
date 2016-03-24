@@ -12,7 +12,7 @@ var app      = require('spa-app'),
 parallel([
     function ( done ) {
         app.once('load', function () {
-            console.log('app.once load');
+            debug.info('app.once load');
 
             // load pages
             app.pages = {
@@ -28,18 +28,20 @@ parallel([
 
         app.wamp.addListener('connection:open', function () {
             document.body.style.opacity = 1;
-            console.log('wamp open ' + app.wamp.socket.url);
+            debug.info('wamp open ' + app.wamp.socket.url);
         });
 
         app.wamp.addListener('connection:close', function () {
             document.body.style.opacity = 0.2;
-            console.log('wamp close ' + app.wamp.socket.url);
+            debug.info('wamp close ' + app.wamp.socket.url);
         });
 
         app.wamp.once('connection:open', done);
     }
 ], function ( error ) {
-    console.log('error', error);
+    if ( error ) {
+        debug.fail(error);
+    }
 
     // show the main page
     app.route(app.pages.main);

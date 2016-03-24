@@ -12,10 +12,27 @@ var app    = require('spa-app'),
 
 app.addListener('load', function load () {
     var buttonSystem = new Button({
-        value: 'system'
-    });
+            $node: window.pageMainButtonSystem,
+            value: 'system',
+            events: {
+                click: function () {
+                    window.pageMainTabSystem.style.display = 'block';
+                    window.pageMainTabTarget.style.display = 'none';
+                }
+            }
+        }),
+        buttonTarget = new Button({
+            $node: window.pageMainButtonTarget,
+            value: 'target',
+            events: {
+                click: function () {
+                    window.pageMainTabSystem.style.display = 'none';
+                    window.pageMainTabTarget.style.display = 'block';
+                }
+            }
+        });
 
-    window.pageMainHeader.appendChild(buttonSystem.$node);
+    //window.pageMainHeader.appendChild(buttonSystem.$node);
     window.pageMainHeaderLink.href = window.pageMainHeaderLink.innerText = 'http://192.168.1.57:8080/app/develop.html?wampPort=9000';
 
     app.wamp.once('connection:open', function () {
@@ -26,7 +43,8 @@ app.addListener('load', function load () {
         });
 
         app.wamp.call('getMemoryUsage', {}, function ( error, data ) {
-            console.log('memory usage', data);
+            //console.log('memory usage', data);
+            debug.info('memory usage', data, {tags: ['memory']});
         });
 
         app.wamp.call('getClients', {}, function ( error, data ) {
@@ -58,7 +76,33 @@ app.addListener('load', function load () {
         });
 
         app.wamp.addListener('eventTargetMessage', function ( event ) {
+            var item = document.createElement('div'),
+                info = document.createElement('div');
+
+            item.className = 'item';
+
+            event.tags = event.tags || [];
+            event.tags.forEach(function ( tag ) {
+                var div = document.createElement('div');
+
+                div.className = 'tag';
+                div.innerText = tag;
+
+                item.appendChild(div);
+
+                if ( ['info', 'warn', 'fail'].indexOf(tag) !== -1 ) {
+                    item.classList.add(tag);
+                }
+            });
+
+            info.className = 'info';
+            info.innerText = event.time + ' :: ' + event.info + (event.data ? ' :: ' + JSON.stringify(event.data) : '');
+
+            item.appendChild(info);
+
             console.log('target message', event);
+
+            window.pageMainTabTargetList.appendChild(item);
         });
 
         /*app.wamp.addListener('message', function ( event ) {
@@ -70,18 +114,18 @@ app.addListener('load', function load () {
                 var target = data[id];
 
                 console.log('target', target);
-                window.pageMainHeader.appendChild(new Button({
+                /*window.pageMainHeader.appendChild(new Button({
                     value: 'target #' + id + ' (' + target.host + ')'
-                }).$node);
+                }).$node);*/
             });
         });
     });
 
     app.wamp.addListener('eventTargetOnline', function ( event ) {
         console.log('new target', event);
-        window.pageMainHeader.appendChild(new Button({
+        /*window.pageMainHeader.appendChild(new Button({
             value: 'target #' + event.id + ' (' + event.host + ')'
-        }).$node);
+        }).$node);*/
     });
 });
 
@@ -115,7 +159,7 @@ page.addListener('show', function load () {
             divTitle.className = 'title';
             divTasks.className = 'tasks';
 
-            page.$body.appendChild(divGroup);
+            window.pageMainTabSystem.appendChild(divGroup);
             divGroup.appendChild(divTitle);
             divGroup.appendChild(divTasks);
 
@@ -151,7 +195,7 @@ page.addListener('show', function load () {
             divTitle.className = 'title';
             divTasks.className = 'tasks';
 
-            page.$body.appendChild(divGroup);
+            window.pageMainTabSystem.appendChild(divGroup);
             divGroup.appendChild(divTitle);
             divGroup.appendChild(divTasks);
 
