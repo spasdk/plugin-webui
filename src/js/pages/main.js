@@ -82,6 +82,7 @@ app.addListener('load', function load () {
             item.className = 'item';
 
             event.tags = event.tags || [];
+            event.tags.push(event.type);
             event.tags.forEach(function ( tag ) {
                 var div = document.createElement('div');
 
@@ -90,10 +91,11 @@ app.addListener('load', function load () {
 
                 item.appendChild(div);
 
-                if ( ['info', 'warn', 'fail'].indexOf(tag) !== -1 ) {
-                    item.classList.add(tag);
-                }
+                // if ( ['info', 'warn', 'fail'].indexOf(tag) !== -1 ) {
+                //     item.classList.add(tag);
+                // }
             });
+            item.classList.add(event.type);
 
             info.className = 'info';
             info.innerText = new Date(event.time).toTimeString() + ' :: ' + event.info + (event.data ? ' :: ' + JSON.stringify(event.data) : '');
