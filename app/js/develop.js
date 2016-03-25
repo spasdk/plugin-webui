@@ -1013,7 +1013,7 @@
 	    config.info = info;
 	    config.data = data;
 	    config.time = +new Date();
-	    config.tags = config.tags.sort();
+	    //config.tags = config.tags.sort();
 	
 	    if ( app.develop.wamp.open ) {
 	        if ( buffer.length ) {
@@ -1053,7 +1053,8 @@
 	    console.log.apply(console, args);*/
 	
 	    config = prepareConfig(config);
-	    config.tags.push('info');
+	    //config.tags.push('info');
+	    config.type = 'info';
 	
 	    debug.log(info, data, config);
 	};
@@ -1061,7 +1062,8 @@
 	
 	debug.warn = function ( info, data, config ) {
 	    config = prepareConfig(config);
-	    config.tags.push('warn');
+	    //config.tags.push('warn');
+	    config.type = 'warn';
 	
 	    debug.log(info, data, config);
 	};
@@ -1069,7 +1071,8 @@
 	
 	debug.fail = function ( info, data, config ) {
 	    config = prepareConfig(config);
-	    config.tags.push('fail');
+	    //config.tags.push('fail');
+	    config.type = 'fail';
 	
 	    debug.log(info, data, config);
 	};
@@ -3823,6 +3826,7 @@
 	            item.className = 'item';
 	
 	            event.tags = event.tags || [];
+	            event.tags.push(event.type);
 	            event.tags.forEach(function ( tag ) {
 	                var div = document.createElement('div');
 	
@@ -3831,10 +3835,11 @@
 	
 	                item.appendChild(div);
 	
-	                if ( ['info', 'warn', 'fail'].indexOf(tag) !== -1 ) {
-	                    item.classList.add(tag);
-	                }
+	                // if ( ['info', 'warn', 'fail'].indexOf(tag) !== -1 ) {
+	                //     item.classList.add(tag);
+	                // }
 	            });
+	            item.classList.add(event.type);
 	
 	            info.className = 'info';
 	            info.innerText = new Date(event.time).toTimeString() + ' :: ' + event.info + (event.data ? ' :: ' + JSON.stringify(event.data) : '');
