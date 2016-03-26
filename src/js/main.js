@@ -26,12 +26,12 @@ parallel([
 
         app.wamp.addListener('connection:open', function () {
             document.body.style.opacity = 1;
-            debug.info('wamp open ' + app.wamp.socket.url, null, {tags: ['open', 'wamp']});
+            debug.info('wamp open ' + app.wamp.socket.url, app.wamp, {tags: ['open', 'wamp']});
         });
 
         app.wamp.addListener('connection:close', function () {
             document.body.style.opacity = 0.2;
-            debug.info('wamp close ' + app.wamp.socket.url, null, {tags: ['close', 'wamp']});
+            debug.info('wamp close ' + app.wamp.socket.url, app.wamp, {tags: ['close', 'wamp']});
         });
 
         app.wamp.once('connection:open', done);
