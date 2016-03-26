@@ -10,6 +10,20 @@ var app    = require('spa-app'),
     page   = new Page({$node: window.pageMain});
 
 
+function getTime ( timestamp ) {
+    var date   = new Date(timestamp),
+        hPart  = date.getHours(),
+        mPart  = date.getMinutes(),
+        msPart = date.getMilliseconds();
+
+    if ( msPart === 0 ) { msPart = '000'; }
+    else if ( msPart < 10  ) { msPart = '00' + msPart; }
+    else if ( msPart < 100 ) { msPart = '0'  + msPart; }
+
+    return (hPart > 9 ? '' : '0') + hPart + ':' + (mPart > 9 ? '' : '0') + mPart + '.' + msPart;
+}
+
+
 app.addListener('load', function load () {
     var buttonSystem = new Button({
             $node: window.pageMainButtonSystem,
@@ -34,6 +48,23 @@ app.addListener('load', function load () {
 
     //window.pageMainHeader.appendChild(buttonSystem.$node);
     window.pageMainHeaderLink.href = window.pageMainHeaderLink.innerText = 'http://192.168.1.57:8080/app/develop.html?wampPort=9000';
+
+    window.pageMainLinkClear.addEventListener('click', function () {
+        var node = window.pageMainTabTargetList;
+
+        while ( node.lastChild ) {
+            node.removeChild(node.lastChild);
+        }
+    });
+
+    window.pageMainLinkReset.addEventListener('click', function () {
+        var node = window.pageMainTabTargetList.children,
+            index;
+
+        for ( index = node.length; index--; ) {
+            node[index].style.display = 'block';
+        }
+    });
 
     app.wamp.once('connection:open', function () {
         // info
@@ -94,17 +125,36 @@ app.addListener('load', function load () {
                 // if ( ['info', 'warn', 'fail'].indexOf(tag) !== -1 ) {
                 //     item.classList.add(tag);
                 // }
+
+                div.addEventListener('click', function () {
+                    var length = window.pageMainTabTargetList.children.length,
+                        index, node;
+
+                    console.log(tag);
+
+                    for ( index = 0; index < length; index++ ) {
+                        node = window.pageMainTabTargetList.children[index];
+                        //console.log(index, node);
+                        node.style.display = node.tags.indexOf(tag) === -1 ? 'none' : 'block';
+                    }
+                });
             });
             item.classList.add(event.type);
+            item.tags = event.tags;
 
             info.className = 'info';
-            info.innerText = new Date(event.time).toTimeString() + ' :: ' + event.info + (event.data ? ' :: ' + JSON.stringify(event.data) : '');
+            console.log(event.data);
+            info.innerText = getTime(event.time) + (event.data ? ' + ' : ' - ') + event.info + (event.data ? ' :: ' + event.data : '');
 
             item.appendChild(info);
 
             //console.log('target message', event);
 
             window.pageMainTabTargetList.appendChild(item);
+
+            if ( window.pageMainTabTargetList.children.length >= 250 ) {
+                window.pageMainTabTargetList.removeChild(window.pageMainTabTargetList.firstChild);
+            }
         });
 
         /*app.wamp.addListener('message', function ( event ) {
