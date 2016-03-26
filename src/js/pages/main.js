@@ -144,7 +144,14 @@ app.addListener('load', function load () {
 
             info.className = 'info';
             console.log(event.data);
-            info.innerText = getTime(event.time) + (event.data ? ' + ' : ' - ') + event.info + (event.data ? ' :: ' + event.data : '');
+            info.innerText = getTime(event.time) + (event.data && 'link' in  event.data ? ' + ' : ' - ') + event.info /*+ (event.data ? ' :: ' + event.data : '')*/;
+
+            item.addEventListener('click', function () {
+                //console.log(event.data.link);
+                app.wamp.call('getLinkData', {targetId: 128, linkId: event.data.link}, function ( error, data ) {
+                    console.log(error, data);
+                });
+            });
 
             item.appendChild(info);
 
