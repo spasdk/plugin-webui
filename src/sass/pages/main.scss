@@ -103,7 +103,8 @@
 }
 
 #pageMainTabTargetList {
-    position: absolute;
+    display: none;
+    /*position: absolute;
     top: 78px;
     bottom: 47px;
     left: 5px;
@@ -124,8 +125,8 @@
             background-color: #f7f7ff;
         }
 
-        &:last-of-type {
-            border-bottom: none;
+        &:first-of-type {
+            //border-bottom: none;
         }
 
         &.fail {
@@ -159,5 +160,5 @@
                 border-color: #bfdfff;
             }
         }
-    }
+    }*/
 }
