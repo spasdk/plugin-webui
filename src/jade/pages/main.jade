@@ -1,27 +1,47 @@
 // top-level page block
 #pageMain
 
-    table
-        tr
-            td.header
-                //#pageMainHeader
-                #pageMainButtonSystem
-                #pageMainButtonTarget
-                a#pageMainHeaderLink
-        tr
-            td.content
-                #pageMainTabSystem
-                    #pageMainTaskFilter
-                    #pageMainTaskList
-                #pageMainTabTarget
-                    #pageMainTabToolBar
-                        a#pageMainLinkClear(href="#") clear
-                        a#pageMainLinkReset(href="#") reset
-                        input#pageMainFilterText(type="text" placeholder="filter text")
-                        input#pageMainTagsInclude(type="text" placeholder="include tags")
-                        input#pageMainTagsExclude(type="text" placeholder="exclude tags")
-                    #pageMainTabTargetList
-                    #pageMainTabConsole
-                    input#pageMainTabInput(type="text" placeholder="type your code here")
-        tr
-            td.footer footer
+    .header
+        #pageMainButtonSystem
+        #pageMainButtonTarget
+        a#pageMainHeaderLink
+
+    .content
+        #pageMainTabSystem
+            #pageMainTaskFilter
+            #pageMainTaskList
+        #pageMainTabTarget
+            #pageMainTabToolBar
+                a#pageMainLinkClear(href="#") clear
+                a#pageMainLinkReset(href="#") reset
+                input#pageMainFilterText(type="text" placeholder="filter text")
+                input#pageMainTagsInclude(type="text" placeholder="include tags")
+                input#pageMainTagsExclude(type="text" placeholder="exclude tags")
+            #pageMainTabTargetList
+            #pageMainTabConsole
+            input#pageMainTabInput(type="text" placeholder="type your code here")
+
+    //table
+    //    //tr
+    //    //    td.header
+    //    //        //#pageMainHeader
+    //    //        #pageMainButtonSystem
+    //    //        #pageMainButtonTarget
+    //    //        a#pageMainHeaderLink
+    //    tr
+    //        td.content
+    //            #pageMainTabSystem
+    //                #pageMainTaskFilter
+    //                #pageMainTaskList
+    //            #pageMainTabTarget
+    //                #pageMainTabToolBar
+    //                    a#pageMainLinkClear(href="#") clear
+    //                    a#pageMainLinkReset(href="#") reset
+    //                    input#pageMainFilterText(type="text" placeholder="filter text")
+    //                    input#pageMainTagsInclude(type="text" placeholder="include tags")
+    //                    input#pageMainTagsExclude(type="text" placeholder="exclude tags")
+    //                #pageMainTabTargetList
+    //                #pageMainTabConsole
+    //                input#pageMainTabInput(type="text" placeholder="type your code here")
+    //    tr
+    //        td.footer footer
