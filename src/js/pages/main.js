@@ -4,11 +4,13 @@
 
 'use strict';
 
-var app     = require('spa-app'),
-    Page    = require('spa-component-page'),
-    Button  = require('spa-component-button'),
-    Console = require('./console'),
-    page    = new Page({$node: window.pageMain});
+var app      = require('spa-app'),
+    Page     = require('spa-component-page'),
+    Button   = require('spa-component-button'),
+    Console  = require('./console'),
+    TaskList = require('./task.list'),
+    page     = new Page({$node: window.pageMain}),
+    taskList;
 
 
 // function getTime ( timestamp ) {
@@ -55,20 +57,10 @@ app.addListener('load', function load () {
     window.pageMainHeaderLink.href = window.pageMainHeaderLink.innerText = 'http://192.168.1.57:8080/app/develop.html?wampPort=9000';
 
     window.pageMainLinkClear.addEventListener('click', function () {
-        var node = window.pageMainTabTargetList;
-
-        while ( node.lastChild ) {
-            node.removeChild(node.lastChild);
-        }
+        devConsole.clear();
     });
 
     window.pageMainLinkReset.addEventListener('click', function () {
-        /*var node = window.pageMainTabTargetList.children,
-            index;
-
-        for ( index = node.length; index--; ) {
-            node[index].style.display = 'block';
-        }*/
         window.pageMainFilterText.value = window.pageMainTagsInclude.value = window.pageMainTagsExclude.value = '';
         devConsole.filterText  = '';
         devConsole.includeTags = [];
@@ -259,6 +251,12 @@ page.addListener('show', function load () {
             general = [];
 
         console.log('tasks', data);
+
+        taskList = new TaskList({
+            $node: window.pageMainTaskList,
+            data: data,
+            events: {}
+        });
 
         Object.keys(data).forEach(function ( id ) {
             var parts = id.split(':');

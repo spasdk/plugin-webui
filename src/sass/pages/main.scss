@@ -16,6 +16,7 @@
     td.content {
         padding: 5px;
         vertical-align: top;
+        position: relative;
     }
 
     td.footer {
@@ -100,6 +101,25 @@
     a {
         margin-right: 10px;
     }
+}
+
+#pageMainTabInput {
+    position: absolute;
+    //top: 78px;
+    bottom: 5px;
+    //left: 5px;
+    //right: 5px;
+    width: inherit;
+    //margin-right: 10px;
+    display: block;
+}
+
+#pageMainTabConsole {
+    position: absolute;
+    top: 35px;
+    bottom: 30px;
+    left: 5px;
+    right: 5px;
 }
 
 #pageMainTabTargetList {

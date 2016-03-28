@@ -11,7 +11,7 @@ var Component = require('spa-component');
 
 
 /**
- * Development console implementation.
+ * Development task list implementation.
  *
  * @constructor
  * @extends Component
@@ -26,7 +26,7 @@ var Component = require('spa-component');
  * @param {boolean}  [config.cycle=true]  allow or not to jump to the opposite side of a list when there is nowhere to go next
  * @param {boolean}  [config.scroll=null] associated ScrollBar component link
  */
-function Console ( config ) {
+function TaskList ( config ) {
     // current execution context
     //var self = this;
 
@@ -43,34 +43,21 @@ function Console ( config ) {
     }
 
     // set default className if classList property empty or undefined
-    config.className = 'console ' + (config.className || '');
+    config.className = 'taskList ' + (config.className || '');
 
     // parent constructor call
     Component.call(this, config);
 
     this.filterText = '';
-    this.includeTags = [];
-    this.excludeTags = [];
-}
 
-
-function getTime ( timestamp ) {
-    var date   = new Date(timestamp),
-        hPart  = date.getHours(),
-        mPart  = date.getMinutes(),
-        msPart = date.getMilliseconds();
-
-    if ( msPart === 0 ) { msPart = '000'; }
-    else if ( msPart < 10  ) { msPart = '00' + msPart; }
-    else if ( msPart < 100 ) { msPart = '0'  + msPart; }
-
-    return (hPart > 9 ? '' : '0') + hPart + ':' + (mPart > 9 ? '' : '0') + mPart + '.' + msPart;
+    // component setup
+    this.init(config);
 }
 
 
 // inheritance
-Console.prototype = Object.create(Component.prototype);
-Console.prototype.constructor = Console;
+TaskList.prototype = Object.create(Component.prototype);
+TaskList.prototype.constructor = TaskList;
 
 
 /**
@@ -78,50 +65,46 @@ Console.prototype.constructor = Console;
  *
  * @type {Object.<string, function>}
  */
-Console.prototype.defaultEvents = {
+TaskList.prototype.defaultEvents = {
 
 };
 
 
-Console.prototype.matchFilter = function ( node ) {
-    var length, tag;
+/**
+ * Init or re-init of the component inner structures and HTML.
+ *
+ * @param {Object} config init parameters (subset of constructor config params)
+ */
+TaskList.prototype.init = function ( config ) {
+    var self = this;
 
-    if ( this.filterText && node.innerText.indexOf(this.filterText) === -1 ) {
-        return false;
+    if ( DEVELOP ) {
+        if ( arguments.length !== 1 ) { throw new Error(__filename + ': wrong arguments number'); }
+        if ( typeof config !== 'object' ) { throw new Error(__filename + ': wrong config type'); }
     }
 
-    // prepare
-    length = this.includeTags.length;
-    // check
-    while ( length-- ) {
-        tag = this.includeTags[length];
+    Object.keys(config.data).forEach(function ( name ) {
+        var item = document.createElement('div');
 
-        if ( tag && node.tags.indexOf(tag) === -1 ) {
-            return false;
-        }
-    }
-
-    // prepare
-    length = this.excludeTags.length;
-    // check
-    while ( length-- ) {
-        tag = this.excludeTags[length];
-
-        if ( tag && node.tags.indexOf(tag) !== -1 ) {
-            return false;
-        }
-    }
-
-    return true;
+        item.className = 'item' + (config.data[name].running ? ' running' : '');
+        item.innerText = name;
+        
+        self.$node.appendChild(item);
+    });
 };
 
 
-Console.prototype.applyFilter = function () {
+TaskList.prototype.matchFilter = function ( node ) {
+    return !(this.filterText && node.innerText.indexOf(this.filterText) === -1);
+};
+
+
+TaskList.prototype.applyFilter = function () {
     var nodes = this.$body.children,
         length, item;
 
     // prepare
-    length = nodes.length;
+    length = nodes.length - 1;
     // check
     while ( length-- ) {
         item = nodes[length];
@@ -131,7 +114,7 @@ Console.prototype.applyFilter = function () {
 };
 
 
-Console.prototype.add = function ( data ) {
+TaskList.prototype.add = function ( data ) {
     var self = this,
         item = document.createElement('div'),
         info = document.createElement('div');
@@ -197,23 +180,9 @@ Console.prototype.add = function ( data ) {
         item.style.display = 'none';
     }
 
-    //this.$node.insertBefore(item, this.$input);
     this.$body.appendChild(item);
-
-    if ( this.$body.children.length >= 250 ) {
-        this.$body.removeChild(this.$body.firstChild);
-    }
-};
-
-
-Console.prototype.clear = function () {
-    var body = this.$body;
-
-    while ( body.lastChild ) {
-        body.removeChild(body.lastChild);
-    }
 };
 
 
 // public
-module.exports = Console;
+module.exports = TaskList;
