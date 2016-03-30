@@ -1,15 +1,28 @@
 // top-level page block
 #pageMain
 
-    .header
-        #pageMainButtonSystem
-        #pageMainButtonTarget
+    #pageMainHeader.header
+        //#pageMainButtonSystem
+        //#pageMainButtonTarget
         a#pageMainHeaderLink
 
     .content
+        table
+            tr
+                td.line
+                    input#pageMainTaskFilter(type="text" placeholder="filter by task name")
+                td.line
+            tr
+                td.side(rowspan=2)
+                    #pageMainTaskList
+                td
+            tr
+                td.line
+                    input.code#pageMainTabInput(type="text" placeholder="type your code here")
+
         #pageMainTabSystem
-            #pageMainTaskFilter
-            #pageMainTaskList
+
+
         #pageMainTabTarget
             #pageMainTabToolBar
                 a#pageMainLinkClear(href="#") clear
@@ -19,7 +32,7 @@
                 input#pageMainTagsExclude(type="text" placeholder="exclude tags")
             #pageMainTabTargetList
             #pageMainTabConsole
-            input#pageMainTabInput(type="text" placeholder="type your code here")
+
 
     //table
     //    //tr

@@ -10,26 +10,45 @@ var app      = require('spa-app'),
     Console  = require('./console'),
     TaskList = require('./task.list'),
     page     = new Page({$node: window.pageMain}),
+    targets  = {},
     taskList;
 
 
-// function getTime ( timestamp ) {
-//     var date   = new Date(timestamp),
-//         hPart  = date.getHours(),
-//         mPart  = date.getMinutes(),
-//         msPart = date.getMilliseconds();
-//
-//     if ( msPart === 0 ) { msPart = '000'; }
-//     else if ( msPart < 10  ) { msPart = '00' + msPart; }
-//     else if ( msPart < 100 ) { msPart = '0'  + msPart; }
-//
-//     return (hPart > 9 ? '' : '0') + hPart + ':' + (mPart > 9 ? '' : '0') + mPart + '.' + msPart;
-// }
+function addSystemTab () {
+    var button = new Button({
+        value: 'system',
+        events: {
+            click: function () {
+
+            }
+        }
+    });
+
+    window.pageMainHeader.appendChild(button.$node);
+}
+
+function addTargetTab ( data ) {
+    var button;
+
+    if ( !(data.id in targets) ) {
+        button = new Button({
+            value: 'target #' + data.id,
+            events: {
+                click: function () {
+
+                }
+            }
+        });
+
+        window.pageMainHeader.appendChild(button.$node);
+        targets[data.id] = data;
+    }
+}
 
 
 app.addListener('load', function load () {
-    var buttonSystem = new Button({
-            $node: window.pageMainButtonSystem,
+    var /*buttonSystem = new Button({
+            //$node: window.pageMainButtonSystem,
             value: 'system',
             events: {
                 click: function () {
@@ -39,7 +58,7 @@ app.addListener('load', function load () {
             }
         }),
         buttonTarget = new Button({
-            $node: window.pageMainButtonTarget,
+            //$node: window.pageMainButtonTarget,
             value: 'target',
             events: {
                 click: function () {
@@ -47,14 +66,13 @@ app.addListener('load', function load () {
                     window.pageMainTabTarget.style.display = 'block';
                 }
             }
-        }),
+        }),*/
         devConsole = new Console({
             $node: window.pageMainTabConsole,
             events: {}
         });
 
-    //window.pageMainHeader.appendChild(buttonSystem.$node);
-    window.pageMainHeaderLink.href = window.pageMainHeaderLink.innerText = 'http://192.168.1.57:8080/app/develop.html?wampPort=9000';
+    addSystemTab();
 
     window.pageMainLinkClear.addEventListener('click', function () {
         devConsole.clear();
@@ -117,8 +135,13 @@ app.addListener('load', function load () {
     app.wamp.once('connection:open', function () {
         // info
 
-        app.wamp.call('getInfo', {}, function ( error, data ) {
-            console.log('info', data);
+        app.wamp.call('getConnectionInfo', {}, function ( error, data ) {
+            console.log('connection info', data);
+        });
+
+        app.wamp.call('getProjectInfo', {}, function ( error, data ) {
+            console.log('project info', data);
+            window.pageMainHeaderLink.href = window.pageMainHeaderLink.innerText = 'http://' + data.host + ':8080/app/develop.html?wampPort=' + app.query.wampPort;
         });
 
         app.wamp.call('getMemoryUsage', {}, function ( error, data ) {
@@ -130,9 +153,13 @@ app.addListener('load', function load () {
             console.log('clients', data);
         });
 
-        /*app.wamp.call('getTargets', {}, function ( error, data ) {
-         console.log('targets', data);
-         });*/
+        app.wamp.call('getTargets', {}, function ( error, data ) {
+            console.log('targets', data);
+
+            Object.keys(data).forEach(function ( id ) {
+                addTargetTab({id: id});
+            });
+        });
 
         app.wamp.call('getPlugins', {}, function ( error, data ) {
             console.log('plugins', data);
@@ -239,6 +266,8 @@ app.addListener('load', function load () {
 
     app.wamp.addListener('eventTargetOnline', function ( event ) {
         console.log('new target', event);
+
+        addTargetTab(event);
         /*window.pageMainHeader.appendChild(new Button({
             value: 'target #' + event.id + ' (' + event.host + ')'
         }).$node);*/
