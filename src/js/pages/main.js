@@ -11,7 +11,7 @@ var app      = require('spa-app'),
     TaskList = require('./task.list'),
     page     = new Page({$node: window.pageMain}),
     targets  = {},
-    taskList;
+    taskList, taskLogs;
 
 
 function addSystemTab () {
@@ -25,13 +25,16 @@ function addSystemTab () {
     });
 
     window.pageMainHeader.appendChild(button.$node);
+
+    taskLogs = new Console({
+        $node: window.pageMainTaskLogs,
+        events: {}
+    });
 }
 
 function addTargetTab ( data ) {
-    var button;
-
     if ( !(data.id in targets) ) {
-        button = new Button({
+        data.button = new Button({
             value: 'target #' + data.id,
             events: {
                 click: function () {
@@ -40,9 +43,13 @@ function addTargetTab ( data ) {
             }
         });
 
-        window.pageMainHeader.appendChild(button.$node);
+        window.pageMainHeader.appendChild(data.button.$node);
         targets[data.id] = data;
     }
+}
+
+function removeTargetTab ( data ) {
+    targets[data.id].button.remove();
 }
 
 
@@ -182,7 +189,15 @@ app.addListener('load', function load () {
         });
 
         app.wamp.addListener('eventTargetMessage', function ( event ) {
-            devConsole.add(event);
+            //console.log(event);
+
+            if ( event.tags.indexOf('target') === -1 ) {
+                taskLogs.add(event);
+            } else {
+                devConsole.add(event);
+            }
+
+
             /*var item = document.createElement('div'),
                 info = document.createElement('div');
 
@@ -264,12 +279,22 @@ app.addListener('load', function load () {
         });
     });
 
-    app.wamp.addListener('eventTargetOnline', function ( event ) {
-        console.log('new target', event);
+    app.wamp.addListener('eventTargetOffline', function ( target ) {
+        console.log('remove target', target);
 
-        addTargetTab(event);
+        removeTargetTab(target);
+        //addTargetTab(target);
         /*window.pageMainHeader.appendChild(new Button({
-            value: 'target #' + event.id + ' (' + event.host + ')'
+            value: 'target #' + target.id + ' (' + target.host + ')'
+        }).$node);*/
+    });
+
+    app.wamp.addListener('eventTargetOnline', function ( target ) {
+        console.log('new target', target);
+
+        addTargetTab(target);
+        /*window.pageMainHeader.appendChild(new Button({
+            value: 'target #' + target.id + ' (' + target.host + ')'
         }).$node);*/
     });
 });
