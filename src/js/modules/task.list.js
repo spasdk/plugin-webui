@@ -16,19 +16,13 @@ var Component = require('spa-component');
  * @constructor
  * @extends Component
  *
- * @param {Object}   [config={}]          init parameters (all inherited from the parent)
- * @param {Array}    [config.data=[]]     component data to visualize
- * @param {function} [config.render]      method to build each grid cell content
- * @param {function} [config.navigate]    method to move focus according to pressed keys
- * @param {number}   [config.size=5]      amount of visible items on a page
- * @param {number}   [config.viewIndex=0] move view window to this position on init
- * @param {number}   [config.focusIndex]  list item index to make item focused (move view window to this position)
- * @param {boolean}  [config.cycle=true]  allow or not to jump to the opposite side of a list when there is nowhere to go next
- * @param {boolean}  [config.scroll=null] associated ScrollBar component link
+ * @param {Object} config={}        init parameters (all inherited from the parent)
+ * @param {Object} config.wamp      link to the server connection
+ * @param {Array}  [config.data=[]] component data to visualize
  */
 function TaskList ( config ) {
     // current execution context
-    //var self = this;
+    var self = this;
 
     // sanitize
     config = config || {};
@@ -39,7 +33,7 @@ function TaskList ( config ) {
         if ( typeof config !== 'object' ) { throw new Error(__filename + ': wrong config type'); }
         // init parameters checks
         if ( config.className && typeof config.className !== 'string' ) { throw new Error(__filename + ': wrong or empty config.className'); }
-        if ( config.type      && Number(config.type) !== config.type  ) { throw new Error(__filename + ': config.type must be a number'); }
+        if ( !config.wamp ) { throw new Error(__filename + ': config.wamp must be given'); }
     }
 
     // set default className if classList property empty or undefined
@@ -49,9 +43,36 @@ function TaskList ( config ) {
     Component.call(this, config);
 
     this.filterText = '';
+    this.wamp = config.wamp;
 
     // component setup
     this.init(config);
+
+    // forward click to the specific item
+    this.addListener('click', function ( event ) {
+        // there are some listeners
+        /*if ( self.events['click:item'] ) {
+            // notify listeners
+            self.emit('click:item', {$item: event.target});
+        }*/
+        
+        //console.log(event.$item);
+        self.wamp.call('runTask', {id: event.target.taskId}, function ( error, data ) {
+            console.log('run task', error, data);
+        });
+    });
+
+    this.wamp.addListener('eventTaskStart', function ( event ) {
+        console.log('task start', event);
+        //window[event.id].classList.add('running');
+        self.data[event.id].$node.classList.add('running');
+    });
+
+    this.wamp.addListener('eventTaskFinish', function ( event ) {
+        console.log('task finish', event);
+        //window[event.id].classList.remove('running');
+        self.data[event.id].$node.classList.remove('running');
+    });
 }
 
 
@@ -83,11 +104,18 @@ TaskList.prototype.init = function ( config ) {
         if ( typeof config !== 'object' ) { throw new Error(__filename + ': wrong config type'); }
     }
 
-    Object.keys(config.data).forEach(function ( name ) {
-        var item = document.createElement('div');
+    // save
+    this.data = config.data || {};
 
-        item.className = 'item' + (config.data[name].running ? ' running' : '');
-        item.innerText = name;
+    // apply
+    Object.keys(this.data).forEach(function ( id ) {
+        var item = document.createElement('div'),
+            data = self.data[id];
+
+        item.innerText = item.taskId = id;
+        item.className = 'item' + (data.running ? ' running' : '');
+
+        data.$node = item;
         
         self.$node.appendChild(item);
     });

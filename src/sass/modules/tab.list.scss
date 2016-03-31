@@ -1,0 +1,29 @@
+// @author Stanislav Kalashnik <darkpark.main@gmail.com>
+// @license GNU GENERAL PUBLIC LICENSE Version 3
+
+/* spa-component-list: release */
+.component.tabList {
+    display: inline-block;
+    //border: 1px solid #eee;
+
+    .item {
+        display: inline-block;
+        height: 24px;
+        line-height: 24px;
+        padding: 0 8px;
+        border: 1px solid #eee;
+        cursor: pointer;
+
+        &:hover {
+            background-color: #f7f7ff;
+        }
+
+        &:first-of-type {
+            //border-bottom: none;
+        }
+
+        &.active {
+            background-color: #f4fff4;
+        }
+    }
+}

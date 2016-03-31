@@ -1,9 +1,70 @@
 /**
- * Main application entry point.
+ * Handle wamp init requests.
  */
 
 'use strict';
 
+var app      = require('spa-app'),
+    Wamp     = require('spa-wamp'),
+    parallel = require('cjs-async/parallel');
+
+
+// public
+module.exports = function ( callback ) {
+    var fnNameList = {
+            connection: 'getConnectionInfo',
+            project:    'getProjectInfo',
+            clients:    'getClients',
+            targets:    'getTargets',
+            plugins:    'getPlugins',
+            tasks:      'getTasks'
+        },
+        fnHashList = [],
+        fnBodyList = [];
+
+    app.data = {};
+
+    app.wamp = new Wamp('ws://' + (app.query.wampHost || location.hostname) + ':' + app.query.wampPort + '/client');
+
+    app.wamp.addListener('connection:open', function () {
+        document.body.style.opacity = 1;
+        //debug.info('wamp open ' + app.wamp.socket.url, app.wamp, {tags: ['open', 'wamp']});
+    });
+
+    app.wamp.addListener('connection:close', function () {
+        document.body.style.opacity = 0.2;
+        //debug.info('wamp close ' + app.wamp.socket.url, app.wamp, {tags: ['close', 'wamp']});
+    });
+
+    Object.keys(fnNameList).forEach(function ( id ) {
+        // prepare async method
+        fnBodyList.push(function ( done ) {
+            app.wamp.call(fnNameList[id], {}, done);
+        });
+
+        // build hash table
+        fnHashList.push(id);
+    });
+
+    app.wamp.once('connection:open', function () {
+        // gather all data
+        parallel(fnBodyList, function ( error, list ) {
+            if ( error ) {
+                debug.fail(error);
+            }
+
+            // build data
+            list.forEach(function ( data, index ) {
+                app.data[fnHashList[index]] = data;
+            });
+
+            callback();
+        });
+    });
+};
+
+
+/*
 var app   = require('spa-app'),
     Wamp  = require('cjs-wamp'),
     parse = require('cjs-query').parse;
@@ -33,9 +94,9 @@ function wamp () {
             console.log('clients', data);
         });
 
-        /*app.wamp.call('getTargets', {}, function ( error, data ) {
+        /!*app.wamp.call('getTargets', {}, function ( error, data ) {
             console.log('targets', data);
-        });*/
+        });*!/
 
         app.wamp.call('getPlugins', {}, function ( error, data ) {
             console.log('plugins', data);
@@ -74,3 +135,4 @@ function wamp () {
 
 // public
 module.exports = wamp;
+*/

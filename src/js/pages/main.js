@@ -7,11 +7,12 @@
 var app      = require('spa-app'),
     Page     = require('spa-component-page'),
     Button   = require('spa-component-button'),
-    Console  = require('./console'),
-    TaskList = require('./task.list'),
+    Console  = require('./../modules/console'),
+    TaskList = require('./../modules/task.list.js'),
+    TabList  = require('./../modules/tab.list.js'),
     page     = new Page({$node: window.pageMain}),
     targets  = {},
-    taskList, taskLogs;
+    taskList, taskLogs, devConsole, tabList;
 
 
 function addSystemTab () {
@@ -24,7 +25,16 @@ function addSystemTab () {
         }
     });
 
-    window.pageMainHeader.appendChild(button.$node);
+    //window.pageMainHeader.appendChild(button.$node);
+
+    tabList.add({
+        type: 'system'
+    });
+
+    taskList = new TaskList({
+        $node: window.pageMainTaskList,
+        wamp: app.wamp
+    });
 
     taskLogs = new Console({
         $node: window.pageMainTaskLogs,
@@ -33,6 +43,8 @@ function addSystemTab () {
 }
 
 function addTargetTab ( data ) {
+    tabList.add(data);
+
     if ( !(data.id in targets) ) {
         data.button = new Button({
             value: 'target #' + data.id,
@@ -43,7 +55,7 @@ function addTargetTab ( data ) {
             }
         });
 
-        window.pageMainHeader.appendChild(data.button.$node);
+        //window.pageMainHeader.appendChild(data.button.$node);
         targets[data.id] = data;
     }
 }
@@ -54,30 +66,40 @@ function removeTargetTab ( data ) {
 
 
 app.addListener('load', function load () {
-    var /*buttonSystem = new Button({
-            //$node: window.pageMainButtonSystem,
-            value: 'system',
-            events: {
-                click: function () {
-                    window.pageMainTabSystem.style.display = 'block';
-                    window.pageMainTabTarget.style.display = 'none';
-                }
-            }
-        }),
-        buttonTarget = new Button({
-            //$node: window.pageMainButtonTarget,
-            value: 'target',
-            events: {
-                click: function () {
-                    window.pageMainTabSystem.style.display = 'none';
-                    window.pageMainTabTarget.style.display = 'block';
-                }
-            }
-        }),*/
-        devConsole = new Console({
-            $node: window.pageMainTabConsole,
-            events: {}
-        });
+    // var /*buttonSystem = new Button({
+    //         //$node: window.pageMainButtonSystem,
+    //         value: 'system',
+    //         events: {
+    //             click: function () {
+    //                 window.pageMainTabSystem.style.display = 'block';
+    //                 window.pageMainTabTarget.style.display = 'none';
+    //             }
+    //         }
+    //     }),
+    //     buttonTarget = new Button({
+    //         //$node: window.pageMainButtonTarget,
+    //         value: 'target',
+    //         events: {
+    //             click: function () {
+    //                 window.pageMainTabSystem.style.display = 'none';
+    //                 window.pageMainTabTarget.style.display = 'block';
+    //             }
+    //         }
+    //     }),*/
+    //     devConsole = new Console({
+    //         $node: window.pageMainTabConsole,
+    //         events: {}
+    //     });
+
+    tabList = new TabList({
+        $node: window.pageMainTabList,
+        wamp: app.wamp
+    });
+
+    devConsole = new Console({
+        $node: window.pageMainTabConsole,
+        events: {}
+    });
 
     addSystemTab();
 
@@ -142,35 +164,35 @@ app.addListener('load', function load () {
     app.wamp.once('connection:open', function () {
         // info
 
-        app.wamp.call('getConnectionInfo', {}, function ( error, data ) {
-            console.log('connection info', data);
-        });
-
-        app.wamp.call('getProjectInfo', {}, function ( error, data ) {
-            console.log('project info', data);
-            window.pageMainHeaderLink.href = window.pageMainHeaderLink.innerText = 'http://' + data.host + ':8080/app/develop.html?wampPort=' + app.query.wampPort;
-        });
-
-        app.wamp.call('getMemoryUsage', {}, function ( error, data ) {
-            //console.log('memory usage', data);
-            debug.info('memory usage', data, {tags: ['memory']});
-        });
-
-        app.wamp.call('getClients', {}, function ( error, data ) {
-            console.log('clients', data);
-        });
-
-        app.wamp.call('getTargets', {}, function ( error, data ) {
-            console.log('targets', data);
-
-            Object.keys(data).forEach(function ( id ) {
-                addTargetTab({id: id});
-            });
-        });
-
-        app.wamp.call('getPlugins', {}, function ( error, data ) {
-            console.log('plugins', data);
-        });
+        // app.wamp.call('getConnectionInfo', {}, function ( error, data ) {
+        //     console.log('connection info', data);
+        // });
+		//
+        // app.wamp.call('getProjectInfo', {}, function ( error, data ) {
+        //     console.log('project info', data);
+        //     window.pageMainHeaderLink.href = window.pageMainHeaderLink.innerText = 'http://' + data.host + ':8080/app/develop.html?wampPort=' + app.query.wampPort;
+        // });
+		//
+        // app.wamp.call('getMemoryUsage', {}, function ( error, data ) {
+        //     //console.log('memory usage', data);
+        //     debug.info('memory usage', data, {tags: ['memory']});
+        // });
+		//
+        // app.wamp.call('getClients', {}, function ( error, data ) {
+        //     console.log('clients', data);
+        // });
+		//
+        // app.wamp.call('getTargets', {}, function ( error, data ) {
+        //     console.log('targets', data);
+		//
+        //     Object.keys(data).forEach(function ( id ) {
+        //         addTargetTab({id: id});
+        //     });
+        // });
+		//
+        // app.wamp.call('getPlugins', {}, function ( error, data ) {
+        //     console.log('plugins', data);
+        // });
 
         // notifications
 
@@ -178,24 +200,24 @@ app.addListener('load', function load () {
         //    console.log('new target', event);
         //});
 
-        app.wamp.addListener('eventTaskStart', function ( event ) {
-            console.log('task start', event);
-            window[event.id].classList.add('running');
-        });
-
-        app.wamp.addListener('eventTaskFinish', function ( event ) {
-            console.log('task finish', event);
-            window[event.id].classList.remove('running');
-        });
+        // app.wamp.addListener('eventTaskStart', function ( event ) {
+        //     console.log('task start', event);
+        //     window[event.id].classList.add('running');
+        // });
+		//
+        // app.wamp.addListener('eventTaskFinish', function ( event ) {
+        //     console.log('task finish', event);
+        //     window[event.id].classList.remove('running');
+        // });
 
         app.wamp.addListener('eventTargetMessage', function ( event ) {
             //console.log(event);
 
-            if ( event.tags.indexOf('target') === -1 ) {
-                taskLogs.add(event);
-            } else {
-                devConsole.add(event);
-            }
+            // if ( event.tags.indexOf('target') === -1 ) {
+            //     taskLogs.add(event);
+            // } else {
+            //     devConsole.add(event);
+            // }
 
 
             /*var item = document.createElement('div'),
@@ -267,22 +289,23 @@ app.addListener('load', function load () {
             console.log('message', event);
         });*/
 
-        app.wamp.call('getTargets', {}, function ( error, data ) {
-            Object.keys(data).forEach(function ( id ) {
-                var target = data[id];
-
-                console.log('target', target);
-                /*window.pageMainHeader.appendChild(new Button({
-                    value: 'target #' + id + ' (' + target.host + ')'
-                }).$node);*/
-            });
-        });
+        // app.wamp.call('getTargets', {}, function ( error, data ) {
+        //     Object.keys(data).forEach(function ( id ) {
+        //         var target = data[id];
+		//
+        //         console.log('target', target);
+        //         /*window.pageMainHeader.appendChild(new Button({
+        //             value: 'target #' + id + ' (' + target.host + ')'
+        //         }).$node);*/
+        //     });
+        // });
     });
 
     app.wamp.addListener('eventTargetOffline', function ( target ) {
         console.log('remove target', target);
 
-        removeTargetTab(target);
+        //removeTargetTab(target);
+        tabList.data[target.id].$node.classList.remove('active');
         //addTargetTab(target);
         /*window.pageMainHeader.appendChild(new Button({
             value: 'target #' + target.id + ' (' + target.host + ')'
@@ -293,14 +316,34 @@ app.addListener('load', function load () {
         console.log('new target', target);
 
         addTargetTab(target);
+        tabList.data[target.id].$node.classList.add('active');
         /*window.pageMainHeader.appendChild(new Button({
             value: 'target #' + target.id + ' (' + target.host + ')'
         }).$node);*/
     });
 });
 
+
 page.addListener('show', function load () {
-    app.wamp.call('getTasks', {}, function ( error, data ) {
+    taskList.init({data: app.data.tasks});
+
+    window.pageMainHeaderLink.href = window.pageMainHeaderLink.innerText = 'http://' + app.data.project.host + ':8080/app/develop.html?wampPort=' + app.query.wampPort;
+
+    Object.keys(app.data.targets).forEach(function ( id ) {
+        addTargetTab({id: id});
+    });
+
+    app.wamp.addListener('eventTargetMessage', function ( event ) {
+        //console.log(event);
+
+        if ( event.tags.indexOf('target') === -1 ) {
+            taskLogs.add(event);
+        } else {
+            devConsole.add(event);
+        }
+    });
+
+    /*app.wamp.call('getTasks', {}, function ( error, data ) {
         var groups  = {},
             general = [];
 
@@ -309,7 +352,15 @@ page.addListener('show', function load () {
         taskList = new TaskList({
             $node: window.pageMainTaskList,
             data: data,
-            events: {}
+            wamp: app.wamp,
+            events: {
+                /!*'click:item': function ( event ) {
+                    console.log(event.$item);
+                    app.wamp.call('runTask', {id: event.$item.innerText}, function ( error, data ) {
+                        console.log('run task', error, data);
+                    });
+                }*!/
+            }
         });
 
         Object.keys(data).forEach(function ( id ) {
@@ -390,7 +441,7 @@ page.addListener('show', function load () {
                 divTasks.appendChild(divTask);
             });
         });
-    });
+    });*/
 });
 
 

@@ -1,15 +1,9 @@
 #pageMain {
     box-sizing: border-box;
 
-    > .header {
-        padding: 5px;
-        background-color: #fdfdfd;
-        border-bottom: 1px solid #eee;
-    }
-
     > .content {
         position: absolute;
-        top: 43px;
+        top: $itemHeight + $itemMargin * 2 + 1;
         bottom: 0;
         left: 0;
         right: 0;
@@ -136,9 +130,23 @@
     }
 }
 
-//#pageMainHeader {
-//    padding: 5px;
-//}
+#pageMainHeader {
+    background-color: #fdfdfd;
+    border-bottom: 1px solid #eee;
+    height: $itemHeight + $itemMargin * 2;
+    position: relative;
+}
+
+#pageMainTabList {
+    position: absolute;
+    bottom: -1px;
+    left: $itemMargin;
+
+    > .item {
+        height: $itemHeight + $itemMargin - 2;
+        line-height: $itemHeight + $itemMargin - 2;
+    }
+}
 
 #pageMainHeaderLink {
     float: right;

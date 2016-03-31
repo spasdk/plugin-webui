@@ -1,5 +1,7 @@
 // pages
 @import "pages/init";
 @import "pages/main";
-@import "pages/console";
-@import "pages/task.list";
+
+@import "modules/console";
+@import "modules/tab.list";
+@import "modules/task.list";
