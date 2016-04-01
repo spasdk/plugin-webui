@@ -27,9 +27,7 @@ function addSystemTab () {
 
     //window.pageMainHeader.appendChild(button.$node);
 
-    tabList.add({
-        type: 'system'
-    });
+    tabList.add();
 
     taskList = new TaskList({
         $node: window.pageMainTaskList,
@@ -66,6 +64,8 @@ function removeTargetTab ( data ) {
 
 
 app.addListener('load', function load () {
+    var timeout;
+
     // var /*buttonSystem = new Button({
     //         //$node: window.pageMainButtonSystem,
     //         value: 'system',
@@ -146,6 +146,22 @@ app.addListener('load', function load () {
             item.style.display = visible ? 'block' : 'none';
         }
     }*/
+
+    window.pageMainTaskFilter.onkeydown = function ( event ) {
+        // Clear the timeout if it has already been set.
+        // This will prevent the previous task from executing
+        // if it has been less than <MILLISECONDS>
+        clearTimeout(timeout);
+
+        timeout = setTimeout(function () {
+            //if ( event.keyCode === 13 ) {
+            taskList.filterText = window.pageMainTaskFilter.value;
+            taskList.applyFilter();
+            //}
+        }, 300);
+
+        event.stopPropagation();
+    };
 
     window.pageMainFilterText.onkeydown = window.pageMainTagsInclude.onkeydown = window.pageMainTagsExclude.onkeydown = function ( event ) {
         event.stopPropagation();
@@ -305,7 +321,7 @@ app.addListener('load', function load () {
         console.log('remove target', target);
 
         //removeTargetTab(target);
-        tabList.data[target.id].$node.classList.remove('active');
+        tabList.data[target.id].$node.classList.remove('online');
         //addTargetTab(target);
         /*window.pageMainHeader.appendChild(new Button({
             value: 'target #' + target.id + ' (' + target.host + ')'
@@ -316,7 +332,7 @@ app.addListener('load', function load () {
         console.log('new target', target);
 
         addTargetTab(target);
-        tabList.data[target.id].$node.classList.add('active');
+        tabList.data[target.id].$node.classList.add('online');
         /*window.pageMainHeader.appendChild(new Button({
             value: 'target #' + target.id + ' (' + target.host + ')'
         }).$node);*/

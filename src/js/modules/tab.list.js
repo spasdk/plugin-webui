@@ -47,6 +47,8 @@ function TabList ( config ) {
 
     this.data = {};
 
+    this.$focus = null;
+
     // component setup
     //this.init(config);
 
@@ -62,6 +64,9 @@ function TabList ( config ) {
         /*self.wamp.call('runTask', {id: event.target.taskId}, function ( error, data ) {
             console.log('run task', error, data);
         });*/
+        self.$focus.classList.remove('active');
+        self.$focus = event.target;
+        self.$focus.classList.add('active');
     });
 
     this.wamp.addListener('eventTargetOnline', function ( target ) {
@@ -161,7 +166,7 @@ TabList.prototype.add = function ( data ) {
 
     if ( !(data.id in this.data) ) {
         item = document.createElement('div');
-        item.className = 'item active';
+        item.className = 'item online';
 
         if ( data.id ) {
             // target
@@ -170,6 +175,8 @@ TabList.prototype.add = function ( data ) {
         } else {
             // system
             item.innerText = 'system';
+            item.className += ' active';
+            this.$focus = item;
         }
 
         data.$node = item;

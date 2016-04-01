@@ -10,20 +10,31 @@
         display: inline-block;
         height: 24px;
         line-height: 24px;
-        padding: 0 8px;
         border: 1px solid #eee;
+        border-left: none;
         cursor: pointer;
+        background: url("https://cdn3.iconfinder.com/data/icons/sweetiev3/png-8/16-circle-red.png") no-repeat 8px center;
+        padding: 0 10px 0 28px;
+        color: #999;
 
         &:hover {
             background-color: #f7f7ff;
         }
 
         &:first-of-type {
-            //border-bottom: none;
+            border-left: 1px solid #eee;
         }
 
         &.active {
-            background-color: #f4fff4;
+            background-color: #fff;
+            border-bottom-color: #fff;
+            color: #000;
+        }
+
+        &.online {
+            background-image: url("https://cdn3.iconfinder.com/data/icons/sweetiev3/png-24/16-circle-green.png");
+
+            //color: #0f0;
         }
     }
 }

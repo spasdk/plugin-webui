@@ -55,7 +55,7 @@ function TaskList ( config ) {
             // notify listeners
             self.emit('click:item', {$item: event.target});
         }*/
-        
+
         //console.log(event.$item);
         self.wamp.call('runTask', {id: event.target.taskId}, function ( error, data ) {
             console.log('run task', error, data);
@@ -72,6 +72,7 @@ function TaskList ( config ) {
         console.log('task finish', event);
         //window[event.id].classList.remove('running');
         self.data[event.id].$node.classList.remove('running');
+        self.data[event.id].$node.classList.add('ok');
     });
 }
 
@@ -116,7 +117,7 @@ TaskList.prototype.init = function ( config ) {
         item.className = 'item' + (data.running ? ' running' : '');
 
         data.$node = item;
-        
+
         self.$node.appendChild(item);
     });
 };
@@ -132,7 +133,7 @@ TaskList.prototype.applyFilter = function () {
         length, item;
 
     // prepare
-    length = nodes.length - 1;
+    length = nodes.length;
     // check
     while ( length-- ) {
         item = nodes[length];
