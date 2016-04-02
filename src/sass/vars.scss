@@ -1,5 +1,10 @@
 // application variables
 
 $itemMargin: 10px;
-$itemHeight: 25px;
+$itemHeight: 28px;
+
+$headerHeight: $itemHeight + $itemMargin * 2;
+
+$colorBorder: #eee;
+
 //$headerHeight: 25px;
