@@ -19,14 +19,15 @@
     "dependencies": {
         "extend": "3.*.*",
         "cjs-async": "cjssdk/async",
-        "spa-plugin": "spasdk/plugin",
-        "spa-wamp": "spasdk/wamp"
+        "spa-plugin": "spasdk/plugin"
     },
     "devDependencies": {
         "spa-app": "spasdk/app",
         "spa-component-button": "spasdk/component-button",
         "spa-component-page": "spasdk/component-page",
-        "spa-eslint-config": "spasdk/eslint-config"
+        "spa-component-tab-item": "spasdk/component-tab-item",
+        "spa-eslint-config": "spasdk/eslint-config",
+        "spa-wamp": "spasdk/wamp"
     },
     "license": "GPL-3.0"
 }
