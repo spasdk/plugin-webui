@@ -4,15 +4,19 @@
 
 'use strict';
 
-var app      = require('spa-app'),
-    Page     = require('spa-component-page'),
-    Button   = require('spa-component-button'),
-    Console  = require('./../modules/console'),
-    TaskList = require('./../modules/task.list.js'),
-    TabList  = require('./../modules/tab.list.js'),
-    page     = new Page({$node: window.pageMain}),
-    targets  = {},
-    taskList, taskLogs, devConsole, tabList;
+var app       = require('spa-app'),
+    Page      = require('spa-component-page'),
+    Button    = require('spa-component-button'),
+    TabItem   = require('spa-component-tab-item'),
+    Console   = require('./../modules/console'),
+    TaskList  = require('./../modules/task.list'),
+    TabList   = require('./../modules/tab.list'),
+    TabSystem = require('./../modules/tab.system'),
+    TabTarget = require('./../modules/tab.target'),
+    page      = new Page({$node: window.pageMain}),
+    targets   = {},
+    taskList, taskLogs, devConsole, tabList,
+    tabSystem;
 
 
 function addSystemTab () {
@@ -27,20 +31,41 @@ function addSystemTab () {
 
     //window.pageMainHeader.appendChild(button.$node);
 
-    tabList.add();
-
-    taskList = new TaskList({
-        $node: window.pageMainTaskList,
-        wamp: app.wamp
-    });
+    // taskList = new TaskList({
+    //     $node: window.pageMainTaskList,
+    //     wamp: app.wamp
+    // });
 
     taskLogs = new Console({
         $node: window.pageMainTaskLogs,
         events: {}
     });
+
+    tabSystem = new TabSystem({
+        parent: page,
+        wamp: app.wamp
+    });
+    /*tabSystem = new TabItem({
+        parent: page
+    });*/
+
+    tabList.add({
+        tab: tabSystem
+    });
+
+    tabSystem.show();
 }
 
 function addTargetTab ( data ) {
+    // data.tab = new TabTarget({
+    //     parent: page,
+    //     wamp: app.wamp
+    // });
+
+    data.tab = new TabItem({
+        parent: page
+    });
+
     tabList.add(data);
 
     if ( !(data.id in targets) ) {
@@ -147,21 +172,21 @@ app.addListener('load', function load () {
         }
     }*/
 
-    window.pageMainTaskFilter.onkeydown = function ( event ) {
-        // Clear the timeout if it has already been set.
-        // This will prevent the previous task from executing
-        // if it has been less than <MILLISECONDS>
-        clearTimeout(timeout);
-
-        timeout = setTimeout(function () {
-            //if ( event.keyCode === 13 ) {
-            taskList.filterText = window.pageMainTaskFilter.value;
-            taskList.applyFilter();
-            //}
-        }, 300);
-
-        event.stopPropagation();
-    };
+    // window.pageMainTaskFilter.onkeydown = function ( event ) {
+    //     // Clear the timeout if it has already been set.
+    //     // This will prevent the previous task from executing
+    //     // if it has been less than <MILLISECONDS>
+    //     clearTimeout(timeout);
+	//
+    //     timeout = setTimeout(function () {
+    //         //if ( event.keyCode === 13 ) {
+    //         taskList.filterText = window.pageMainTaskFilter.value;
+    //         taskList.applyFilter();
+    //         //}
+    //     }, 300);
+	//
+    //     event.stopPropagation();
+    // };
 
     window.pageMainFilterText.onkeydown = window.pageMainTagsInclude.onkeydown = window.pageMainTagsExclude.onkeydown = function ( event ) {
         event.stopPropagation();
@@ -341,7 +366,8 @@ app.addListener('load', function load () {
 
 
 page.addListener('show', function load () {
-    taskList.init({data: app.data.tasks});
+    //taskList.init({data: app.data.tasks});
+    tabSystem.taskList.init({data: app.data.tasks});
 
     window.pageMainHeaderLink.href = window.pageMainHeaderLink.innerText = 'http://' + app.data.project.host + ':8080/app/develop.html?wampPort=' + app.query.wampPort;
 
@@ -353,7 +379,7 @@ page.addListener('show', function load () {
         //console.log(event);
 
         if ( event.tags.indexOf('target') === -1 ) {
-            taskLogs.add(event);
+            tabSystem.taskLogs.add(event);
         } else {
             devConsole.add(event);
         }

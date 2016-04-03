@@ -67,6 +67,8 @@ function TabList ( config ) {
         self.$focus.classList.remove('active');
         self.$focus = event.target;
         self.$focus.classList.add('active');
+        //console.log(self.data[event.target.tabId]);
+        self.data[event.target.tabId].tab.show();
     });
 
     this.wamp.addListener('eventTargetOnline', function ( target ) {
@@ -167,6 +169,7 @@ TabList.prototype.add = function ( data ) {
     if ( !(data.id in this.data) ) {
         item = document.createElement('div');
         item.className = 'item online';
+        item.tabId = data.id;
 
         if ( data.id ) {
             // target

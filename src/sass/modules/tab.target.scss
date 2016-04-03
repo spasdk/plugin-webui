@@ -1,0 +1,12 @@
+// @author Stanislav Kalashnik <darkpark.main@gmail.com>
+// @license GNU GENERAL PUBLIC LICENSE Version 3
+
+/* spa-component-list: release */
+.component.tabTarget {
+    position: absolute;
+    top: $headerHeight;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: #ae7200;
+}

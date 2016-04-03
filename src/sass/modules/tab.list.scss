@@ -4,17 +4,17 @@
 /* spa-component-list: release */
 .component.tabList {
     display: inline-block;
-    //border: 1px solid #eee;
+    //border: 1px solid $colorBorderDark;
 
     .item {
         display: inline-block;
         height: 24px;
         line-height: 24px;
-        border: 1px solid #eee;
+        border: 1px solid $colorBorderDark;
         border-left: none;
         cursor: pointer;
-        background: url("https://cdn3.iconfinder.com/data/icons/sweetiev3/png-8/16-circle-red.png") no-repeat 8px center;
-        padding: 0 10px 0 28px;
+        background: url("https://cdn3.iconfinder.com/data/icons/sweetiev3/png-8/16-circle-red.png") no-repeat 10px center;
+        padding: 0 15px 0 30px;
         color: #999;
 
         &:hover {
@@ -22,7 +22,7 @@
         }
 
         &:first-of-type {
-            border-left: 1px solid #eee;
+            border-left: 1px solid $colorBorderDark;
         }
 
         &.active {

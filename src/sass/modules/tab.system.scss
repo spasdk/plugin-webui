@@ -1,0 +1,160 @@
+// @author Stanislav Kalashnik <darkpark.main@gmail.com>
+// @license GNU GENERAL PUBLIC LICENSE Version 3
+
+/* spa-component-list: release */
+.component.tabSystem {
+    top: $headerHeight + 1;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: #fff;
+    height: initial;
+
+    > .taskListFilters {
+        position: absolute;
+        top: $itemMargin;
+        left: $itemMargin;
+        height: $itemHeight;
+        width: $tabSystemSideWidth;
+
+        > input {
+            width: 100%;
+            height: 100%;
+            box-sizing: border-box;
+            outline: none;
+            border: 1px solid $colorBorderDark;
+            font-size: 14px;
+            background: url("https://cdn4.iconfinder.com/data/icons/small-n-flat/24/search-16.png") no-repeat 6px center;
+            padding: 0 5px 0 $itemHeight;
+
+            &:focus {
+                background-color: #fffff4;
+            }
+        }
+    }
+
+    > .taskList {
+        position: absolute;
+        top: $itemHeight + $itemMargin * 2;
+        left: $itemMargin;
+        bottom: $itemMargin;
+        width: $tabSystemSideWidth;
+        overflow: auto;
+    }
+
+    > .taskLogsFilters {
+        position: absolute;
+        top: $itemMargin;
+        height: $itemHeight;
+        left: $tabSystemSideWidth + $itemMargin * 2;
+        right: $itemMargin;
+        outline: 1px dashed lightgrey;
+        outline-offset: -1px;
+    }
+
+    > .console {
+        position: absolute;
+        top: $itemHeight + $itemMargin * 2;
+        left: $tabSystemSideWidth + $itemMargin * 2;
+        bottom: $itemHeight + $itemMargin * 2;
+        right: $itemMargin;
+        overflow: auto;
+    }
+
+    > .taskExec {
+        position: absolute;
+        left: $tabSystemSideWidth + $itemMargin * 2;
+        bottom: $itemMargin;
+        right: $itemMargin;
+        height: $itemHeight;
+
+        > input {
+            width: 100%;
+            height: 100%;
+            box-sizing: border-box;
+            outline: none;
+            border: 1px solid $colorBorderDark;
+            font-size: 14px;
+            background: url("https://cdn4.iconfinder.com/data/icons/mayssam/512/development-16.png") no-repeat 6px center;
+            padding: 0 5px 0 $itemHeight;
+
+            &:focus {
+                background-color: #fffff4;
+            }
+        }
+    }
+
+    //.side {
+    //    display: table-cell;
+    //    width: 200px;
+    //    //height: inherit;
+    //    background-color: red;
+    //    padding: $itemMargin 0 $itemMargin $itemMargin;
+    //}
+    //
+    //.content {
+    //    display: table-cell;
+    //    //height: inherit;
+    //    background-color: blueviolet;
+    //    padding: $itemMargin;
+    //}
+
+    > table {
+        width: 100%;
+        height: 100%;
+        border-collapse: separate;
+        border-spacing: $itemMargin;
+        //border: 1px solid red;
+
+        td {
+            outline: 1px dashed lightgrey;
+            outline-offset: -1px;
+
+            &.line {
+                height: $itemHeight + 2;
+
+                > input {
+                    box-sizing: border-box;
+                    outline: none;
+                    border: 1px solid $colorBorderDark;
+                    font-size: 14px;
+                    //padding: 0 5px;
+                    //width: 100%;
+                    height: inherit;
+
+                    &:focus {
+                        background-color: #fffff4;
+                    }
+
+                    &.code {
+                        font-family: monospace;
+                        font-size: 13px;
+                    }
+                }
+            }
+
+            &.list {
+                width: 210px;
+                position: relative;
+
+                > .taskList {
+                    position: absolute;
+                    top: 0;
+                    bottom: 0;
+                    left: 0;
+                    right: 0;
+                    overflow: auto;
+                }
+            }
+
+            &.logs {
+                position: relative;
+            }
+
+            &.code {
+                height: $itemHeight + 2;
+                //position: relative;
+            }
+        }
+    }
+}

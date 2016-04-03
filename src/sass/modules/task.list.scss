@@ -3,21 +3,24 @@
 
 /* spa-component-list: release */
 .component.taskList {
-    border: 1px solid #eee;
+    border: 1px solid $colorBorderDark;
 
     .item {
-        height: 24px;
-        line-height: 24px;
-        padding: 0 5px;
-        border-bottom: 1px solid #eee;
+        height: $itemHeight;
+        line-height: $itemHeight;
+        padding: 0 20px 0 5px;
+        border-bottom: 1px solid $colorBorderLight;
         cursor: pointer;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
 
         &:hover {
             background-color: #f7f7ff;
         }
 
-        &:first-of-type {
-            //border-bottom: none;
+        &:last-of-type {
+            border-bottom: none;
         }
 
         &.running {
@@ -25,7 +28,7 @@
         }
 
         &.ok {
-            background: url("https://cdn0.iconfinder.com/data/icons/very-basic-android-l-lollipop-icon-pack/24/checkmark-16.png") no-repeat right 5px center;
+            background: url("https://cdn0.iconfinder.com/data/icons/very-basic-android-l-lollipop-icon-pack/24/checkmark-16.png") no-repeat right center;
         }
     }
 }

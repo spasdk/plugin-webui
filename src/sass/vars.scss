@@ -1,10 +1,13 @@
 // application variables
 
 $itemMargin: 10px;
-$itemHeight: 28px;
+$itemHeight: 26px;
 
 $headerHeight: $itemHeight + $itemMargin * 2;
 
-$colorBorder: #eee;
+$colorBorderDark: #ddd;
+$colorBorderLight: #eee;
+
+$tabSystemSideWidth: 210px;
 
 //$headerHeight: 25px;

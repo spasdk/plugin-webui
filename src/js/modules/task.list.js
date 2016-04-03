@@ -65,6 +65,7 @@ function TaskList ( config ) {
     this.wamp.addListener('eventTaskStart', function ( event ) {
         console.log('task start', event);
         //window[event.id].classList.add('running');
+        console.log(self);
         self.data[event.id].$node.classList.add('running');
     });
 
