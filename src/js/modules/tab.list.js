@@ -54,30 +54,42 @@ function TabList ( config ) {
 
     // forward click to the specific item
     this.addListener('click', function ( event ) {
+        var data = self.data[event.target.tabId];
+
         // there are some listeners
         /*if ( self.events['click:item'] ) {
             // notify listeners
             self.emit('click:item', {$item: event.target});
         }*/
+        //console.log(event);
 
-        //console.log(event.$item);
-        /*self.wamp.call('runTask', {id: event.target.taskId}, function ( error, data ) {
-            console.log('run task', error, data);
-        });*/
-        self.$focus.classList.remove('active');
-        self.$focus = event.target;
-        self.$focus.classList.add('active');
-        //console.log(self.data[event.target.tabId]);
-        self.data[event.target.tabId].tab.show();
+        if ( event.button === 0 ) {
+            // left mouse button
+            /*self.wamp.call('runTask', {id: event.target.taskId}, function ( error, data ) {
+             console.log('run task', error, data);
+             });*/
+            self.$focus.classList.remove('active');
+            self.$focus = event.target;
+            self.$focus.classList.add('active');
+            //console.log(self.data[event.target.tabId]);
+            data.tab.show();
+        } else if ( event.button === 1 && !data.online ) {
+            // middle mouse button
+            console.log('close');
+            if ( event.target.tabId ) {
+                //console.log(self.data[event.target.tabId]);
+                self.close(event.target.tabId);
+            }
+        }
     });
 
-    this.wamp.addListener('eventTargetOnline', function ( target ) {
-        //self.data[target.id].$node.classList.add('active');
-    });
-
-    this.wamp.addListener('eventTargetOffline', function ( target ) {
-        //self.data[target.id].$node.classList.remove('active');
-    });
+    // this.wamp.addListener('eventTargetOnline', function ( target ) {
+    //     //self.data[target.id].$node.classList.add('active');
+    // });
+	//
+    // this.wamp.addListener('eventTargetOffline', function ( target ) {
+    //     //self.data[target.id].$node.classList.remove('active');
+    // });
 
     /*this.wamp.addListener('eventTaskStart', function ( event ) {
         console.log('task start', event);
@@ -159,6 +171,21 @@ TabList.prototype.constructor = TabList;
 // };
 
 
+TabList.prototype.online = function ( id, state ) {
+    var data = this.data[id];
+
+    if ( data ) {
+        data.online = state;
+
+        if ( state ) {
+            data.$node.classList.add('online');
+        } else {
+            data.$node.classList.remove('online');
+        }
+    }
+};
+
+
 TabList.prototype.add = function ( data ) {
     var self = this,
         item;
@@ -173,8 +200,9 @@ TabList.prototype.add = function ( data ) {
 
         if ( data.id ) {
             // target
-            item.innerText = 'target #' + data.id;
-            item.title = data.host || 'localhost';
+            //item.innerText = 'target #' + data.id;
+            item.innerText = data.host || 'localhost';
+            //item.title = data.host || 'localhost';
         } else {
             // system
             item.innerText = 'system';
@@ -182,7 +210,8 @@ TabList.prototype.add = function ( data ) {
             this.$focus = item;
         }
 
-        data.$node = item;
+        data.$node  = item;
+        data.online = true;
         this.data[data.id] = data;
 
         this.$body.appendChild(item);
@@ -250,6 +279,17 @@ TabList.prototype.add = function ( data ) {
     // }
 
 
+};
+
+
+TabList.prototype.close = function ( id ) {
+    var data = this.data[id];
+
+    if ( data ) {
+        data.$node.parentNode.removeChild(data.$node);
+        data.tab.remove();
+        delete this.data[id];
+    }
 };
 
 

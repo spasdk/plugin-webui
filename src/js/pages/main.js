@@ -6,7 +6,7 @@
 
 var app       = require('spa-app'),
     Page      = require('spa-component-page'),
-    Button    = require('spa-component-button'),
+    //Button    = require('spa-component-button'),
     TabItem   = require('spa-component-tab-item'),
     Console   = require('./../modules/console'),
     TaskList  = require('./../modules/task.list'),
@@ -20,14 +20,14 @@ var app       = require('spa-app'),
 
 
 function addSystemTab () {
-    var button = new Button({
-        value: 'system',
-        events: {
-            click: function () {
-
-            }
-        }
-    });
+    // var button = new Button({
+    //     value: 'system',
+    //     events: {
+    //         click: function () {
+	//
+    //         }
+    //     }
+    // });
 
     //window.pageMainHeader.appendChild(button.$node);
 
@@ -69,23 +69,25 @@ function addTargetTab ( data ) {
     tabList.add(data);
 
     if ( !(data.id in targets) ) {
-        data.button = new Button({
-            value: 'target #' + data.id,
-            events: {
-                click: function () {
-
-                }
-            }
-        });
+        // data.button = new Button({
+        //     value: 'target #' + data.id,
+        //     events: {
+        //         click: function () {
+		//
+        //         }
+        //     }
+        // });
 
         //window.pageMainHeader.appendChild(data.button.$node);
         targets[data.id] = data;
     }
+
+    tabList.online(data.id, true);
 }
 
-function removeTargetTab ( data ) {
-    targets[data.id].button.remove();
-}
+// function removeTargetTab ( data ) {
+//     targets[data.id].button.remove();
+// }
 
 
 app.addListener('load', function load () {
@@ -346,7 +348,8 @@ app.addListener('load', function load () {
         console.log('remove target', target);
 
         //removeTargetTab(target);
-        tabList.data[target.id].$node.classList.remove('online');
+        //tabList.data[target.id].$node.classList.remove('online');
+        tabList.online(target.id, false);
         //addTargetTab(target);
         /*window.pageMainHeader.appendChild(new Button({
             value: 'target #' + target.id + ' (' + target.host + ')'
@@ -357,7 +360,8 @@ app.addListener('load', function load () {
         console.log('new target', target);
 
         addTargetTab(target);
-        tabList.data[target.id].$node.classList.add('online');
+
+        //tabList.data[target.id].$node.classList.add('online');
         /*window.pageMainHeader.appendChild(new Button({
             value: 'target #' + target.id + ' (' + target.host + ')'
         }).$node);*/
