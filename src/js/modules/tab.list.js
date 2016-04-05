@@ -201,7 +201,7 @@ TabList.prototype.add = function ( data ) {
         if ( data.id ) {
             // target
             //item.innerText = 'target #' + data.id;
-            item.innerText = data.host || 'localhost';
+            item.innerText = data.host || 'n/a';
             //item.title = data.host || 'localhost';
         } else {
             // system

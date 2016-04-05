@@ -376,7 +376,8 @@ page.addListener('show', function load () {
     window.pageMainHeaderLink.href = window.pageMainHeaderLink.innerText = 'http://' + app.data.project.host + ':8080/app/develop.html?wampPort=' + app.query.wampPort;
 
     Object.keys(app.data.targets).forEach(function ( id ) {
-        addTargetTab({id: id});
+        app.data.targets[id].id = id;
+        addTargetTab(app.data.targets[id]);
     });
 
     app.wamp.addListener('eventTargetMessage', function ( event ) {
