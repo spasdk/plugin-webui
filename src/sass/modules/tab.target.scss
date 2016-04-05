@@ -3,10 +3,52 @@
 
 /* spa-component-list: release */
 .component.tabTarget {
-    position: absolute;
-    top: $headerHeight;
+    top: $headerHeight + 1;
     bottom: 0;
     left: 0;
     right: 0;
-    background-color: #ae7200;
+    background-color: #fff;
+    height: initial;
+
+    > .taskLogsFilters {
+        position: absolute;
+        top: $itemMargin;
+        height: $itemHeight;
+        left: $itemMargin;
+        right: $itemMargin;
+        outline: 1px dashed lightgrey;
+        outline-offset: -1px;
+    }
+
+    > .console {
+        position: absolute;
+        top: $itemHeight + $itemMargin * 2;
+        left: $itemMargin;
+        bottom: $itemHeight + $itemMargin * 2;
+        right: $itemMargin;
+        overflow: auto;
+    }
+
+    > .codeExec {
+        position: absolute;
+        left: $itemMargin;
+        bottom: $itemMargin;
+        right: $itemMargin;
+        height: $itemHeight;
+
+        > input {
+            width: 100%;
+            height: 100%;
+            box-sizing: border-box;
+            outline: none;
+            border: 1px solid $colorBorderDark;
+            font-size: 14px;
+            background: url("https://cdn4.iconfinder.com/data/icons/mayssam/512/development-16.png") no-repeat 6px center;
+            padding: 0 5px 0 $itemHeight;
+
+            &:focus {
+                background-color: #fffff4;
+            }
+        }
+    }
 }

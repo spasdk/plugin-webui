@@ -7,14 +7,15 @@
 
 'use strict';
 
-var Component = require('spa-component');
+var TabItem = require('spa-component-tab-item'),
+    Console = require('./../modules/console');
 
 
 /**
  * Target tab.
  *
  * @constructor
- * @extends Component
+ * @extends TabItem
  *
  * @param {Object} config={}        init parameters (all inherited from the parent)
  * @param {Object} config.wamp      link to the server connection
@@ -22,7 +23,8 @@ var Component = require('spa-component');
  */
 function TabTarget ( config ) {
     // current execution context
-    var self = this;
+    var //self = this,
+        codeExec = document.createElement('input');
 
     // sanitize
     config = config || {};
@@ -31,14 +33,30 @@ function TabTarget ( config ) {
     config.className = 'tabTarget ' + (config.className || '');
 
     // parent constructor call
-    Component.call(this, config);
+    TabItem.call(this, config);
 
     this.wamp = config.wamp;
+
+    this.taskLogsFilters = document.createElement('div');
+    this.taskLogsFilters.className = 'taskLogsFilters';
+    this.$body.appendChild(this.taskLogsFilters);
+
+    this.logs = new Console({
+        parent: this,
+        wamp: this.wamp
+    });
+
+    codeExec.type = 'text';
+    codeExec.placeholder = 'type your code here';
+    this.codeExec = document.createElement('div');
+    this.codeExec.className = 'codeExec';
+    this.codeExec.appendChild(codeExec);
+    this.$body.appendChild(this.codeExec);
 }
 
 
 // inheritance
-TabTarget.prototype = Object.create(Component.prototype);
+TabTarget.prototype = Object.create(TabItem.prototype);
 TabTarget.prototype.constructor = TabTarget;
 
 

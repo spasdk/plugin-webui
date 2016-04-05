@@ -62,7 +62,7 @@ function addTargetTab ( data ) {
     //     wamp: app.wamp
     // });
 
-    data.tab = new TabItem({
+    data.tab = new TabTarget({
         parent: page
     });
 
@@ -386,7 +386,9 @@ page.addListener('show', function load () {
         if ( event.tags.indexOf('target') === -1 ) {
             tabSystem.taskLogs.add(event);
         } else {
-            devConsole.add(event);
+            //devConsole.add(event);
+            //console.log(event.targetId);
+            tabList.data[event.targetId].tab.logs.add(event)
         }
     });
 
