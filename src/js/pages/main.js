@@ -36,10 +36,10 @@ function addSystemTab () {
     //     wamp: app.wamp
     // });
 
-    taskLogs = new Console({
-        $node: window.pageMainTaskLogs,
-        events: {}
-    });
+    // taskLogs = new Console({
+    //     $node: window.pageMainTaskLogs,
+    //     events: {}
+    // });
 
     tabSystem = new TabSystem({
         parent: page,
@@ -123,24 +123,24 @@ app.addListener('load', function load () {
         wamp: app.wamp
     });
 
-    devConsole = new Console({
-        $node: window.pageMainTabConsole,
-        events: {}
-    });
+    // devConsole = new Console({
+    //     $node: window.pageMainTabConsole,
+    //     events: {}
+    // });
 
     addSystemTab();
 
-    window.pageMainLinkClear.addEventListener('click', function () {
-        devConsole.clear();
-    });
-
-    window.pageMainLinkReset.addEventListener('click', function () {
-        window.pageMainFilterText.value = window.pageMainTagsInclude.value = window.pageMainTagsExclude.value = '';
-        devConsole.filterText  = '';
-        devConsole.includeTags = [];
-        devConsole.excludeTags = [];
-        devConsole.applyFilter();
-    });
+    // window.pageMainLinkClear.addEventListener('click', function () {
+    //     devConsole.clear();
+    // });
+	//
+    // window.pageMainLinkReset.addEventListener('click', function () {
+    //     window.pageMainFilterText.value = window.pageMainTagsInclude.value = window.pageMainTagsExclude.value = '';
+    //     devConsole.filterText  = '';
+    //     devConsole.includeTags = [];
+    //     devConsole.excludeTags = [];
+    //     devConsole.applyFilter();
+    // });
 
     /*function applyFilter () {
         var node        = window.pageMainTabTargetList.children,
@@ -190,19 +190,19 @@ app.addListener('load', function load () {
     //     event.stopPropagation();
     // };
 
-    window.pageMainFilterText.onkeydown = window.pageMainTagsInclude.onkeydown = window.pageMainTagsExclude.onkeydown = function ( event ) {
-        event.stopPropagation();
-        if ( event.keyCode === 13 ) {
-            devConsole.filterText  = window.pageMainFilterText.value;
-            devConsole.includeTags = window.pageMainTagsInclude.value.split(' ');
-            devConsole.excludeTags = window.pageMainTagsExclude.value.split(' ');
-            devConsole.applyFilter();
-        }
-    };
+    // window.pageMainFilterText.onkeydown = window.pageMainTagsInclude.onkeydown = window.pageMainTagsExclude.onkeydown = function ( event ) {
+    //     event.stopPropagation();
+    //     if ( event.keyCode === 13 ) {
+    //         devConsole.filterText  = window.pageMainFilterText.value;
+    //         devConsole.includeTags = window.pageMainTagsInclude.value.split(' ');
+    //         devConsole.excludeTags = window.pageMainTagsExclude.value.split(' ');
+    //         devConsole.applyFilter();
+    //     }
+    // };
 
-    window.pageMainFilterText.onkeypress = window.pageMainTagsInclude.onkeypress = window.pageMainTagsExclude.onkeypress = function ( event ) {
-        event.stopPropagation();
-    };
+    // window.pageMainFilterText.onkeypress = window.pageMainTagsInclude.onkeypress = window.pageMainTagsExclude.onkeypress = function ( event ) {
+    //     event.stopPropagation();
+    // };
 
     app.wamp.once('connection:open', function () {
         // info

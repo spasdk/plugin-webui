@@ -7,7 +7,7 @@
     bottom: 0;
     left: 0;
     right: 0;
-    background-color: #fff;
+    //background-color: #fff;
     height: initial;
 
     > .taskListFilters {
@@ -48,8 +48,45 @@
         height: $itemHeight;
         left: $tabSystemSideWidth + $itemMargin * 2;
         right: $itemMargin;
-        outline: 1px dashed lightgrey;
-        outline-offset: -1px;
+
+        > .component.button {
+            margin-right: $itemMargin;
+
+            &.side {
+                background-image: url("https://cdn2.iconfinder.com/data/icons/ledicons/layout_split.png");
+            }
+
+            &.clear {
+                background-image: url("https://cdn3.iconfinder.com/data/icons/tango-icon-library/48/edit-clear-16.png");
+            }
+
+            &.reset {
+                background-image: url("https://cdn1.iconfinder.com/data/icons/fs-icons-ubuntu-by-franksouza-/16/gtk-cancel.png");
+            }
+        }
+
+        > input {
+            box-sizing: border-box;
+            vertical-align: bottom;
+            outline: none;
+            border: 1px solid $colorBorderDark;
+            font-size: 14px;
+            margin-right: $itemMargin;
+            height: 100%;
+            padding: 0 5px 0 $itemHeight;
+
+            &.logsInclude {
+                background: url("https://cdn4.iconfinder.com/data/icons/small-n-flat/24/search-16.png") no-repeat 6px center;
+            }
+
+            &.tagsInclude, &.tagsExclude {
+                background: url("https://cdn4.iconfinder.com/data/icons/berlin/16x16/cost.png") no-repeat 6px center;
+            }
+
+            &:focus {
+                background-color: #fffff4;
+            }
+        }
     }
 
     > .console {
@@ -84,77 +121,13 @@
         }
     }
 
-    //.side {
-    //    display: table-cell;
-    //    width: 200px;
-    //    //height: inherit;
-    //    background-color: red;
-    //    padding: $itemMargin 0 $itemMargin $itemMargin;
-    //}
-    //
-    //.content {
-    //    display: table-cell;
-    //    //height: inherit;
-    //    background-color: blueviolet;
-    //    padding: $itemMargin;
-    //}
-
-    /*> table {
-        width: 100%;
-        height: 100%;
-        border-collapse: separate;
-        border-spacing: $itemMargin;
-        //border: 1px solid red;
-
-        td {
-            outline: 1px dashed lightgrey;
-            outline-offset: -1px;
-
-            &.line {
-                height: $itemHeight + 2;
-
-                > input {
-                    box-sizing: border-box;
-                    outline: none;
-                    border: 1px solid $colorBorderDark;
-                    font-size: 14px;
-                    //padding: 0 5px;
-                    //width: 100%;
-                    height: inherit;
-
-                    &:focus {
-                        background-color: #fffff4;
-                    }
-
-                    &.code {
-                        font-family: monospace;
-                        font-size: 13px;
-                    }
-                }
-            }
-
-            &.list {
-                width: 210px;
-                position: relative;
-
-                > .taskList {
-                    position: absolute;
-                    top: 0;
-                    bottom: 0;
-                    left: 0;
-                    right: 0;
-                    overflow: auto;
-                }
-            }
-
-            &.logs {
-                position: relative;
-            }
-
-            &.code {
-                height: $itemHeight + 2;
-                //position: relative;
-            }
+    &.full {
+        > .taskListFilters, > .taskList {
+            visibility: hidden;
         }
-    }*/
+
+        > .taskLogsFilters, > .console, > .taskExec {
+            left: $itemMargin;
+        }
+    }
 }

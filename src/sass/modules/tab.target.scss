@@ -7,17 +7,52 @@
     bottom: 0;
     left: 0;
     right: 0;
-    background-color: #fff;
+    //background-color: #fff;
     height: initial;
 
-    > .taskLogsFilters {
+    > .logsFilters {
         position: absolute;
         top: $itemMargin;
         height: $itemHeight;
         left: $itemMargin;
         right: $itemMargin;
-        outline: 1px dashed lightgrey;
-        outline-offset: -1px;
+        //outline: 1px dashed lightgrey;
+        //outline-offset: -1px;
+
+        > .component.button {
+            margin-right: $itemMargin;
+
+            &.clear {
+                background-image: url("https://cdn3.iconfinder.com/data/icons/tango-icon-library/48/edit-clear-16.png");
+            }
+
+            &.reset {
+                background-image: url("https://cdn1.iconfinder.com/data/icons/fs-icons-ubuntu-by-franksouza-/16/gtk-cancel.png");
+            }
+        }
+
+        > input {
+            box-sizing: border-box;
+            vertical-align: bottom;
+            outline: none;
+            border: 1px solid $colorBorderDark;
+            font-size: 14px;
+            margin-right: $itemMargin;
+            height: 100%;
+            padding: 0 5px 0 $itemHeight;
+
+            &.logsInclude {
+                background: url("https://cdn4.iconfinder.com/data/icons/small-n-flat/24/search-16.png") no-repeat 6px center;
+            }
+
+            &.tagsInclude, &.tagsExclude {
+                background: url("https://cdn4.iconfinder.com/data/icons/berlin/16x16/cost.png") no-repeat 6px center;
+            }
+
+            &:focus {
+                background-color: #fffff4;
+            }
+        }
     }
 
     > .console {

@@ -1,3 +1,14 @@
+.component {
+    &.button {
+        height: inherit;
+        width: $itemHeight;
+
+        background-position: center center;
+        background-repeat: no-repeat;
+        background-color: $colorButton;
+    }
+}
+
 #pageMain {
     box-sizing: border-box;
 
@@ -132,7 +143,7 @@
 
 #pageMainHeader {
     //background-color: #fdfdfd;
-    background-color: #f4f4f4;
+    background-color: $colorButton;
     border-bottom: 1px solid $colorBorderDark;
     height: $headerHeight;
     position: relative;
@@ -202,7 +213,7 @@
     background: #fdfdfd url("https://cdn0.iconfinder.com/data/icons/duesseldorf/16/process.png") no-repeat center center;
 
     &:hover {
-        background-color: #f7f7ff;
+        background-color: $colorHover;
     }
 }
 
@@ -251,7 +262,7 @@
         border-bottom: 1px solid $colorBorderDark;
 
         &:hover {
-            background-color: #f7f7ff;
+            background-color: $colorHover;
         }
 
         &:first-of-type {

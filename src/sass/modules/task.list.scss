@@ -16,7 +16,7 @@
         text-overflow: ellipsis;
 
         &:hover {
-            background-color: #f7f7ff;
+            background-color: $colorHover;
         }
 
         &:last-of-type {

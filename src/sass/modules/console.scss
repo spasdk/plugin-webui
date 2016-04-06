@@ -15,7 +15,7 @@
         border-bottom: 1px solid $colorBorderLight;
 
         &:hover {
-            background-color: #f7f7ff;
+            background-color: $colorHover;
         }
 
         &:first-of-type {

@@ -1,0 +1,14 @@
+.component {
+    &.button {
+        background-color: $colorButton;
+        border: 1px solid $colorBorderDark;
+
+        & .focus {
+            background-color: $colorButton;
+        }
+
+        &:hover {
+            background-color: $colorHover;
+        }
+    }
+}
