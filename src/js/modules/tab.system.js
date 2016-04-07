@@ -96,14 +96,15 @@ function TabSystem ( config ) {
         className: 'reset',
         events: {
             click: function () {
-                $logsInclude.value = '';
-                $tagsInclude.value = '';
-                $tagsExclude.value = '';
-
-                self.taskLogs.filterText  = '';
-                self.taskLogs.includeTags = [];
-                self.taskLogs.excludeTags = [];
-                self.taskLogs.applyFilter();
+                // $logsInclude.value = '';
+                // $tagsInclude.value = '';
+                // $tagsExclude.value = '';
+				//
+                // self.taskLogs.filterText  = '';
+                // self.taskLogs.includeTags = [];
+                // self.taskLogs.excludeTags = [];
+                // self.taskLogs.applyFilter();
+                self.taskLogs.resetFilters();
             }
         }
     });
@@ -124,22 +125,25 @@ function TabSystem ( config ) {
     $tagsExclude.className = 'tagsExclude';
     this.$taskLogsFilters.appendChild($tagsExclude);
 
-    $logsInclude.onkeydown = $tagsInclude.onkeydown = $tagsExclude.onkeydown = function ( event ) {
-        clearTimeout(timeout);
-
-        timeout = setTimeout(function () {
-            self.taskLogs.filterText  = $logsInclude.value;
-            self.taskLogs.includeTags = $tagsInclude.value.split(' ');
-            self.taskLogs.excludeTags = $tagsExclude.value.split(' ');
-            self.taskLogs.applyFilter();
-        }, 300);
-
-        event.stopPropagation();
-    };
+    // $logsInclude.onkeydown = $tagsInclude.onkeydown = $tagsExclude.onkeydown = function ( event ) {
+    //     clearTimeout(timeout);
+	//
+    //     timeout = setTimeout(function () {
+    //         self.taskLogs.filterText  = $logsInclude.value;
+    //         self.taskLogs.includeTags = $tagsInclude.value.split(' ');
+    //         self.taskLogs.excludeTags = $tagsExclude.value.split(' ');
+    //         self.taskLogs.applyFilter();
+    //     }, 300);
+	//
+    //     event.stopPropagation();
+    // };
 
     this.taskLogs = new Console({
         parent: this,
-        wamp: this.wamp
+        wamp: this.wamp,
+        $logsInclude: $logsInclude,
+        $tagsInclude: $tagsInclude,
+        $tagsExclude: $tagsExclude
     });
 
     $taskExec.type = 'text';

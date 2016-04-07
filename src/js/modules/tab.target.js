@@ -59,14 +59,15 @@ function TabTarget ( config ) {
         className: 'reset',
         events: {
             click: function () {
-                $logsInclude.value = '';
-                $tagsInclude.value = '';
-                $tagsExclude.value = '';
-
-                self.logs.filterText  = '';
-                self.logs.includeTags = [];
-                self.logs.excludeTags = [];
-                self.logs.applyFilter();
+                // $logsInclude.value = '';
+                // $tagsInclude.value = '';
+                // $tagsExclude.value = '';
+				//
+                // self.logs.filterText  = '';
+                // self.logs.includeTags = [];
+                // self.logs.excludeTags = [];
+                // self.logs.applyFilter();
+                self.logs.resetFilters();
             }
         }
     });
@@ -87,22 +88,25 @@ function TabTarget ( config ) {
     $tagsExclude.className = 'tagsExclude';
     this.$logsFilters.appendChild($tagsExclude);
 
-    $logsInclude.onkeydown = $tagsInclude.onkeydown = $tagsExclude.onkeydown = function ( event ) {
-        clearTimeout(timeout);
-
-        timeout = setTimeout(function () {
-            self.logs.filterText  = $logsInclude.value;
-            self.logs.includeTags = $tagsInclude.value.split(' ');
-            self.logs.excludeTags = $tagsExclude.value.split(' ');
-            self.logs.applyFilter();
-        }, 300);
-
-        event.stopPropagation();
-    };
+    // $logsInclude.onkeydown = $tagsInclude.onkeydown = $tagsExclude.onkeydown = function ( event ) {
+    //     clearTimeout(timeout);
+	//
+    //     timeout = setTimeout(function () {
+    //         self.logs.filterText  = $logsInclude.value;
+    //         self.logs.includeTags = $tagsInclude.value.split(' ');
+    //         self.logs.excludeTags = $tagsExclude.value.split(' ');
+    //         self.logs.applyFilter();
+    //     }, 300);
+	//
+    //     event.stopPropagation();
+    // };
 
     this.logs = new Console({
         parent: this,
-        wamp: this.wamp
+        wamp: this.wamp,
+        $logsInclude: $logsInclude,
+        $tagsInclude: $tagsInclude,
+        $tagsExclude: $tagsExclude
     });
 
     $codeExec.type = 'text';

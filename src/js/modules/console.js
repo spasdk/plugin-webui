@@ -27,8 +27,8 @@ var Component = require('spa-component');
  * @param {boolean}  [config.scroll=null] associated ScrollBar component link
  */
 function Console ( config ) {
-    // current execution context
-    //var self = this;
+    var self = this,
+        timeout;
 
     // sanitize
     config = config || {};
@@ -47,6 +47,23 @@ function Console ( config ) {
 
     // parent constructor call
     Component.call(this, config);
+
+    this.$logsInclude = config.$logsInclude;
+    this.$tagsInclude = config.$tagsInclude;
+    this.$tagsExclude = config.$tagsExclude;
+
+    config.$logsInclude.onkeydown = config.$tagsInclude.onkeydown = config.$tagsExclude.onkeydown = function ( event ) {
+        clearTimeout(timeout);
+
+        timeout = setTimeout(function () {
+            self.filterText  = config.$logsInclude.value;
+            self.includeTags = config.$tagsInclude.value.split(' ');
+            self.excludeTags = config.$tagsExclude.value.split(' ');
+            self.applyFilter();
+        }, 300);
+
+        event.stopPropagation();
+    };
 
     this.filterText = '';
     this.includeTags = [];
@@ -155,13 +172,15 @@ Console.prototype.add = function ( data ) {
         div.addEventListener('click', function ( event ) {
             if ( event.ctrlKey ) {
                 self.excludeTags.push(tag);
-                window.pageMainTagsExclude.value = window.pageMainTagsExclude.value + (window.pageMainTagsExclude.value ? ' ' : '') + tag;
+                self.$tagsExclude.value = self.$tagsExclude.value + (self.$tagsExclude.value ? ' ' : '') + tag;
             } else {
                 self.includeTags.push(tag);
-                window.pageMainTagsInclude.value = window.pageMainTagsInclude.value + (window.pageMainTagsInclude.value ? ' ' : '') + tag;
+                self.$tagsInclude.value = self.$tagsInclude.value + (self.$tagsInclude.value ? ' ' : '') + tag;
             }
 
             self.applyFilter();
+
+            event.stopPropagation();
 
             /*var length = window.pageMainTabTargetList.children.length,
              index, node;
@@ -212,6 +231,19 @@ Console.prototype.clear = function () {
     while ( body.lastChild ) {
         body.removeChild(body.lastChild);
     }
+};
+
+
+Console.prototype.resetFilters = function () {
+    this.$logsInclude.value = '';
+    this.$tagsInclude.value = '';
+    this.$tagsExclude.value = '';
+
+    this.filterText  = '';
+    this.includeTags = [];
+    this.excludeTags = [];
+
+    this.applyFilter();
 };
 
 
