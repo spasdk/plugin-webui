@@ -54,7 +54,7 @@
 	'use strict';
 	
 	var app      = __webpack_require__(/*! spa-app */ 1),
-	    Wamp     = __webpack_require__(/*! spa-wamp */ 7),
+	    //Wamp     = require('spa-wamp'),
 	    parallel = __webpack_require__(/*! cjs-async/parallel */ 15);
 	
 	
@@ -70,7 +70,8 @@
 	            done();
 	        });
 	    },
-	    function ( done ) {
+	    __webpack_require__(/*! ./wamp */ 27)
+	    /*function ( done ) {
 	        app.wamp = new Wamp('ws://' + (app.query.wampHost || location.hostname) + ':' + app.query.wampPort + '/client');
 	
 	        app.wamp.addListener('connection:open', function () {
@@ -84,7 +85,7 @@
 	        });
 	
 	        app.wamp.once('connection:open', done);
-	    }
+	    }*/
 	], function ( error ) {
 	    if ( error ) {
 	        debug.fail(error);
@@ -514,11 +515,11 @@
 	     *
 	     * @param {Event} event generated object with event data
 	     */
-	    click: function ( event ) {
+	    /*click: function ( event ) {
 	        //debug.event(event);
 	        //console.log(event);
 	        debug.info('app event: ' + event.type, event, {tags: [event.type, 'event']});
-	    },
+	    },*/
 	
 	    /**
 	     * The contextmenu event is fired when the right button of the mouse is clicked (before the context menu is displayed),
@@ -529,7 +530,7 @@
 	     *
 	     * @param {Event} event generated object with event data
 	     */
-	    contextmenu: function ( event ) {
+	    /*contextmenu: function ( event ) {
 	        //var kbEvent = {}; //Object.create(document.createEvent('KeyboardEvent'));
 	
 	        //debug.event(event);
@@ -547,11 +548,11 @@
 	
 	        //document.dispatchEvent(kbEvent);
 	
-	        if ( false ) {
+	        if ( !DEVELOP ) {
 	            // disable right click in release mode
 	            event.preventDefault();
 	        }
-	    },
+	    },*/
 	
 	    /**
 	     * The wheel event is fired when a wheel button of a pointing device (usually a mouse) is rotated.
@@ -1071,6 +1072,7 @@
 	    config.data = data !== undefined ? wrapData(data) : undefined;
 	    //config.data = wrapData(data);
 	    config.time = +new Date();
+	    config.targetId = app.query.wampTargetId;
 	    //config.tags = config.tags.sort();
 	
 	    if ( app.develop.wamp.open ) {
@@ -1267,21 +1269,42 @@
 	
 	'use strict';
 	
-	var app  = __webpack_require__(/*! spa-app */ 1),
-	    Wamp = __webpack_require__(/*! spa-wamp */ 7);
+	var app       = __webpack_require__(/*! spa-app */ 1),
+	    Wamp      = __webpack_require__(/*! spa-wamp */ 7),
+	    stringify = __webpack_require__(/*! cjs-query */ 3).stringify;
 	
 	
 	if ( app.query.wampPort ) {
 	    app.develop.wamp = new Wamp(
-	        'ws://' + (app.query.wampHost || location.hostname) + ':' + app.query.wampPort + '/target/' + (app.query.wampSession || '')
+	        'ws://' + (app.query.wampHost || location.hostname) + ':' + app.query.wampPort + '/target/' + (app.query.wampTargetId || '')
 	    );
 	
 	    app.develop.wamp.addListener('connection:open', function () {
 	        debug.info('wamp open ' + app.develop.wamp.socket.url, null, {tags: ['open', 'wamp']});
+	
+	        // get target connection id
+	        app.develop.wamp.call('getConnectionInfo', {}, function ( error, data ) {
+	            // check if already linked
+	            if ( !error && parseInt(app.query.wampTargetId, 10) !== data.id ) {
+	                // disconnect
+	                app.develop.wamp.socket.close();
+	                // correct url
+	                app.query.wampTargetId = data.id;
+	                // bind to the target id
+	                location.search = '?' + stringify(app.query);
+	            }
+	        });
 	    });
 	
 	    app.develop.wamp.addListener('connection:close', function () {
 	        debug.info('wamp close ' + app.develop.wamp.socket.url, null, {tags: ['close', 'wamp']});
+	    });
+	
+	    app.develop.wamp.addListener('evalCode', function ( params, callback ) {
+	        console.log('incoming evalCode', params);
+	
+	        /* eslint no-eval: 0 */
+	        callback(null, {eval: eval(params.code)});
 	    });
 	}
 
@@ -3070,8 +3093,10 @@
 	            counter++;
 	
 	            // all tasks are processed
-	            if ( counter >= tasks.length && typeof callback === 'function' ) {
+	            if ( counter === tasks.length && typeof callback === 'function' ) {
 	                callback(null, outList, outHash);
+	            } else if ( counter > tasks.length ) {
+	                throw Error('done callback invoked more than one time in function with ' + index + ' position in tasks array');
 	            }
 	        };
 	
@@ -3418,23 +3443,23 @@
 	    // component activation by mouse
 	    this.$node.addEventListener('click', function ( event ) {
 	        // left mouse button
-	        if ( event.button === 0 ) {
-	            // activate if possible
-	            self.focus();
+	        //if ( event.button === 0 ) {
+	        // activate if possible
+	        self.focus();
 	
-	            // there are some listeners
-	            if ( self.events['click'] ) {
-	                /**
-	                 * Mouse click event.
-	                 *
-	                 * @event module:stb/component~Component#click
-	                 *
-	                 * @type {Object}
-	                 * @property {Event} event click event data
-	                 */
-	                self.emit('click', {event: event});
-	            }
+	        // there are some listeners
+	        if ( self.events['click'] ) {
+	            /**
+	             * Mouse click event.
+	             *
+	             * @event module:stb/component~Component#click
+	             *
+	             * @type {Object}
+	             * @property {Event} event click event data
+	             */
+	            self.emit('click', event);
 	        }
+	        //}
 	
 	        if ( true ) {
 	            // middle mouse button
@@ -3806,77 +3831,145 @@
 	
 	'use strict';
 	
-	var app     = __webpack_require__(/*! spa-app */ 1),
-	    Page    = __webpack_require__(/*! spa-component-page */ 17),
-	    Button  = __webpack_require__(/*! spa-component-button */ 20),
-	    Console = __webpack_require__(/*! ./console */ 21),
-	    page    = new Page({$node: window.pageMain});
+	var app       = __webpack_require__(/*! spa-app */ 1),
+	    Page      = __webpack_require__(/*! spa-component-page */ 17),
+	    //Button    = require('spa-component-button'),
+	    TabItem   = __webpack_require__(/*! spa-component-tab-item */ 20),
+	    Console   = __webpack_require__(/*! ./../modules/console */ 21),
+	    TaskList  = __webpack_require__(/*! ./../modules/task.list */ 22),
+	    TabList   = __webpack_require__(/*! ./../modules/tab.list */ 23),
+	    TabSystem = __webpack_require__(/*! ./../modules/tab.system */ 24),
+	    TabTarget = __webpack_require__(/*! ./../modules/tab.target */ 26),
+	    page      = new Page({$node: window.pageMain}),
+	    targets   = {},
+	    taskList, taskLogs, devConsole, tabList,
+	    tabSystem;
 	
 	
-	// function getTime ( timestamp ) {
-	//     var date   = new Date(timestamp),
-	//         hPart  = date.getHours(),
-	//         mPart  = date.getMinutes(),
-	//         msPart = date.getMilliseconds();
-	//
-	//     if ( msPart === 0 ) { msPart = '000'; }
-	//     else if ( msPart < 10  ) { msPart = '00' + msPart; }
-	//     else if ( msPart < 100 ) { msPart = '0'  + msPart; }
-	//
-	//     return (hPart > 9 ? '' : '0') + hPart + ':' + (mPart > 9 ? '' : '0') + mPart + '.' + msPart;
+	function addSystemTab () {
+	    // var button = new Button({
+	    //     value: 'system',
+	    //     events: {
+	    //         click: function () {
+		//
+	    //         }
+	    //     }
+	    // });
+	
+	    //window.pageMainHeader.appendChild(button.$node);
+	
+	    // taskList = new TaskList({
+	    //     $node: window.pageMainTaskList,
+	    //     wamp: app.wamp
+	    // });
+	
+	    // taskLogs = new Console({
+	    //     $node: window.pageMainTaskLogs,
+	    //     events: {}
+	    // });
+	
+	    tabSystem = new TabSystem({
+	        parent: page,
+	        wamp: app.wamp
+	    });
+	    /*tabSystem = new TabItem({
+	        parent: page
+	    });*/
+	
+	    tabList.add({
+	        tab: tabSystem
+	    });
+	
+	    tabSystem.show();
+	}
+	
+	function addTargetTab ( data ) {
+	    // data.tab = new TabTarget({
+	    //     parent: page,
+	    //     wamp: app.wamp
+	    // });
+	
+	    data.tab = new TabTarget({
+	        targetId: parseInt(data.id, 10),
+	        parent: page,
+	        wamp: app.wamp
+	    });
+	
+	    tabList.add(data);
+	
+	    if ( !(data.id in targets) ) {
+	        // data.button = new Button({
+	        //     value: 'target #' + data.id,
+	        //     events: {
+	        //         click: function () {
+			//
+	        //         }
+	        //     }
+	        // });
+	
+	        //window.pageMainHeader.appendChild(data.button.$node);
+	        targets[data.id] = data;
+	    }
+	
+	    tabList.online(data.id, true);
+	}
+	
+	// function removeTargetTab ( data ) {
+	//     targets[data.id].button.remove();
 	// }
 	
 	
 	app.addListener('load', function load () {
-	    var buttonSystem = new Button({
-	            $node: window.pageMainButtonSystem,
-	            value: 'system',
-	            events: {
-	                click: function () {
-	                    window.pageMainTabSystem.style.display = 'block';
-	                    window.pageMainTabTarget.style.display = 'none';
-	                }
-	            }
-	        }),
-	        buttonTarget = new Button({
-	            $node: window.pageMainButtonTarget,
-	            value: 'target',
-	            events: {
-	                click: function () {
-	                    window.pageMainTabSystem.style.display = 'none';
-	                    window.pageMainTabTarget.style.display = 'block';
-	                }
-	            }
-	        }),
-	        devConsole = new Console({
-	            $node: window.pageMainTabConsole,
-	            events: {}
-	        });
+	    var timeout;
 	
-	    //window.pageMainHeader.appendChild(buttonSystem.$node);
-	    window.pageMainHeaderLink.href = window.pageMainHeaderLink.innerText = 'http://192.168.1.57:8080/app/develop.html?wampPort=9000';
+	    // var /*buttonSystem = new Button({
+	    //         //$node: window.pageMainButtonSystem,
+	    //         value: 'system',
+	    //         events: {
+	    //             click: function () {
+	    //                 window.pageMainTabSystem.style.display = 'block';
+	    //                 window.pageMainTabTarget.style.display = 'none';
+	    //             }
+	    //         }
+	    //     }),
+	    //     buttonTarget = new Button({
+	    //         //$node: window.pageMainButtonTarget,
+	    //         value: 'target',
+	    //         events: {
+	    //             click: function () {
+	    //                 window.pageMainTabSystem.style.display = 'none';
+	    //                 window.pageMainTabTarget.style.display = 'block';
+	    //             }
+	    //         }
+	    //     }),*/
+	    //     devConsole = new Console({
+	    //         $node: window.pageMainTabConsole,
+	    //         events: {}
+	    //     });
 	
-	    window.pageMainLinkClear.addEventListener('click', function () {
-	        var node = window.pageMainTabTargetList;
-	
-	        while ( node.lastChild ) {
-	            node.removeChild(node.lastChild);
-	        }
+	    tabList = new TabList({
+	        $node: window.pageMainTabList,
+	        wamp: app.wamp
 	    });
 	
-	    window.pageMainLinkReset.addEventListener('click', function () {
-	        /*var node = window.pageMainTabTargetList.children,
-	            index;
+	    // devConsole = new Console({
+	    //     $node: window.pageMainTabConsole,
+	    //     events: {}
+	    // });
 	
-	        for ( index = node.length; index--; ) {
-	            node[index].style.display = 'block';
-	        }*/
-	        window.pageMainFilterText.value = window.pageMainTagsInclude.value = window.pageMainTagsExclude.value = '';
-	        devConsole.filterText  = '';
-	        devConsole.includeTags = [];
-	        devConsole.excludeTags = [];
-	        devConsole.applyFilter();
-	    });
+	    addSystemTab();
+	
+	    // window.pageMainLinkClear.addEventListener('click', function () {
+	    //     devConsole.clear();
+	    // });
+		//
+	    // window.pageMainLinkReset.addEventListener('click', function () {
+	    //     window.pageMainFilterText.value = window.pageMainTagsInclude.value = window.pageMainTagsExclude.value = '';
+	    //     devConsole.filterText  = '';
+	    //     devConsole.includeTags = [];
+	    //     devConsole.excludeTags = [];
+	    //     devConsole.applyFilter();
+	    // });
 	
 	    /*function applyFilter () {
 	        var node        = window.pageMainTabTargetList.children,
@@ -3910,43 +4003,68 @@
 	        }
 	    }*/
 	
-	    window.pageMainFilterText.onkeydown = window.pageMainTagsInclude.onkeydown = window.pageMainTagsExclude.onkeydown = function ( event ) {
-	        event.stopPropagation();
-	        if ( event.keyCode === 13 ) {
-	            devConsole.filterText  = window.pageMainFilterText.value;
-	            devConsole.includeTags = window.pageMainTagsInclude.value.split(' ');
-	            devConsole.excludeTags = window.pageMainTagsExclude.value.split(' ');
-	            devConsole.applyFilter();
-	        }
-	    };
+	    // window.pageMainTaskFilter.onkeydown = function ( event ) {
+	    //     // Clear the timeout if it has already been set.
+	    //     // This will prevent the previous task from executing
+	    //     // if it has been less than <MILLISECONDS>
+	    //     clearTimeout(timeout);
+		//
+	    //     timeout = setTimeout(function () {
+	    //         //if ( event.keyCode === 13 ) {
+	    //         taskList.filterText = window.pageMainTaskFilter.value;
+	    //         taskList.applyFilter();
+	    //         //}
+	    //     }, 300);
+		//
+	    //     event.stopPropagation();
+	    // };
 	
-	    window.pageMainFilterText.onkeypress = window.pageMainTagsInclude.onkeypress = window.pageMainTagsExclude.onkeypress = function ( event ) {
-	        event.stopPropagation();
-	    };
+	    // window.pageMainFilterText.onkeydown = window.pageMainTagsInclude.onkeydown = window.pageMainTagsExclude.onkeydown = function ( event ) {
+	    //     event.stopPropagation();
+	    //     if ( event.keyCode === 13 ) {
+	    //         devConsole.filterText  = window.pageMainFilterText.value;
+	    //         devConsole.includeTags = window.pageMainTagsInclude.value.split(' ');
+	    //         devConsole.excludeTags = window.pageMainTagsExclude.value.split(' ');
+	    //         devConsole.applyFilter();
+	    //     }
+	    // };
+	
+	    // window.pageMainFilterText.onkeypress = window.pageMainTagsInclude.onkeypress = window.pageMainTagsExclude.onkeypress = function ( event ) {
+	    //     event.stopPropagation();
+	    // };
 	
 	    app.wamp.once('connection:open', function () {
 	        // info
 	
-	        app.wamp.call('getInfo', {}, function ( error, data ) {
-	            console.log('info', data);
-	        });
-	
-	        app.wamp.call('getMemoryUsage', {}, function ( error, data ) {
-	            //console.log('memory usage', data);
-	            debug.info('memory usage', data, {tags: ['memory']});
-	        });
-	
-	        app.wamp.call('getClients', {}, function ( error, data ) {
-	            console.log('clients', data);
-	        });
-	
-	        /*app.wamp.call('getTargets', {}, function ( error, data ) {
-	         console.log('targets', data);
-	         });*/
-	
-	        app.wamp.call('getPlugins', {}, function ( error, data ) {
-	            console.log('plugins', data);
-	        });
+	        // app.wamp.call('getConnectionInfo', {}, function ( error, data ) {
+	        //     console.log('connection info', data);
+	        // });
+			//
+	        // app.wamp.call('getProjectInfo', {}, function ( error, data ) {
+	        //     console.log('project info', data);
+	        //     window.pageMainHeaderLink.href = window.pageMainHeaderLink.innerText = 'http://' + data.host + ':8080/app/develop.html?wampPort=' + app.query.wampPort;
+	        // });
+			//
+	        // app.wamp.call('getMemoryUsage', {}, function ( error, data ) {
+	        //     //console.log('memory usage', data);
+	        //     debug.info('memory usage', data, {tags: ['memory']});
+	        // });
+			//
+	        // app.wamp.call('getClients', {}, function ( error, data ) {
+	        //     console.log('clients', data);
+	        // });
+			//
+	        // app.wamp.call('getTargets', {}, function ( error, data ) {
+	        //     console.log('targets', data);
+			//
+	        //     Object.keys(data).forEach(function ( id ) {
+	        //         addTargetTab({id: id});
+	        //     });
+	        // });
+			//
+	        // app.wamp.call('getPlugins', {}, function ( error, data ) {
+	        //     console.log('plugins', data);
+	        // });
 	
 	        // notifications
 	
@@ -3954,18 +4072,26 @@
 	        //    console.log('new target', event);
 	        //});
 	
-	        app.wamp.addListener('eventTaskStart', function ( event ) {
-	            console.log('task start', event);
-	            window[event.id].classList.add('running');
-	        });
-	
-	        app.wamp.addListener('eventTaskFinish', function ( event ) {
-	            console.log('task finish', event);
-	            window[event.id].classList.remove('running');
-	        });
+	        // app.wamp.addListener('eventTaskStart', function ( event ) {
+	        //     console.log('task start', event);
+	        //     window[event.id].classList.add('running');
+	        // });
+			//
+	        // app.wamp.addListener('eventTaskFinish', function ( event ) {
+	        //     console.log('task finish', event);
+	        //     window[event.id].classList.remove('running');
+	        // });
 	
 	        app.wamp.addListener('eventTargetMessage', function ( event ) {
-	            devConsole.add(event);
+	            //console.log(event);
+	
+	            // if ( event.tags.indexOf('target') === -1 ) {
+	            //     taskLogs.add(event);
+	            // } else {
+	            //     devConsole.add(event);
+	            // }
+	
+	
 	            /*var item = document.createElement('div'),
 	                info = document.createElement('div');
 	
@@ -4035,32 +4161,85 @@
 	            console.log('message', event);
 	        });*/
 	
-	        app.wamp.call('getTargets', {}, function ( error, data ) {
-	            Object.keys(data).forEach(function ( id ) {
-	                var target = data[id];
-	
-	                console.log('target', target);
-	                /*window.pageMainHeader.appendChild(new Button({
-	                    value: 'target #' + id + ' (' + target.host + ')'
-	                }).$node);*/
-	            });
-	        });
+	        // app.wamp.call('getTargets', {}, function ( error, data ) {
+	        //     Object.keys(data).forEach(function ( id ) {
+	        //         var target = data[id];
+			//
+	        //         console.log('target', target);
+	        //         /*window.pageMainHeader.appendChild(new Button({
+	        //             value: 'target #' + id + ' (' + target.host + ')'
+	        //         }).$node);*/
+	        //     });
+	        // });
 	    });
 	
-	    app.wamp.addListener('eventTargetOnline', function ( event ) {
-	        console.log('new target', event);
+	    app.wamp.addListener('eventTargetOffline', function ( target ) {
+	        console.log('remove target', target);
+	
+	        //removeTargetTab(target);
+	        //tabList.data[target.id].$node.classList.remove('online');
+	        tabList.online(target.id, false);
+	        //addTargetTab(target);
 	        /*window.pageMainHeader.appendChild(new Button({
-	            value: 'target #' + event.id + ' (' + event.host + ')'
+	            value: 'target #' + target.id + ' (' + target.host + ')'
+	        }).$node);*/
+	    });
+	
+	    app.wamp.addListener('eventTargetOnline', function ( target ) {
+	        console.log('new target', target);
+	
+	        addTargetTab(target);
+	
+	        //tabList.data[target.id].$node.classList.add('online');
+	        /*window.pageMainHeader.appendChild(new Button({
+	            value: 'target #' + target.id + ' (' + target.host + ')'
 	        }).$node);*/
 	    });
 	});
 	
+	
 	page.addListener('show', function load () {
-	    app.wamp.call('getTasks', {}, function ( error, data ) {
+	    //taskList.init({data: app.data.tasks});
+	    tabSystem.taskList.init({data: app.data.tasks});
+	
+	    window.pageMainHeaderLink.href = window.pageMainHeaderLink.innerText = 'http://' + app.data.project.host + ':8080/app/develop.html?wampPort=' + app.query.wampPort;
+	
+	    Object.keys(app.data.targets).forEach(function ( id ) {
+	        app.data.targets[id].id = id;
+	        addTargetTab(app.data.targets[id]);
+	    });
+	
+	    app.wamp.addListener('eventTargetMessage', function ( event ) {
+	        //console.log(event);
+	
+	        if ( event.tags.indexOf('target') === -1 ) {
+	            tabSystem.taskLogs.add(event);
+	        } else {
+	            //devConsole.add(event);
+	            //console.log(event.targetId);
+	            tabList.data[event.targetId].tab.logs.add(event);
+	        }
+	    });
+	
+	    /*app.wamp.call('getTasks', {}, function ( error, data ) {
 	        var groups  = {},
 	            general = [];
 	
 	        console.log('tasks', data);
+	
+	        taskList = new TaskList({
+	            $node: window.pageMainTaskList,
+	            data: data,
+	            wamp: app.wamp,
+	            events: {
+	                /!*'click:item': function ( event ) {
+	                    console.log(event.$item);
+	                    app.wamp.call('runTask', {id: event.$item.innerText}, function ( error, data ) {
+	                        console.log('run task', error, data);
+	                    });
+	                }*!/
+	            }
+	        });
 	
 	        Object.keys(data).forEach(function ( id ) {
 	            var parts = id.split(':');
@@ -4140,7 +4319,7 @@
 	                divTasks.appendChild(divTask);
 	            });
 	        });
-	    });
+	    });*/
 	});
 	
 	
@@ -4150,6 +4329,1141 @@
 
 /***/ },
 /* 20 */
+/*!**************************************!*\
+  !*** ../component-tab-item/index.js ***!
+  \**************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * @author Stanislav Kalashnik <sk@infomir.eu>
+	 * @license GNU GENERAL PUBLIC LICENSE Version 3
+	 */
+	
+	/* eslint no-path-concat: 0 */
+	
+	'use strict';
+	
+	var Component = __webpack_require__(/*! spa-component */ 18);
+	
+	
+	/**
+	 * Tab item implementation.
+	 * This component has redefined methods 'show' and 'hide', use them to switch between tabs.
+	 * All tab items are created invisible by default.
+	 *
+	 * @constructor
+	 * @extends Component
+	 *
+	 * @param {Object} [config={}] init parameters (all inherited from the parent)
+	 *
+	 * @example
+	 * var TabItem = require('stb/ui/tab.item'),
+	 *     tabItem = new TabItem({
+	 *         $node: window.someId,
+	 *         children: [
+	 *             new Panel({
+	 *                 $node: window.anotherId
+	 *             })
+	 *         ],
+	 *         events: {
+	 *             show: function ( event ) {
+	 *                 // tab was activated
+	 *             },
+	 *             hide: function ( event ) {
+	 *                 // tab was hidden
+	 *             }
+	 *         }
+	 *     });
+	 *
+	 * tabList.add(tabItem);
+	 */
+	function TabItem ( config ) {
+	    // sanitize
+	    config = config || {};
+	
+	    if ( false ) {
+	        if ( typeof config !== 'object' ) { throw new Error(__filename + ': wrong config type'); }
+	        if ( config.className && typeof config.className !== 'string' ) { throw new Error(__filename + ': wrong or empty config.className'); }
+	    }
+	
+	    // can't accept focus
+	    config.focusable = config.focusable || false;
+	
+	    // set default className if classList property empty or undefined
+	    config.className = 'tabItem hidden ' + (config.className || '');
+	
+	    // prevent parent hiding
+	    config.visible = null;
+	
+	    // parent constructor call
+	    Component.call(this, config);
+	
+	    this.visible = false;
+	}
+	
+	
+	// inheritance
+	TabItem.prototype = Object.create(Component.prototype);
+	TabItem.prototype.constructor = TabItem;
+	
+	
+	/**
+	 * Make the tab visible, i.e. set active tab, and notify subscribers.
+	 * Hide previous visible tab if exists.
+	 *
+	 * @param {Object} [data] custom data which passed into handlers
+	 *
+	 * @return {boolean} operation status
+	 *
+	 * @fires module:stb/ui/tab.item~TabItem#show
+	 */
+	TabItem.prototype.show = function ( data ) {
+	    var prev = null;
+	
+	    if ( false ) {
+	        if ( !this.parent ) { throw new Error(__filename + ': no parent for tab item'); }
+	        if ( this.parent.constructor.name !== 'TabList' ) { throw new Error(__filename + ': wrong parent for tab item'); }
+	        if ( this.parent.currentTabItem && !(this.parent.currentTabItem instanceof TabItem) ) { throw new Error(__filename + ': wrong current tab item type'); }
+	    }
+	
+	    // is it hidden
+	    if ( !this.visible ) {
+	        // hide previous tab
+	        if ( this.parent.currentTabItem ) {
+	            prev = this.parent.currentTabItem;
+	            prev.hide(data);
+	        }
+	
+	        Component.prototype.show.call(this, data);
+	        this.parent.currentTabItem = this;
+	
+	        /*// there are some listeners
+	         if ( this.parent.events['switch'] ) {
+	         this.parent.emit('switch', {prev: prev, curr: this});
+	         }*/
+	
+	        return true;
+	    }
+	
+	    // nothing was done
+	    return true;
+	};
+	
+	
+	/**
+	 * Make the tab hidden and notify subscribers.
+	 *
+	 * @return {boolean} operation status
+	 *
+	 * @fires module:stb/ui/tab.item~TabItem#hide
+	 */
+	TabItem.prototype.hide = function () {
+	    if ( false ) {
+	        if ( !this.parent ) { throw new Error(__filename + ': no parent for tab item'); }
+	        if ( this.parent.constructor.name !== 'TabList' ) { throw new Error(__filename + ': wrong parent for tab item'); }
+	        if ( this.parent.currentTabItem && !(this.parent.currentTabItem instanceof TabItem) ) { throw new Error(__filename + ': wrong current tab item type'); }
+	    }
+	
+	    if ( Component.prototype.hide.call(this) ) {
+	        this.parent.currentTabItem = null;
+	
+	        return true;
+	    }
+	
+	    // nothing was done
+	    return true;
+	};
+	
+	
+	// public
+	module.exports = TabItem;
+
+
+/***/ },
+/* 21 */
+/*!***********************************!*\
+  !*** ./src/js/modules/console.js ***!
+  \***********************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(__filename) {/**
+	 * @author Stanislav Kalashnik <sk@infomir.eu>
+	 * @license GNU GENERAL PUBLIC LICENSE Version 3
+	 */
+	
+	/* eslint no-path-concat: 0 */
+	
+	'use strict';
+	
+	var Component = __webpack_require__(/*! spa-component */ 18);
+	
+	
+	/**
+	 * Development console implementation.
+	 *
+	 * @constructor
+	 * @extends Component
+	 *
+	 * @param {Object}   [config={}]          init parameters (all inherited from the parent)
+	 * @param {Array}    [config.data=[]]     component data to visualize
+	 * @param {function} [config.render]      method to build each grid cell content
+	 * @param {function} [config.navigate]    method to move focus according to pressed keys
+	 * @param {number}   [config.size=5]      amount of visible items on a page
+	 * @param {number}   [config.viewIndex=0] move view window to this position on init
+	 * @param {number}   [config.focusIndex]  list item index to make item focused (move view window to this position)
+	 * @param {boolean}  [config.cycle=true]  allow or not to jump to the opposite side of a list when there is nowhere to go next
+	 * @param {boolean}  [config.scroll=null] associated ScrollBar component link
+	 */
+	function Console ( config ) {
+	    var self = this,
+	        timeout;
+	
+	    // sanitize
+	    config = config || {};
+	
+	    console.assert(typeof this === 'object', 'must be constructed via new');
+	
+	    if ( true ) {
+	        if ( typeof config !== 'object' ) { throw new Error(__filename + ': wrong config type'); }
+	        // init parameters checks
+	        if ( config.className && typeof config.className !== 'string' ) { throw new Error(__filename + ': wrong or empty config.className'); }
+	        if ( config.type      && Number(config.type) !== config.type  ) { throw new Error(__filename + ': config.type must be a number'); }
+	    }
+	
+	    // set default className if classList property empty or undefined
+	    config.className = 'console ' + (config.className || '');
+	
+	    // parent constructor call
+	    Component.call(this, config);
+	
+	    this.$logsInclude = config.$logsInclude;
+	    this.$tagsInclude = config.$tagsInclude;
+	    this.$tagsExclude = config.$tagsExclude;
+	
+	    config.$logsInclude.onkeydown = config.$tagsInclude.onkeydown = config.$tagsExclude.onkeydown = function ( event ) {
+	        clearTimeout(timeout);
+	
+	        timeout = setTimeout(function () {
+	            self.filterText  = config.$logsInclude.value;
+	            self.includeTags = config.$tagsInclude.value.split(' ');
+	            self.excludeTags = config.$tagsExclude.value.split(' ');
+	            self.applyFilter();
+	        }, 300);
+	
+	        event.stopPropagation();
+	    };
+	
+	    this.filterText = '';
+	    this.includeTags = [];
+	    this.excludeTags = [];
+	}
+	
+	
+	function getTime ( timestamp ) {
+	    var date   = new Date(timestamp),
+	        hPart  = date.getHours(),
+	        mPart  = date.getMinutes(),
+	        msPart = date.getMilliseconds();
+	
+	    if ( msPart === 0 ) { msPart = '000'; }
+	    else if ( msPart < 10  ) { msPart = '00' + msPart; }
+	    else if ( msPart < 100 ) { msPart = '0'  + msPart; }
+	
+	    return (hPart > 9 ? '' : '0') + hPart + ':' + (mPart > 9 ? '' : '0') + mPart + '.' + msPart;
+	}
+	
+	
+	// inheritance
+	Console.prototype = Object.create(Component.prototype);
+	Console.prototype.constructor = Console;
+	
+	
+	/**
+	 * List of all default event callbacks.
+	 *
+	 * @type {Object.<string, function>}
+	 */
+	Console.prototype.defaultEvents = {
+	
+	};
+	
+	
+	Console.prototype.matchFilter = function ( node ) {
+	    var length, tag;
+	
+	    if ( this.filterText && node.innerText.indexOf(this.filterText) === -1 ) {
+	        return false;
+	    }
+	
+	    // prepare
+	    length = this.includeTags.length;
+	    // check
+	    while ( length-- ) {
+	        tag = this.includeTags[length];
+	
+	        if ( tag && node.tags.indexOf(tag) === -1 ) {
+	            return false;
+	        }
+	    }
+	
+	    // prepare
+	    length = this.excludeTags.length;
+	    // check
+	    while ( length-- ) {
+	        tag = this.excludeTags[length];
+	
+	        if ( tag && node.tags.indexOf(tag) !== -1 ) {
+	            return false;
+	        }
+	    }
+	
+	    return true;
+	};
+	
+	
+	Console.prototype.applyFilter = function () {
+	    var nodes = this.$body.children,
+	        length, item;
+	
+	    // prepare
+	    length = nodes.length;
+	    // check
+	    while ( length-- ) {
+	        item = nodes[length];
+	
+	        item.style.display = this.matchFilter(item) ? 'block' : 'none';
+	    }
+	};
+	
+	
+	Console.prototype.add = function ( data ) {
+	    var self = this,
+	        item = document.createElement('div'),
+	        info = document.createElement('div');
+	
+	    item.className = 'item';
+	
+	    data.time = data.time || +new Date();
+	    data.tags = data.tags || [];
+	    data.type = data.type || 'info';
+	    data.tags.push(data.type);
+	    data.tags.forEach(function ( tag ) {
+	        var div = document.createElement('div');
+	
+	        div.className = 'tag';
+	        div.innerText = tag;
+	
+	        item.appendChild(div);
+	
+	        // if ( ['info', 'warn', 'fail'].indexOf(tag) !== -1 ) {
+	        //     item.classList.add(tag);
+	        // }
+	
+	        div.addEventListener('click', function ( event ) {
+	            if ( event.ctrlKey ) {
+	                self.excludeTags.push(tag);
+	                self.$tagsExclude.value = self.$tagsExclude.value + (self.$tagsExclude.value ? ' ' : '') + tag;
+	            } else {
+	                self.includeTags.push(tag);
+	                self.$tagsInclude.value = self.$tagsInclude.value + (self.$tagsInclude.value ? ' ' : '') + tag;
+	            }
+	
+	            self.applyFilter();
+	
+	            event.stopPropagation();
+	
+	            /*var length = window.pageMainTabTargetList.children.length,
+	             index, node;
+	
+	             console.log(tag);
+	
+	             for ( index = 0; index < length; index++ ) {
+	             node = window.pageMainTabTargetList.children[index];
+	             //console.log(index, node);
+	             node.style.display = node.tags.indexOf(tag) === -1 ? 'none' : 'block';
+	             }*/
+	        });
+	    });
+	    item.classList.add(data.type);
+	    item.tags = data.tags;
+	
+	    info.className = 'info';
+	    console.log(data.data);
+	    info.innerText = (data.data && 'link' in  data.data ? '+ ' : '- ') + getTime(data.time) + ' :: ' + data.info /*+ (data.data ? ' :: ' + data.data : '')*/;
+	
+	    item.addEventListener('click', function () {
+	        //console.log(data.data.link);
+	        app.wamp.call('getLinkData', {targetId: 128, linkId: data.data.link}, function ( error, data ) {
+	            console.log(error, data);
+	        });
+	    });
+	
+	    item.appendChild(info);
+	
+	    //console.log('target message', data);
+	
+	    if ( !this.matchFilter(item) ) {
+	        item.style.display = 'none';
+	    }
+	
+	    //this.$node.insertBefore(item, this.$input);
+	    this.$body.appendChild(item);
+	
+	    if ( this.$body.children.length >= 250 ) {
+	        this.$body.removeChild(this.$body.firstChild);
+	    }
+	
+	    this.$body.scrollTop = this.$body.scrollHeight;
+	};
+	
+	
+	Console.prototype.clear = function () {
+	    var body = this.$body;
+	
+	    while ( body.lastChild ) {
+	        body.removeChild(body.lastChild);
+	    }
+	};
+	
+	
+	Console.prototype.resetFilters = function () {
+	    this.$logsInclude.value = '';
+	    this.$tagsInclude.value = '';
+	    this.$tagsExclude.value = '';
+	
+	    this.filterText  = '';
+	    this.includeTags = [];
+	    this.excludeTags = [];
+	
+	    this.applyFilter();
+	};
+	
+	
+	// public
+	module.exports = Console;
+	
+	/* WEBPACK VAR INJECTION */}.call(exports, "src/js/modules/console.js"))
+
+/***/ },
+/* 22 */
+/*!*************************************!*\
+  !*** ./src/js/modules/task.list.js ***!
+  \*************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(__filename) {/**
+	 * @author Stanislav Kalashnik <sk@infomir.eu>
+	 * @license GNU GENERAL PUBLIC LICENSE Version 3
+	 */
+	
+	/* eslint no-path-concat: 0 */
+	
+	'use strict';
+	
+	var Component = __webpack_require__(/*! spa-component */ 18);
+	
+	
+	/**
+	 * Development task list implementation.
+	 *
+	 * @constructor
+	 * @extends Component
+	 *
+	 * @param {Object} config={}        init parameters (all inherited from the parent)
+	 * @param {Object} config.wamp      link to the server connection
+	 * @param {Array}  [config.data=[]] component data to visualize
+	 */
+	function TaskList ( config ) {
+	    // current execution context
+	    var self = this;
+	
+	    // sanitize
+	    config = config || {};
+	
+	    console.assert(typeof this === 'object', 'must be constructed via new');
+	
+	    if ( true ) {
+	        if ( typeof config !== 'object' ) { throw new Error(__filename + ': wrong config type'); }
+	        // init parameters checks
+	        if ( config.className && typeof config.className !== 'string' ) { throw new Error(__filename + ': wrong or empty config.className'); }
+	        if ( !config.wamp ) { throw new Error(__filename + ': config.wamp must be given'); }
+	    }
+	
+	    // set default className if classList property empty or undefined
+	    config.className = 'taskList ' + (config.className || '');
+	
+	    // parent constructor call
+	    Component.call(this, config);
+	
+	    this.filterText = '';
+	    this.wamp = config.wamp;
+	
+	    // component setup
+	    this.init(config);
+	
+	    // forward click to the specific item
+	    this.addListener('click', function ( event ) {
+	        // there are some listeners
+	        /*if ( self.events['click:item'] ) {
+	            // notify listeners
+	            self.emit('click:item', {$item: event.target});
+	        }*/
+	
+	        //console.log(event.$item);
+	        self.wamp.call('runTask', {id: event.target.taskId}, function ( error, data ) {
+	            console.log('run task', error, data);
+	        });
+	    });
+	
+	    this.wamp.addListener('eventTaskStart', function ( event ) {
+	        console.log('task start', event);
+	        //window[event.id].classList.add('running');
+	        console.log(self);
+	        self.data[event.id].$node.classList.add('running');
+	    });
+	
+	    this.wamp.addListener('eventTaskFinish', function ( event ) {
+	        console.log('task finish', event);
+	        //window[event.id].classList.remove('running');
+	        self.data[event.id].$node.classList.remove('running');
+	        self.data[event.id].$node.classList.add('ok');
+	    });
+	}
+	
+	
+	// inheritance
+	TaskList.prototype = Object.create(Component.prototype);
+	TaskList.prototype.constructor = TaskList;
+	
+	
+	/**
+	 * List of all default event callbacks.
+	 *
+	 * @type {Object.<string, function>}
+	 */
+	TaskList.prototype.defaultEvents = {
+	
+	};
+	
+	
+	/**
+	 * Init or re-init of the component inner structures and HTML.
+	 *
+	 * @param {Object} config init parameters (subset of constructor config params)
+	 */
+	TaskList.prototype.init = function ( config ) {
+	    var self = this;
+	
+	    if ( true ) {
+	        if ( arguments.length !== 1 ) { throw new Error(__filename + ': wrong arguments number'); }
+	        if ( typeof config !== 'object' ) { throw new Error(__filename + ': wrong config type'); }
+	    }
+	
+	    // save
+	    this.data = config.data || {};
+	
+	    // apply
+	    Object.keys(this.data).forEach(function ( id ) {
+	        var item = document.createElement('div'),
+	            data = self.data[id];
+	
+	        item.innerText = item.taskId = id;
+	        item.className = 'item' + (data.running ? ' running' : '');
+	
+	        data.$node = item;
+	
+	        self.$node.appendChild(item);
+	    });
+	};
+	
+	
+	TaskList.prototype.matchFilter = function ( node ) {
+	    return !(this.filterText && node.innerText.indexOf(this.filterText) === -1);
+	};
+	
+	
+	TaskList.prototype.applyFilter = function () {
+	    var nodes = this.$body.children,
+	        length, item;
+	
+	    // prepare
+	    length = nodes.length;
+	    // check
+	    while ( length-- ) {
+	        item = nodes[length];
+	
+	        item.style.display = this.matchFilter(item) ? 'block' : 'none';
+	    }
+	};
+	
+	
+	TaskList.prototype.add = function ( data ) {
+	    var self = this,
+	        item = document.createElement('div'),
+	        info = document.createElement('div');
+	
+	    item.className = 'item';
+	
+	    data.tags = data.tags || [];
+	    data.tags.push(data.type);
+	    data.tags.forEach(function ( tag ) {
+	        var div = document.createElement('div');
+	
+	        div.className = 'tag';
+	        div.innerText = tag;
+	
+	        item.appendChild(div);
+	
+	        // if ( ['info', 'warn', 'fail'].indexOf(tag) !== -1 ) {
+	        //     item.classList.add(tag);
+	        // }
+	
+	        div.addEventListener('click', function ( event ) {
+	            if ( event.ctrlKey ) {
+	                self.excludeTags.push(tag);
+	                window.pageMainTagsExclude.value = window.pageMainTagsExclude.value + (window.pageMainTagsExclude.value ? ' ' : '') + tag;
+	            } else {
+	                self.includeTags.push(tag);
+	                window.pageMainTagsInclude.value = window.pageMainTagsInclude.value + (window.pageMainTagsInclude.value ? ' ' : '') + tag;
+	            }
+	
+	            self.applyFilter();
+	
+	            /*var length = window.pageMainTabTargetList.children.length,
+	             index, node;
+	
+	             console.log(tag);
+	
+	             for ( index = 0; index < length; index++ ) {
+	             node = window.pageMainTabTargetList.children[index];
+	             //console.log(index, node);
+	             node.style.display = node.tags.indexOf(tag) === -1 ? 'none' : 'block';
+	             }*/
+	        });
+	    });
+	    item.classList.add(data.type);
+	    item.tags = data.tags;
+	
+	    info.className = 'info';
+	    console.log(data.data);
+	    info.innerText = (data.data && 'link' in  data.data ? '+ ' : '- ') + getTime(data.time) + ' :: ' + data.info /*+ (data.data ? ' :: ' + data.data : '')*/;
+	
+	    item.addEventListener('click', function () {
+	        //console.log(data.data.link);
+	        app.wamp.call('getLinkData', {targetId: 128, linkId: data.data.link}, function ( error, data ) {
+	            console.log(error, data);
+	        });
+	    });
+	
+	    item.appendChild(info);
+	
+	    //console.log('target message', data);
+	
+	    if ( !this.matchFilter(item) ) {
+	        item.style.display = 'none';
+	    }
+	
+	    this.$body.appendChild(item);
+	};
+	
+	
+	// public
+	module.exports = TaskList;
+	
+	/* WEBPACK VAR INJECTION */}.call(exports, "src/js/modules/task.list.js"))
+
+/***/ },
+/* 23 */
+/*!************************************!*\
+  !*** ./src/js/modules/tab.list.js ***!
+  \************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(__filename) {/**
+	 * @author Stanislav Kalashnik <sk@infomir.eu>
+	 * @license GNU GENERAL PUBLIC LICENSE Version 3
+	 */
+	
+	/* eslint no-path-concat: 0 */
+	
+	'use strict';
+	
+	var Component = __webpack_require__(/*! spa-component */ 18);
+	
+	
+	/**
+	 * Development task list implementation.
+	 *
+	 * @constructor
+	 * @extends Component
+	 *
+	 * @param {Object} config={}        init parameters (all inherited from the parent)
+	 * @param {Object} config.wamp      link to the server connection
+	 * @param {Array}  [config.data=[]] component data to visualize
+	 */
+	function TabList ( config ) {
+	    // current execution context
+	    var self = this;
+	
+	    // sanitize
+	    config = config || {};
+	
+	    console.assert(typeof this === 'object', 'must be constructed via new');
+	
+	    if ( true ) {
+	        if ( typeof config !== 'object' ) { throw new Error(__filename + ': wrong config type'); }
+	        // init parameters checks
+	        if ( config.className && typeof config.className !== 'string' ) { throw new Error(__filename + ': wrong or empty config.className'); }
+	        if ( !config.wamp ) { throw new Error(__filename + ': config.wamp must be given'); }
+	    }
+	
+	    // set default className if classList property empty or undefined
+	    config.className = 'tabList ' + (config.className || '');
+	
+	    // parent constructor call
+	    Component.call(this, config);
+	
+	    //this.filterText = '';
+	    this.wamp = config.wamp;
+	
+	    this.data = {};
+	
+	    this.$focus = null;
+	
+	    // component setup
+	    //this.init(config);
+	
+	    // forward click to the specific item
+	    this.addListener('click', function ( event ) {
+	        var data = self.data[event.target.tabId];
+	
+	        // there are some listeners
+	        /*if ( self.events['click:item'] ) {
+	            // notify listeners
+	            self.emit('click:item', {$item: event.target});
+	        }*/
+	        //console.log(event);
+	
+	        if ( event.button === 0 ) {
+	            // left mouse button
+	            /*self.wamp.call('runTask', {id: event.target.taskId}, function ( error, data ) {
+	             console.log('run task', error, data);
+	             });*/
+	            self.$focus.classList.remove('active');
+	            self.$focus = event.target;
+	            self.$focus.classList.add('active');
+	            //console.log(self.data[event.target.tabId]);
+	            data.tab.show();
+	        } else if ( event.button === 1 && !data.online ) {
+	            // middle mouse button
+	            console.log('close');
+	            if ( event.target.tabId ) {
+	                //console.log(self.data[event.target.tabId]);
+	                self.close(event.target.tabId);
+	            }
+	        }
+	    });
+	
+	    // this.wamp.addListener('eventTargetOnline', function ( target ) {
+	    //     //self.data[target.id].$node.classList.add('active');
+	    // });
+		//
+	    // this.wamp.addListener('eventTargetOffline', function ( target ) {
+	    //     //self.data[target.id].$node.classList.remove('active');
+	    // });
+	
+	    /*this.wamp.addListener('eventTaskStart', function ( event ) {
+	        console.log('task start', event);
+	        //window[event.id].classList.add('running');
+	        self.data[event.id].$node.classList.add('running');
+	    });
+	
+	    this.wamp.addListener('eventTaskFinish', function ( event ) {
+	        console.log('task finish', event);
+	        //window[event.id].classList.remove('running');
+	        self.data[event.id].$node.classList.remove('running');
+	    });*/
+	}
+	
+	
+	// inheritance
+	TabList.prototype = Object.create(Component.prototype);
+	TabList.prototype.constructor = TabList;
+	
+	
+	/**
+	 * List of all default event callbacks.
+	 *
+	 * @type {Object.<string, function>}
+	 */
+	// TabList.prototype.defaultEvents = {
+	//
+	// };
+	
+	
+	/**
+	 * Init or re-init of the component inner structures and HTML.
+	 *
+	 * @param {Object} config init parameters (subset of constructor config params)
+	 */
+	/*TabList.prototype.init = function ( config ) {
+	    var self = this;
+	
+	    if ( DEVELOP ) {
+	        if ( arguments.length !== 1 ) { throw new Error(__filename + ': wrong arguments number'); }
+	        if ( typeof config !== 'object' ) { throw new Error(__filename + ': wrong config type'); }
+	    }
+	
+	    // save
+	    this.data = config.data || {};
+	
+	    // apply
+	    Object.keys(this.data).forEach(function ( id ) {
+	        var item = document.createElement('div'),
+	            data = self.data[id];
+	
+	        item.innerText = item.taskId = id;
+	        item.className = 'item' + (data.running ? ' running' : '');
+	
+	        data.$node = item;
+	
+	        self.$node.appendChild(item);
+	    });
+	};*/
+	
+	
+	// TabList.prototype.matchFilter = function ( node ) {
+	//     return !(this.filterText && node.innerText.indexOf(this.filterText) === -1);
+	// };
+	
+	
+	// TabList.prototype.applyFilter = function () {
+	//     var nodes = this.$body.children,
+	//         length, item;
+	//
+	//     // prepare
+	//     length = nodes.length - 1;
+	//     // check
+	//     while ( length-- ) {
+	//         item = nodes[length];
+	//
+	//         item.style.display = this.matchFilter(item) ? 'block' : 'none';
+	//     }
+	// };
+	
+	
+	TabList.prototype.online = function ( id, state ) {
+	    var data = this.data[id];
+	
+	    if ( data ) {
+	        data.online = state;
+	
+	        if ( state ) {
+	            data.$node.classList.add('online');
+	        } else {
+	            data.$node.classList.remove('online');
+	        }
+	    }
+	};
+	
+	
+	TabList.prototype.add = function ( data ) {
+	    var self = this,
+	        item;
+	        //info = document.createElement('div');
+	
+	    data = data || {};
+	
+	    if ( !(data.id in this.data) ) {
+	        item = document.createElement('div');
+	        item.className = 'item online';
+	        item.tabId = data.id;
+	
+	        if ( data.id ) {
+	            // target
+	            //item.innerText = 'target #' + data.id;
+	            item.innerText = data.host || 'n/a';
+	            //item.title = data.host || 'localhost';
+	        } else {
+	            // system
+	            item.innerText = 'system';
+	            item.className += ' active';
+	            this.$focus = item;
+	        }
+	
+	        data.$node  = item;
+	        data.online = true;
+	        this.data[data.id] = data;
+	
+	        this.$body.appendChild(item);
+	    }
+	
+	
+	    // data.tags = data.tags || [];
+	    // data.tags.push(data.type);
+	    // data.tags.forEach(function ( tag ) {
+	    //     var div = document.createElement('div');
+		//
+	    //     div.className = 'tag';
+	    //     div.innerText = tag;
+		//
+	    //     item.appendChild(div);
+		//
+	    //     // if ( ['info', 'warn', 'fail'].indexOf(tag) !== -1 ) {
+	    //     //     item.classList.add(tag);
+	    //     // }
+		//
+	    //     div.addEventListener('click', function ( event ) {
+	    //         if ( event.ctrlKey ) {
+	    //             self.excludeTags.push(tag);
+	    //             window.pageMainTagsExclude.value = window.pageMainTagsExclude.value + (window.pageMainTagsExclude.value ? ' ' : '') + tag;
+	    //         } else {
+	    //             self.includeTags.push(tag);
+	    //             window.pageMainTagsInclude.value = window.pageMainTagsInclude.value + (window.pageMainTagsInclude.value ? ' ' : '') + tag;
+	    //         }
+		//
+	    //         self.applyFilter();
+		//
+	    //         /*var length = window.pageMainTabTargetList.children.length,
+	    //          index, node;
+		//
+	    //          console.log(tag);
+		//
+	    //          for ( index = 0; index < length; index++ ) {
+	    //          node = window.pageMainTabTargetList.children[index];
+	    //          //console.log(index, node);
+	    //          node.style.display = node.tags.indexOf(tag) === -1 ? 'none' : 'block';
+	    //          }*/
+	    //     });
+	    // });
+	
+	    //item.classList.add(data.type);
+	    //item.tags = data.tags;
+	
+	    // info.className = 'info';
+	    // console.log(data.data);
+	    // info.innerText = (data.data && 'link' in  data.data ? '+ ' : '- ') + getTime(data.time) + ' :: ' + data.info /*+ (data.data ? ' :: ' + data.data : '')*/;
+	
+	    // item.addEventListener('click', function () {
+	    //     //console.log(data.data.link);
+	    //     app.wamp.call('getLinkData', {targetId: 128, linkId: data.data.link}, function ( error, data ) {
+	    //         console.log(error, data);
+	    //     });
+	    // });
+	
+	    //item.appendChild(info);
+	
+	    //console.log('target message', data);
+	
+	    // if ( !this.matchFilter(item) ) {
+	    //     item.style.display = 'none';
+	    // }
+	
+	
+	};
+	
+	
+	TabList.prototype.close = function ( id ) {
+	    var data = this.data[id];
+	
+	    if ( data ) {
+	        data.$node.parentNode.removeChild(data.$node);
+	        data.tab.remove();
+	        delete this.data[id];
+	    }
+	};
+	
+	
+	// public
+	module.exports = TabList;
+	
+	/* WEBPACK VAR INJECTION */}.call(exports, "src/js/modules/tab.list.js"))
+
+/***/ },
+/* 24 */
+/*!**************************************!*\
+  !*** ./src/js/modules/tab.system.js ***!
+  \**************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * @author Stanislav Kalashnik <sk@infomir.eu>
+	 * @license GNU GENERAL PUBLIC LICENSE Version 3
+	 */
+	
+	/* eslint no-path-concat: 0 */
+	
+	'use strict';
+	
+	var Button   = __webpack_require__(/*! spa-component-button */ 25),
+	    TabItem  = __webpack_require__(/*! spa-component-tab-item */ 20),
+	    TaskList = __webpack_require__(/*! ./../modules/task.list */ 22),
+	    Console  = __webpack_require__(/*! ./../modules/console */ 21);
+	
+	
+	/**
+	 * System tab.
+	 *
+	 * @constructor
+	 * @extends TabItem
+	 *
+	 * @param {Object} config={}        init parameters (all inherited from the parent)
+	 * @param {Object} config.wamp      link to the server connection
+	 * @param {Array}  [config.data=[]] component data to visualize
+	 */
+	function TabSystem ( config ) {
+	    var self  = this,
+	        $taskFilter  = document.createElement('input'),
+	        $logsInclude = document.createElement('input'),
+	        $tagsInclude = document.createElement('input'),
+	        $tagsExclude = document.createElement('input'),
+	        $taskExec    = document.createElement('input'),
+	        timeout, button;
+	
+	    // sanitize
+	    config = config || {};
+	
+	    // set default className if classList property empty or undefined
+	    config.className = 'tabSystem ' + (config.className || '');
+	
+	    //config.$node = table;
+	
+	    // parent constructor call
+	    TabItem.call(this, config);
+	
+	    this.wamp = config.wamp;
+	
+	    $taskFilter.type = 'text';
+	    $taskFilter.placeholder = 'filter tasks by name';
+	    this.$taskListFilters = document.createElement('div');
+	    this.$taskListFilters.className = 'taskListFilters';
+	    this.$taskListFilters.appendChild($taskFilter);
+	    this.$body.appendChild(this.$taskListFilters);
+	
+	    this.taskList = new TaskList({
+	        parent: this,
+	        wamp: this.wamp
+	    });
+	
+	    $taskFilter.onkeydown = function ( event ) {
+	        clearTimeout(timeout);
+	
+	        timeout = setTimeout(function () {
+	            self.taskList.filterText = $taskFilter.value;
+	            self.taskList.applyFilter();
+	        }, 300);
+	
+	        event.stopPropagation();
+	    };
+	
+	    this.$taskLogsFilters = document.createElement('div');
+	    this.$taskLogsFilters.className = 'taskLogsFilters';
+	    this.$body.appendChild(this.$taskLogsFilters);
+	
+	    button = new Button({
+	        className: 'side',
+	        events: {
+	            click: function () {
+	                self.$node.classList.toggle('full');
+	            }
+	        }
+	    });
+	    this.$taskLogsFilters.appendChild(button.$node);
+	
+	    button = new Button({
+	        className: 'clear',
+	        events: {
+	            click: function () {
+	                self.taskLogs.clear();
+	            }
+	        }
+	    });
+	    this.$taskLogsFilters.appendChild(button.$node);
+	
+	    button = new Button({
+	        className: 'reset',
+	        events: {
+	            click: function () {
+	                // $logsInclude.value = '';
+	                // $tagsInclude.value = '';
+	                // $tagsExclude.value = '';
+					//
+	                // self.taskLogs.filterText  = '';
+	                // self.taskLogs.includeTags = [];
+	                // self.taskLogs.excludeTags = [];
+	                // self.taskLogs.applyFilter();
+	                self.taskLogs.resetFilters();
+	            }
+	        }
+	    });
+	    this.$taskLogsFilters.appendChild(button.$node);
+	
+	    $logsInclude.type = 'text';
+	    $logsInclude.placeholder = 'filter text';
+	    $logsInclude.className = 'logsInclude';
+	    this.$taskLogsFilters.appendChild($logsInclude);
+	
+	    $tagsInclude.type = 'text';
+	    $tagsInclude.placeholder = 'enter include tags';
+	    $tagsInclude.className = 'tagsInclude';
+	    this.$taskLogsFilters.appendChild($tagsInclude);
+	
+	    $tagsExclude.type = 'text';
+	    $tagsExclude.placeholder = 'enter exclude tags';
+	    $tagsExclude.className = 'tagsExclude';
+	    this.$taskLogsFilters.appendChild($tagsExclude);
+	
+	    // $logsInclude.onkeydown = $tagsInclude.onkeydown = $tagsExclude.onkeydown = function ( event ) {
+	    //     clearTimeout(timeout);
+		//
+	    //     timeout = setTimeout(function () {
+	    //         self.taskLogs.filterText  = $logsInclude.value;
+	    //         self.taskLogs.includeTags = $tagsInclude.value.split(' ');
+	    //         self.taskLogs.excludeTags = $tagsExclude.value.split(' ');
+	    //         self.taskLogs.applyFilter();
+	    //     }, 300);
+		//
+	    //     event.stopPropagation();
+	    // };
+	
+	    this.taskLogs = new Console({
+	        parent: this,
+	        wamp: this.wamp,
+	        $logsInclude: $logsInclude,
+	        $tagsInclude: $tagsInclude,
+	        $tagsExclude: $tagsExclude
+	    });
+	
+	    $taskExec.type = 'text';
+	    $taskExec.placeholder = 'type task name to execute';
+	    $taskExec.onkeydown = function ( event ) {
+	        if ( event.keyCode === 13 ) {
+	            self.wamp.call('runTask', {id: $taskExec.value}, function ( error, data ) {
+	                console.log('run task', error, data);
+	            });
+	            
+	            // prepare for a new run
+	            $taskExec.value = '';
+	        }
+	    };
+	    this.taskExec = document.createElement('div');
+	    this.taskExec.className = 'taskExec';
+	    this.taskExec.appendChild($taskExec);
+	    this.$body.appendChild(this.taskExec);
+	}
+	
+	
+	// inheritance
+	TabSystem.prototype = Object.create(TabItem.prototype);
+	TabSystem.prototype.constructor = TabSystem;
+	
+	
+	// public
+	module.exports = TabSystem;
+
+
+/***/ },
+/* 25 */
 /*!************************************!*\
   !*** ../component-button/index.js ***!
   \************************************/
@@ -4302,13 +5616,13 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, "../component-button/index.js"))
 
 /***/ },
-/* 21 */
-/*!*********************************!*\
-  !*** ./src/js/pages/console.js ***!
-  \*********************************/
+/* 26 */
+/*!**************************************!*\
+  !*** ./src/js/modules/tab.target.js ***!
+  \**************************************/
 /***/ function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function(__filename) {/**
+	/**
 	 * @author Stanislav Kalashnik <sk@infomir.eu>
 	 * @license GNU GENERAL PUBLIC LICENSE Version 3
 	 */
@@ -4317,229 +5631,300 @@
 	
 	'use strict';
 	
-	var Component = __webpack_require__(/*! spa-component */ 18);
+	var Button  = __webpack_require__(/*! spa-component-button */ 25),
+	    TabItem = __webpack_require__(/*! spa-component-tab-item */ 20),
+	    Console = __webpack_require__(/*! ./../modules/console */ 21);
 	
 	
 	/**
-	 * Development console implementation.
+	 * Target tab.
 	 *
 	 * @constructor
-	 * @extends Component
+	 * @extends TabItem
 	 *
-	 * @param {Object}   [config={}]          init parameters (all inherited from the parent)
-	 * @param {Array}    [config.data=[]]     component data to visualize
-	 * @param {function} [config.render]      method to build each grid cell content
-	 * @param {function} [config.navigate]    method to move focus according to pressed keys
-	 * @param {number}   [config.size=5]      amount of visible items on a page
-	 * @param {number}   [config.viewIndex=0] move view window to this position on init
-	 * @param {number}   [config.focusIndex]  list item index to make item focused (move view window to this position)
-	 * @param {boolean}  [config.cycle=true]  allow or not to jump to the opposite side of a list when there is nowhere to go next
-	 * @param {boolean}  [config.scroll=null] associated ScrollBar component link
+	 * @param {Object} config={}        init parameters (all inherited from the parent)
+	 * @param {Object} config.wamp      link to the server connection
+	 * @param {Array}  [config.data=[]] component data to visualize
 	 */
-	function Console ( config ) {
-	    // current execution context
-	    //var self = this;
+	function TabTarget ( config ) {
+	    var self = this,
+	        $logsInclude = document.createElement('input'),
+	        $tagsInclude = document.createElement('input'),
+	        $tagsExclude = document.createElement('input'),
+	        $codeExec    = document.createElement('input'),
+	        button, timeout;
 	
 	    // sanitize
 	    config = config || {};
 	
-	    console.assert(typeof this === 'object', 'must be constructed via new');
-	
-	    if ( true ) {
-	        if ( typeof config !== 'object' ) { throw new Error(__filename + ': wrong config type'); }
-	        // init parameters checks
-	        if ( config.className && typeof config.className !== 'string' ) { throw new Error(__filename + ': wrong or empty config.className'); }
-	        if ( config.type      && Number(config.type) !== config.type  ) { throw new Error(__filename + ': config.type must be a number'); }
-	    }
-	
 	    // set default className if classList property empty or undefined
-	    config.className = 'console ' + (config.className || '');
+	    config.className = 'tabTarget ' + (config.className || '');
 	
 	    // parent constructor call
-	    Component.call(this, config);
+	    TabItem.call(this, config);
 	
-	    this.filterText = '';
-	    this.includeTags = [];
-	    this.excludeTags = [];
+	    this.wamp = config.wamp;
 	
-	    // component setup
-	    this.init(config);
-	}
+	    this.targetId = config.targetId;
 	
+	    this.$logsFilters = document.createElement('div');
+	    this.$logsFilters.className = 'logsFilters';
+	    this.$body.appendChild(this.$logsFilters);
 	
-	function getTime ( timestamp ) {
-	    var date   = new Date(timestamp),
-	        hPart  = date.getHours(),
-	        mPart  = date.getMinutes(),
-	        msPart = date.getMilliseconds();
+	    button = new Button({
+	        className: 'clear',
+	        events: {
+	            click: function () {
+	                self.logs.clear();
+	            }
+	        }
+	    });
+	    this.$logsFilters.appendChild(button.$node);
 	
-	    if ( msPart === 0 ) { msPart = '000'; }
-	    else if ( msPart < 10  ) { msPart = '00' + msPart; }
-	    else if ( msPart < 100 ) { msPart = '0'  + msPart; }
+	    button = new Button({
+	        className: 'reset',
+	        events: {
+	            click: function () {
+	                // $logsInclude.value = '';
+	                // $tagsInclude.value = '';
+	                // $tagsExclude.value = '';
+					//
+	                // self.logs.filterText  = '';
+	                // self.logs.includeTags = [];
+	                // self.logs.excludeTags = [];
+	                // self.logs.applyFilter();
+	                self.logs.resetFilters();
+	            }
+	        }
+	    });
+	    this.$logsFilters.appendChild(button.$node);
 	
-	    return (hPart > 9 ? '' : '0') + hPart + ':' + (mPart > 9 ? '' : '0') + mPart + '.' + msPart;
+	    $logsInclude.type = 'text';
+	    $logsInclude.placeholder = 'filter text';
+	    $logsInclude.className = 'logsInclude';
+	    this.$logsFilters.appendChild($logsInclude);
+	
+	    $tagsInclude.type = 'text';
+	    $tagsInclude.placeholder = 'enter include tags';
+	    $tagsInclude.className = 'tagsInclude';
+	    this.$logsFilters.appendChild($tagsInclude);
+	
+	    $tagsExclude.type = 'text';
+	    $tagsExclude.placeholder = 'enter exclude tags';
+	    $tagsExclude.className = 'tagsExclude';
+	    this.$logsFilters.appendChild($tagsExclude);
+	
+	    // $logsInclude.onkeydown = $tagsInclude.onkeydown = $tagsExclude.onkeydown = function ( event ) {
+	    //     clearTimeout(timeout);
+		//
+	    //     timeout = setTimeout(function () {
+	    //         self.logs.filterText  = $logsInclude.value;
+	    //         self.logs.includeTags = $tagsInclude.value.split(' ');
+	    //         self.logs.excludeTags = $tagsExclude.value.split(' ');
+	    //         self.logs.applyFilter();
+	    //     }, 300);
+		//
+	    //     event.stopPropagation();
+	    // };
+	
+	    this.logs = new Console({
+	        parent: this,
+	        wamp: this.wamp,
+	        $logsInclude: $logsInclude,
+	        $tagsInclude: $tagsInclude,
+	        $tagsExclude: $tagsExclude
+	    });
+	
+	    $codeExec.type = 'text';
+	    $codeExec.placeholder = 'type JavaScript code to execute';
+	    $codeExec.onkeydown = function ( event ) {
+	        var code;
+	
+	        if ( event.keyCode === 13 ) {
+	            code = $codeExec.value;
+	
+	            self.wamp.call('evalCode', {targetId: self.targetId, code: code}, function ( error, data ) {
+	                console.log('eval code', error, data);
+	
+	                if ( !error ) {
+	                    self.logs.add({
+	                        info: code + ' = ' + data.eval,
+	                        tags: ['eval']
+	                    });
+	                }
+	            });
+	
+	            // prepare for a new run
+	            $codeExec.value = '';
+	        }
+	    };
+	    this.codeExec = document.createElement('div');
+	    this.codeExec.className = 'codeExec';
+	    this.codeExec.appendChild($codeExec);
+	    this.$body.appendChild(this.codeExec);
 	}
 	
 	
 	// inheritance
-	Console.prototype = Object.create(Component.prototype);
-	Console.prototype.constructor = Console;
+	TabTarget.prototype = Object.create(TabItem.prototype);
+	TabTarget.prototype.constructor = TabTarget;
 	
 	
-	/**
-	 * List of all default event callbacks.
-	 *
-	 * @type {Object.<string, function>}
-	 */
-	Console.prototype.defaultEvents = {
-	
-	};
-	
-	
-	/**
-	 * Init or re-init of the component inner structures and HTML.
-	 *
-	 * @param {Object} config init parameters (subset of constructor config params)
-	 */
-	Console.prototype.init = function ( config ) {
-	    if ( true ) {
-	        if ( arguments.length !== 1 ) { throw new Error(__filename + ': wrong arguments number'); }
-	        if ( typeof config !== 'object' ) { throw new Error(__filename + ': wrong config type'); }
-	    }
-	
-	    this.$input = document.createElement('input');
-	    this.$input.type = 'text';
-	
-	    this.$node.appendChild(this.$input);
-	};
-	
-	
-	Console.prototype.matchFilter = function ( node ) {
-	    var length, tag;
-	
-	    if ( this.filterText && node.innerText.indexOf(this.filterText) === -1 ) {
-	        return false;
-	    }
-	
-	    // prepare
-	    length = this.includeTags.length;
-	    // check
-	    while ( length-- ) {
-	        tag = this.includeTags[length];
-	
-	        if ( tag && node.tags.indexOf(tag) === -1 ) {
-	            return false;
-	        }
-	    }
-	
-	    // prepare
-	    length = this.excludeTags.length;
-	    // check
-	    while ( length-- ) {
-	        tag = this.excludeTags[length];
-	
-	        if ( tag && node.tags.indexOf(tag) !== -1 ) {
-	            return false;
-	        }
-	    }
-	
-	    return true;
-	};
-	
-	
-	Console.prototype.applyFilter = function () {
-	    var nodes = this.$node.children,
-	        length, item;
-	
-	    // prepare
-	    length = nodes.length - 1;
-	    // check
-	    while ( length-- ) {
-	        item = nodes[length];
-	
-	        item.style.display = this.matchFilter(item) ? 'block' : 'none';
-	    }
-	};
-	
-	
-	Console.prototype.add = function ( data ) {
-	    var self = this,
-	        item = document.createElement('div'),
-	        info = document.createElement('div');
-	
-	    item.className = 'item';
-	
-	    data.tags = data.tags || [];
-	    data.tags.push(data.type);
-	    data.tags.forEach(function ( tag ) {
-	        var div = document.createElement('div');
-	
-	        div.className = 'tag';
-	        div.innerText = tag;
-	
-	        item.appendChild(div);
-	
-	        // if ( ['info', 'warn', 'fail'].indexOf(tag) !== -1 ) {
-	        //     item.classList.add(tag);
-	        // }
-	
-	        div.addEventListener('click', function ( event ) {
-	            if ( event.ctrlKey ) {
-	                self.excludeTags.push(tag);
-	                window.pageMainTagsExclude.value = window.pageMainTagsExclude.value + (window.pageMainTagsExclude.value ? ' ' : '') + tag;
-	            } else {
-	                self.includeTags.push(tag);
-	                window.pageMainTagsInclude.value = window.pageMainTagsInclude.value + (window.pageMainTagsInclude.value ? ' ' : '') + tag;
-	            }
-	
-	            self.applyFilter();
-	
-	            /*var length = window.pageMainTabTargetList.children.length,
-	             index, node;
-	
-	             console.log(tag);
-	
-	             for ( index = 0; index < length; index++ ) {
-	             node = window.pageMainTabTargetList.children[index];
-	             //console.log(index, node);
-	             node.style.display = node.tags.indexOf(tag) === -1 ? 'none' : 'block';
-	             }*/
-	        });
-	    });
-	    item.classList.add(data.type);
-	    item.tags = data.tags;
-	
-	    info.className = 'info';
-	    console.log(data.data);
-	    info.innerText = (data.data && 'link' in  data.data ? '+ ' : '- ') + getTime(data.time) + ' :: ' + data.info /*+ (data.data ? ' :: ' + data.data : '')*/;
-	
-	    item.addEventListener('click', function () {
-	        //console.log(data.data.link);
-	        app.wamp.call('getLinkData', {targetId: 128, linkId: data.data.link}, function ( error, data ) {
-	            console.log(error, data);
-	        });
-	    });
-	
-	    item.appendChild(info);
-	
-	    //console.log('target message', data);
-	
-	    if ( !this.matchFilter(item) ) {
-	        item.style.display = 'none';
-	    }
-	
-	    this.$node.insertBefore(item, this.$input);
-	
-	    if ( this.$node.children.length >= 250 ) {
-	        this.$node.removeChild(this.$node.firstChild);
-	    }
-	};
+	// TabTarget.prototype.add = function ( data ) {
+	//
+	// };
 	
 	
 	// public
-	module.exports = Console;
+	module.exports = TabTarget;
+
+
+/***/ },
+/* 27 */
+/*!************************!*\
+  !*** ./src/js/wamp.js ***!
+  \************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * Handle wamp init requests.
+	 */
 	
-	/* WEBPACK VAR INJECTION */}.call(exports, "src/js/pages/console.js"))
+	'use strict';
+	
+	var app      = __webpack_require__(/*! spa-app */ 1),
+	    Wamp     = __webpack_require__(/*! spa-wamp */ 7),
+	    parallel = __webpack_require__(/*! cjs-async/parallel */ 15);
+	
+	
+	// public
+	module.exports = function ( callback ) {
+	    var fnNameList = {
+	            connection: 'getConnectionInfo',
+	            project:    'getProjectInfo',
+	            clients:    'getClients',
+	            targets:    'getTargets',
+	            plugins:    'getPlugins',
+	            tasks:      'getTasks'
+	        },
+	        fnHashList = [],
+	        fnBodyList = [];
+	
+	    app.data = {};
+	
+	    app.wamp = new Wamp('ws://' + (app.query.wampHost || location.hostname) + ':' + app.query.wampPort + '/client');
+	
+	    app.wamp.addListener('connection:open', function () {
+	        document.body.style.opacity = 1;
+	        //debug.info('wamp open ' + app.wamp.socket.url, app.wamp, {tags: ['open', 'wamp']});
+	    });
+	
+	    app.wamp.addListener('connection:close', function () {
+	        document.body.style.opacity = 0.2;
+	        //debug.info('wamp close ' + app.wamp.socket.url, app.wamp, {tags: ['close', 'wamp']});
+	    });
+	
+	    Object.keys(fnNameList).forEach(function ( id ) {
+	        // prepare async method
+	        fnBodyList.push(function ( done ) {
+	            app.wamp.call(fnNameList[id], {}, done);
+	        });
+	
+	        // build hash table
+	        fnHashList.push(id);
+	    });
+	
+	    app.wamp.once('connection:open', function () {
+	        // gather all data
+	        parallel(fnBodyList, function ( error, list ) {
+	            if ( error ) {
+	                debug.fail(error);
+	            }
+	
+	            // build data
+	            list.forEach(function ( data, index ) {
+	                app.data[fnHashList[index]] = data;
+	            });
+	
+	            callback();
+	        });
+	    });
+	};
+	
+	
+	/*
+	var app   = require('spa-app'),
+	    Wamp  = require('cjs-wamp'),
+	    parse = require('cjs-query').parse;
+	
+	
+	function wamp () {
+	    app.wamp = new Wamp(
+	        new WebSocket('ws://localhost:' + parse(document.location.search.substring(1)).port + '/client')
+	    );
+	
+	    // ready
+	    app.wamp.socket.onopen = function () {
+	        console.log('wamp is ready!');
+	        document.body.style.opacity = 1;
+	
+	        // info
+	
+	        app.wamp.call('getInfo', {}, function ( error, data ) {
+	            console.log('info', data);
+	        });
+	
+	        app.wamp.call('getMemoryUsage', {}, function ( error, data ) {
+	            console.log('memory usage', data);
+	        });
+	
+	        app.wamp.call('getClients', {}, function ( error, data ) {
+	            console.log('clients', data);
+	        });
+	
+	        /!*app.wamp.call('getTargets', {}, function ( error, data ) {
+	            console.log('targets', data);
+	        });*!/
+	
+	        app.wamp.call('getPlugins', {}, function ( error, data ) {
+	            console.log('plugins', data);
+	        });
+	
+	        // notifications
+	
+	        //app.wamp.addListener('eventTargetOnline', function ( event ) {
+	        //    console.log('new target', event);
+	        //});
+	
+	        app.wamp.addListener('eventTaskStart', function ( event ) {
+	            console.log('task start', event);
+	            window[event.id].classList.add('running');
+	        });
+	
+	        app.wamp.addListener('eventTaskFinish', function ( event ) {
+	            console.log('task finish', event);
+	            window[event.id].classList.remove('running');
+	        });
+	
+	        app.wamp.addListener('message', function ( event ) {
+	            console.log('message', event);
+	        });
+	
+	        app.emit('wamp:open');
+	    };
+	
+	    // try to reconnect in 5 seconds on disconnect
+	    app.wamp.socket.onclose = function () {
+	        document.body.style.opacity = 0.2;
+	        setTimeout(wamp, 5000);
+	    };
+	}
+	
+	
+	// public
+	module.exports = wamp;
+	*/
+
 
 /***/ }
 /******/ ]);
