@@ -43,9 +43,11 @@
             height: $itemHeight - 6;
             line-height: $itemHeight - 6;
             float: right;
-            background-color: #f4fff4;
             border: 1px solid $colorBorderLight;
-            padding: 0 6px;
+            //background: #f4fff4 url("https://cdn3.iconfinder.com/data/icons/free-social-icons/67/tumblr_circle_gray-16.png") no-repeat 6px center;
+            background: #f4fff4 url("https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-ios7-circle-outline-16.png") no-repeat 3px center;
+            border-radius: 10px 0 0 10px;
+            padding: 0 6px 0 $itemHeight - 4;
             margin: 2px 2px 2px 0;
 
             &:hover {

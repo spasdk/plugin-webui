@@ -155,7 +155,9 @@ Console.prototype.add = function ( data ) {
 
     item.className = 'item';
 
+    data.time = data.time || +new Date();
     data.tags = data.tags || [];
+    data.type = data.type || 'info';
     data.tags.push(data.type);
     data.tags.forEach(function ( tag ) {
         var div = document.createElement('div');
@@ -222,6 +224,8 @@ Console.prototype.add = function ( data ) {
     if ( this.$body.children.length >= 250 ) {
         this.$body.removeChild(this.$body.firstChild);
     }
+
+    this.$body.scrollTop = this.$body.scrollHeight;
 };
 
 

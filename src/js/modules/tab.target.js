@@ -41,6 +41,8 @@ function TabTarget ( config ) {
 
     this.wamp = config.wamp;
 
+    this.targetId = config.targetId;
+
     this.$logsFilters = document.createElement('div');
     this.$logsFilters.className = 'logsFilters';
     this.$body.appendChild(this.$logsFilters);
@@ -110,7 +112,28 @@ function TabTarget ( config ) {
     });
 
     $codeExec.type = 'text';
-    $codeExec.placeholder = 'type your code here';
+    $codeExec.placeholder = 'type JavaScript code to execute';
+    $codeExec.onkeydown = function ( event ) {
+        var code;
+
+        if ( event.keyCode === 13 ) {
+            code = $codeExec.value;
+
+            self.wamp.call('evalCode', {targetId: self.targetId, code: code}, function ( error, data ) {
+                console.log('eval code', error, data);
+
+                if ( !error ) {
+                    self.logs.add({
+                        info: code + ' = ' + data.eval,
+                        tags: ['eval']
+                    });
+                }
+            });
+
+            // prepare for a new run
+            $codeExec.value = '';
+        }
+    };
     this.codeExec = document.createElement('div');
     this.codeExec.className = 'codeExec';
     this.codeExec.appendChild($codeExec);

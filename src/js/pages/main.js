@@ -63,7 +63,9 @@ function addTargetTab ( data ) {
     // });
 
     data.tab = new TabTarget({
-        parent: page
+        targetId: parseInt(data.id, 10),
+        parent: page,
+        wamp: app.wamp
     });
 
     tabList.add(data);
@@ -388,7 +390,7 @@ page.addListener('show', function load () {
         } else {
             //devConsole.add(event);
             //console.log(event.targetId);
-            tabList.data[event.targetId].tab.logs.add(event)
+            tabList.data[event.targetId].tab.logs.add(event);
         }
     });
 

@@ -147,7 +147,17 @@ function TabSystem ( config ) {
     });
 
     $taskExec.type = 'text';
-    $taskExec.placeholder = 'type your code here';
+    $taskExec.placeholder = 'type task name to execute';
+    $taskExec.onkeydown = function ( event ) {
+        if ( event.keyCode === 13 ) {
+            self.wamp.call('runTask', {id: $taskExec.value}, function ( error, data ) {
+                console.log('run task', error, data);
+            });
+            
+            // prepare for a new run
+            $taskExec.value = '';
+        }
+    };
     this.taskExec = document.createElement('div');
     this.taskExec.className = 'taskExec';
     this.taskExec.appendChild($taskExec);
