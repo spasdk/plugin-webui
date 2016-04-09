@@ -151,6 +151,7 @@ Console.prototype.applyFilter = function () {
 Console.prototype.add = function ( data ) {
     var self = this,
         item = document.createElement('div'),
+        time = document.createElement('div'),
         info = document.createElement('div');
 
     item.className = 'item';
@@ -199,9 +200,17 @@ Console.prototype.add = function ( data ) {
     item.classList.add(data.type);
     item.tags = data.tags;
 
+    time.className = 'time';
     info.className = 'info';
-    console.log(data.data);
-    info.innerText = (data.data && 'link' in  data.data ? '+ ' : '- ') + getTime(data.time) + ' :: ' + data.info /*+ (data.data ? ' :: ' + data.data : '')*/;
+
+    //console.log(data.data);
+    if ( data.data && 'link' in  data.data ) {
+        item.classList.add('data');
+    }
+
+    time.innerText = getTime(data.time);
+
+    info.innerText = /*(data.data && 'link' in  data.data ? '+ ' : '- ') + getTime(data.time) + ' :: ' +*/ data.info /*+ (data.data ? ' :: ' + data.data : '')*/;
 
     item.addEventListener('click', function () {
         //console.log(data.data.link);
@@ -210,6 +219,7 @@ Console.prototype.add = function ( data ) {
         });
     });
 
+    item.appendChild(time);
     item.appendChild(info);
 
     //console.log('target message', data);

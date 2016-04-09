@@ -13,10 +13,7 @@
         //padding: 3px;
         height: $itemHeight;
         border-bottom: 1px solid $colorBorderLight;
-
-        &:hover {
-            background-color: $colorHover;
-        }
+        padding-left: $itemHeight + 2;
 
         &:first-of-type {
             //border-bottom: none;
@@ -30,10 +27,21 @@
             background-color: #fffff0;
         }
 
+        &.data {
+            background: url("https://cdn0.iconfinder.com/data/icons/feather/96/square-add-16.png") no-repeat 6px center;
+        }
+
+        > .time {
+            color: #777;
+            float: left;
+            height: $itemHeight;
+            line-height: $itemHeight;
+        }
+
         > .info {
             height: $itemHeight;
             line-height: $itemHeight;
-            padding: 0 5px;
+            padding: 0 5px 0 8px;
             font-family: monospace;
             overflow: hidden;
         }
@@ -54,6 +62,10 @@
                 background-color: #bfdfff;
                 border-color: #bfdfff;
             }
+        }
+
+        &:hover {
+            background-color: $colorHover;
         }
     }
 
