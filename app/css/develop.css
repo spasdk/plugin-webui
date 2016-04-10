@@ -317,17 +317,23 @@ body.develop .component {
     .component.console .item {
         font-size: 13px;
         height: 26px;
-        border-bottom: 1px solid #eee; }
-        .component.console .item:hover {
-            background-color: #f7f7ff; }
+        border-bottom: 1px solid #eee;
+        padding-left: 28px; }
         .component.console .item.fail {
             background-color: #fff0f0; }
         .component.console .item.warn {
             background-color: #fffff0; }
+        .component.console .item.data {
+            background: url("https://cdn0.iconfinder.com/data/icons/feather/96/square-add-16.png") no-repeat 6px center; }
+        .component.console .item > .time {
+            color: #777;
+            float: left;
+            height: 26px;
+            line-height: 26px; }
         .component.console .item > .info {
             height: 26px;
             line-height: 26px;
-            padding: 0 5px;
+            padding: 0 5px 0 8px;
             font-family: monospace;
             overflow: hidden; }
         .component.console .item > .tag {
@@ -343,6 +349,8 @@ body.develop .component {
             .component.console .item > .tag:hover {
                 background-color: #bfdfff;
                 border-color: #bfdfff; }
+        .component.console .item:hover {
+            background-color: #f7f7ff; }
     .component.console > input {
         font-family: monospace;
         border: none;
