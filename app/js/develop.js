@@ -4334,7 +4334,7 @@
   \**************************************/
 /***/ function(module, exports, __webpack_require__) {
 
-	/**
+	/* WEBPACK VAR INJECTION */(function(__filename) {/**
 	 * @author Stanislav Kalashnik <sk@infomir.eu>
 	 * @license GNU GENERAL PUBLIC LICENSE Version 3
 	 */
@@ -4381,7 +4381,7 @@
 	    // sanitize
 	    config = config || {};
 	
-	    if ( false ) {
+	    if ( true ) {
 	        if ( typeof config !== 'object' ) { throw new Error(__filename + ': wrong config type'); }
 	        if ( config.className && typeof config.className !== 'string' ) { throw new Error(__filename + ': wrong or empty config.className'); }
 	    }
@@ -4420,9 +4420,9 @@
 	TabItem.prototype.show = function ( data ) {
 	    var prev = null;
 	
-	    if ( false ) {
+	    if ( true ) {
 	        if ( !this.parent ) { throw new Error(__filename + ': no parent for tab item'); }
-	        if ( this.parent.constructor.name !== 'TabList' ) { throw new Error(__filename + ': wrong parent for tab item'); }
+	        //if ( this.parent.constructor.name !== 'TabList' ) { throw new Error(__filename + ': wrong parent for tab item'); }
 	        if ( this.parent.currentTabItem && !(this.parent.currentTabItem instanceof TabItem) ) { throw new Error(__filename + ': wrong current tab item type'); }
 	    }
 	
@@ -4458,9 +4458,9 @@
 	 * @fires module:stb/ui/tab.item~TabItem#hide
 	 */
 	TabItem.prototype.hide = function () {
-	    if ( false ) {
+	    if ( true ) {
 	        if ( !this.parent ) { throw new Error(__filename + ': no parent for tab item'); }
-	        if ( this.parent.constructor.name !== 'TabList' ) { throw new Error(__filename + ': wrong parent for tab item'); }
+	        //if ( this.parent.constructor.name !== 'TabList' ) { throw new Error(__filename + ': wrong parent for tab item'); }
 	        if ( this.parent.currentTabItem && !(this.parent.currentTabItem instanceof TabItem) ) { throw new Error(__filename + ': wrong current tab item type'); }
 	    }
 	
@@ -4477,7 +4477,8 @@
 	
 	// public
 	module.exports = TabItem;
-
+	
+	/* WEBPACK VAR INJECTION */}.call(exports, "../component-tab-item/index.js"))
 
 /***/ },
 /* 21 */
