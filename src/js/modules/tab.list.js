@@ -187,7 +187,7 @@ TabList.prototype.online = function ( id, state ) {
 
 
 TabList.prototype.add = function ( data ) {
-    var self = this,
+    var //self = this,
         item;
         //info = document.createElement('div');
 
@@ -203,6 +203,7 @@ TabList.prototype.add = function ( data ) {
             //item.innerText = 'target #' + data.id;
             item.innerText = data.host || 'n/a';
             //item.title = data.host || 'localhost';
+            item.title = 'id: ' + data.id;
         } else {
             // system
             item.innerText = 'system';
