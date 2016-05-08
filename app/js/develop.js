@@ -1794,6 +1794,7 @@
 	
 	
 	if ( app.query.wampPort ) {
+	    // correct type
 	    app.query.wampTargetId = parseInt(app.query.wampTargetId, 10);
 	
 	    app.develop.wamp = new Wamp(
@@ -3764,7 +3765,7 @@
 	
 	'use strict';
 	
-	var app     = __webpack_require__(/*! spa-app */ 1),
+	var app     = __webpack_require__(/*! spa-app/lib/core */ 2),
 	    Emitter = __webpack_require__(/*! cjs-emitter */ 3),
 	    counter = 0;
 	
@@ -4710,14 +4711,14 @@
 	    });
 	
 	    app.wamp.addListener('eventTargetMessage', function ( event ) {
-	        console.log(event);
+	        //console.log(event);
 	
 	        if ( event.tags.indexOf('target') === -1 ) {
 	            tabSystem.taskLogs.add(event);
 	        } else {
 	            //devConsole.add(event);
 	            //console.log(event.targetId);
-	            //tabList.data[event.targetId].tab.logs.add(event);
+	            tabList.data[event.targetId].tab.logs.add(event);
 	        }
 	    });
 	
