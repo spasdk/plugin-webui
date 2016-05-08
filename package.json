@@ -6,7 +6,10 @@
         "name": "Stanislav Kalashnik",
         "email": "darkpark.main@gmail.com"
     },
-    "repository": "spasdk/plugin-webui",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/spasdk/plugin-webui.git"
+    },
     "scripts": {
         "start": "spasdk",
         "build": "spasdk build",
