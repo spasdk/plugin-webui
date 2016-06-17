@@ -770,9 +770,9 @@
 
 /***/ },
 /* 3 */
-/*!*****************************************************!*\
-  !*** /home/dp/Projects/sdk/cjssdk/emitter/index.js ***!
-  \*****************************************************/
+/*!****************************************************!*\
+  !*** /home/dp/Projects/sdk/~/cjs-emitter/index.js ***!
+  \****************************************************/
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(__filename) {/**
@@ -1027,7 +1027,7 @@
 	// public
 	module.exports = Emitter;
 	
-	/* WEBPACK VAR INJECTION */}.call(exports, "../../cjssdk/emitter/index.js"))
+	/* WEBPACK VAR INJECTION */}.call(exports, "../../node_modules/cjs-emitter/index.js"))
 
 /***/ },
 /* 4 */
@@ -1833,9 +1833,9 @@
 
 /***/ },
 /* 10 */
-/*!************************!*\
-  !*** ../wamp/index.js ***!
-  \************************/
+/*!*************************************************!*\
+  !*** /home/dp/Projects/sdk/~/spa-wamp/index.js ***!
+  \*************************************************/
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -1920,9 +1920,9 @@
 
 /***/ },
 /* 11 */
-/*!**************************************************!*\
-  !*** /home/dp/Projects/sdk/cjssdk/wamp/index.js ***!
-  \**************************************************/
+/*!*************************************************!*\
+  !*** /home/dp/Projects/sdk/~/cjs-wamp/index.js ***!
+  \*************************************************/
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -3568,8 +3568,7 @@
 	module.exports = function ( tasks, callback ) {
 	    var isError = false,
 	        counter = 0,
-	        outList = [],
-	        outHash = {};
+	        results = [];
 	
 	    function handler ( task, index ) {
 	        var done = function ( error, result ) {
@@ -3586,16 +3585,13 @@
 	            }
 	
 	            // fill results
-	            outList[index] = result;
-	            if ( task.name ) {
-	                outHash[task.name] = result;
-	            }
+	            results[index] = result;
 	
 	            counter++;
 	
 	            // all tasks are processed
 	            if ( counter === tasks.length && typeof callback === 'function' ) {
-	                callback(null, outList, outHash);
+	                callback(null, results);
 	            } else if ( counter > tasks.length ) {
 	                throw Error('done callback invoked more than one time in function with ' + index + ' position in tasks array');
 	            }
@@ -3622,7 +3618,7 @@
 	    if ( tasks.length === 0 ) {
 	        if ( typeof callback === 'function' ) {
 	            // empty result
-	            callback(null, outList, outHash);
+	            callback(null, results);
 	        }
 	    } else {
 	        // run all tasks
