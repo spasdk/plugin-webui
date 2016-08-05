@@ -156,7 +156,7 @@ Console.prototype.add = function ( data ) {
 
     item.className = 'item';
 
-    data.time = data.time || +new Date();
+    data.time = data.time || Date.now();
     data.tags = data.tags || [];
     data.type = data.type || 'info';
     data.tags.push(data.type);
