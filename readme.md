@@ -15,11 +15,7 @@ npm install spa-plugin-webui
 
 ## Usage ##
 
-Add to the scope:
-
-```js
-var webui = require('spa-plugin-webui');
-```
+Web page address: http://localhost:8000/develop.html?wampPort=9000
 
 
 ## Contribution ##
