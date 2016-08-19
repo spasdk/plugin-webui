@@ -206,7 +206,7 @@ app.addListener('load', function load () {
     //     event.stopPropagation();
     // };
 
-    app.wamp.once('connection:open', function () {
+    //app.wamp.once('connection:open', function () {
         // info
 
         // app.wamp.call('getConnectionInfo', {}, function ( error, data ) {
@@ -255,7 +255,7 @@ app.addListener('load', function load () {
         //     window[event.id].classList.remove('running');
         // });
 
-        app.wamp.addListener('eventTargetMessage', function ( event ) {
+        //app.wamp.addListener('eventTargetMessage', function ( event ) {
             //console.log(event);
 
             // if ( event.tags.indexOf('target') === -1 ) {
@@ -310,7 +310,8 @@ app.addListener('load', function load () {
 
             info.className = 'info';
             console.log(event.data);
-            info.innerText = getTime(event.time) + (event.data && 'link' in  event.data ? ' + ' : ' - ') + event.info /!*+ (event.data ? ' :: ' + event.data : '')*!/;
+            info.innerText = getTime(event.time) + (event.data && 'link' in  event.data ? ' + ' : ' - ') +
+                event.info /!*+ (event.data ? ' :: ' + event.data : '')*!/;
 
             item.addEventListener('click', function () {
                 //console.log(event.data.link);
@@ -328,7 +329,7 @@ app.addListener('load', function load () {
             if ( window.pageMainTabTargetList.children.length >= 250 ) {
                 window.pageMainTabTargetList.removeChild(window.pageMainTabTargetList.firstChild);
             }*/
-        });
+        //});
 
         /*app.wamp.addListener('message', function ( event ) {
             console.log('message', event);
@@ -344,7 +345,7 @@ app.addListener('load', function load () {
         //         }).$node);*/
         //     });
         // });
-    });
+    //});
 
     app.wamp.addListener('eventTargetOffline', function ( target ) {
         console.log('remove target', target);
@@ -383,7 +384,7 @@ page.addListener('show', function load () {
     });
 
     app.wamp.addListener('eventTargetMessage', function ( event ) {
-        //console.log(event);
+        console.log(event);
 
         if ( event.tags.indexOf('target') === -1 ) {
             tabSystem.taskLogs.add(event);

@@ -204,9 +204,11 @@ Console.prototype.add = function ( data ) {
     info.className = 'info';
 
     //console.log(data.data);
-    if ( data.data && 'link' in  data.data ) {
+    // data.data can be a string which can give:
+    // Uncaught TypeError: Cannot use 'in' operator to search for 'link' in ENOENT: no such file or directory, unlink 'app/css/develop.css'
+    /*if ( data.data && 'link' in data.data ) {
         item.classList.add('data');
-    }
+    }*/
 
     time.innerText = getTime(data.time);
 
