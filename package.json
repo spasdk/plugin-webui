@@ -1,5 +1,5 @@
 {
-    "name": "spa-plugin-webui",
+    "name": "spa-webui",
     "version": "1.0.0",
     "description": "Web Application for plugins and tasks management.",
     "author": {
@@ -8,7 +8,7 @@
     },
     "repository": {
         "type": "git",
-        "url": "https://github.com/spasdk/plugin-webui.git"
+        "url": "https://github.com/spasdk/webui.git"
     },
     "scripts": {
         "start": "spasdk",

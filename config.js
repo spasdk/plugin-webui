@@ -10,7 +10,7 @@ var path     = require('path'),
     config   = require('spa-plugin-static/config'),
     profiles = {};
 
-//console.log(require.resolve('spa-plugin-webui'));
+//console.log(require.resolve('spa-webui'));
 //console.log(path.join(__dirname, 'app'));
 
 // main
@@ -19,7 +19,7 @@ profiles.default = extend(true, {}, config.default, {
     source: path.join(__dirname, 'app'),
 
     // main entry point to load web page
-    target: 'release.html?port=9000',
+    target: 'release.html?wampPort=9000',
 
     // listening port (0 - random)
     port: 8000
