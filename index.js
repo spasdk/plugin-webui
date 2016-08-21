@@ -1,16 +1,15 @@
 /**
- * @author Stanislav Kalashnik <darkpark.main@gmail.com>
- * @license GNU GENERAL PUBLIC LICENSE Version 3
+ * Main SDK entry point.
  */
 
 'use strict';
 
-var Plugin = require('spa-plugin-static/lib/plugin');
+// redefinition of plugin option example
+// require('spa-plugin-static/config').default.port = 8000;
 
+// load default plugins
+// and run default tasks
+module.exports = require('spasdk/default');
 
-// public
-module.exports = new Plugin({
-    name: 'webui',
-    entry: 'serve',
-    config: require('./config')
-});
+// redefinition of default task example
+// module.exports.runner.task('default', module.exports.runner.serial('build'));
