@@ -1,6 +1,5 @@
-.eslintrc.js
-.eslintignore
 .github
 .idea
 .sdk
+app/js/.eslintignore
 src
