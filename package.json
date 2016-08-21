@@ -16,16 +16,9 @@
         "watch": "spasdk watch",
         "serve": "spasdk serve"
     },
-    "config": {
-        "static.default.port" : "8080"
-    },
-    "dependencies": {
-        "extend": "3.*.*",
-        "cjs-async": "cjssdk/async",
-        "spa-plugin": "spasdk/plugin"
-    },
     "devDependencies": {
         "spa-app": "spasdk/app",
+        "cjs-async": "cjssdk/async",
         "spa-component-button": "spasdk/component-button",
         "spa-component-page": "spasdk/component-page",
         "spa-component-tab-item": "spasdk/component-tab-item",
