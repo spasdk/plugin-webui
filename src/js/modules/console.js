@@ -77,9 +77,13 @@ function getTime ( timestamp ) {
         mPart  = date.getMinutes(),
         msPart = date.getMilliseconds();
 
-    if ( msPart === 0 ) { msPart = '000'; }
-    else if ( msPart < 10  ) { msPart = '00' + msPart; }
-    else if ( msPart < 100 ) { msPart = '0'  + msPart; }
+    if ( msPart === 0 ) {
+        msPart = '000';
+    } else if ( msPart < 10  ) {
+        msPart = '00' + msPart;
+    } else if ( msPart < 100 ) {
+        msPart = '0'  + msPart;
+    }
 
     return (hPart > 9 ? '' : '0') + hPart + ':' + (mPart > 9 ? '' : '0') + mPart + '.' + msPart;
 }
@@ -212,7 +216,8 @@ Console.prototype.add = function ( data ) {
 
     time.innerText = getTime(data.time);
 
-    info.innerText = /*(data.data && 'link' in  data.data ? '+ ' : '- ') + getTime(data.time) + ' :: ' +*/ data.info /*+ (data.data ? ' :: ' + data.data : '')*/;
+    info.innerText = /*(data.data && 'link' in  data.data ? '+ ' : '- ') + getTime(data.time) + ' :: ' +*/
+        data.info/*+ (data.data ? ' :: ' + data.data : '')*/;
 
     item.addEventListener('click', function () {
         //console.log(data.data.link);

@@ -262,7 +262,8 @@ TabList.prototype.add = function ( data ) {
 
     // info.className = 'info';
     // console.log(data.data);
-    // info.innerText = (data.data && 'link' in  data.data ? '+ ' : '- ') + getTime(data.time) + ' :: ' + data.info /*+ (data.data ? ' :: ' + data.data : '')*/;
+    // info.innerText = (data.data && 'link' in  data.data ? '+ ' : '- ') + getTime(data.time) + ' :: '
+    // + data.info /*+ (data.data ? ' :: ' + data.data : '')*/;
 
     // item.addEventListener('click', function () {
     //     //console.log(data.data.link);

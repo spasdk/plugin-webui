@@ -7,15 +7,15 @@
 var app       = require('spa-app'),
     Page      = require('spa-component-page'),
     //Button    = require('spa-component-button'),
-    TabItem   = require('spa-component-tab-item'),
-    Console   = require('./../modules/console'),
-    TaskList  = require('./../modules/task.list'),
+    //TabItem   = require('spa-component-tab-item'),
+    //Console   = require('./../modules/console'),
+    //TaskList  = require('./../modules/task.list'),
     TabList   = require('./../modules/tab.list'),
     TabSystem = require('./../modules/tab.system'),
     TabTarget = require('./../modules/tab.target'),
     page      = new Page({$node: window.pageMain}),
     targets   = {},
-    taskList, taskLogs, devConsole, tabList,
+    /*taskList, taskLogs, devConsole, */tabList,
     tabSystem;
 
 
@@ -93,7 +93,7 @@ function addTargetTab ( data ) {
 
 
 app.addListener('load', function load () {
-    var timeout;
+    //var timeout;
 
     // var /*buttonSystem = new Button({
     //         //$node: window.pageMainButtonSystem,

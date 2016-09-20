@@ -28,7 +28,7 @@ function TabTarget ( config ) {
         $tagsInclude = document.createElement('input'),
         $tagsExclude = document.createElement('input'),
         $codeExec    = document.createElement('input'),
-        button, timeout;
+        button;
 
     // sanitize
     config = config || {};
