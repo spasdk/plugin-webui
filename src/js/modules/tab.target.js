@@ -9,7 +9,8 @@
 
 var Button  = require('spa-component-button'),
     TabItem = require('spa-component-tab-item'),
-    Console = require('./../modules/console');
+    Console = require('./../modules/console'),
+    keys    = require('spa-keys');
 
 
 /**
@@ -116,7 +117,7 @@ function TabTarget ( config ) {
     $codeExec.onkeydown = function ( event ) {
         var code;
 
-        if ( event.keyCode === 13 ) {
+        if ( event.keyCode === keys.enter ) {
             code = $codeExec.value;
 
             self.wamp.call('evalCode', {targetId: self.targetId, code: code}, function ( error, data ) {

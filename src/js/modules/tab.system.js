@@ -10,7 +10,8 @@
 var Button   = require('spa-component-button'),
     TabItem  = require('spa-component-tab-item'),
     TaskList = require('./../modules/task.list'),
-    Console  = require('./../modules/console');
+    Console  = require('./../modules/console'),
+    keys     = require('spa-keys');
 
 
 /**
@@ -149,11 +150,11 @@ function TabSystem ( config ) {
     $taskExec.type = 'text';
     $taskExec.placeholder = 'type task name to execute';
     $taskExec.onkeydown = function ( event ) {
-        if ( event.keyCode === 13 ) {
+        if ( event.keyCode === keys.enter ) {
             self.wamp.call('runTask', {id: $taskExec.value}, function ( error, data ) {
                 console.log('run task', error, data);
             });
-            
+
             // prepare for a new run
             $taskExec.value = '';
         }
