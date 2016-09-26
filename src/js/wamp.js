@@ -26,12 +26,12 @@ module.exports = function ( callback ) {
 
     app.wamp = new Wamp('ws://' + (app.query.wampHost || location.hostname) + ':' + app.query.wampPort + '/client');
 
-    app.wamp.addListener('connection:open', function () {
+    app.wamp.addListener(app.wamp.EVENT_OPEN, function () {
         document.body.style.opacity = 1;
         //debug.info('wamp open ' + app.wamp.socket.url, app.wamp, {tags: ['open', 'wamp']});
     });
 
-    app.wamp.addListener('connection:close', function () {
+    app.wamp.addListener(app.wamp.EVENT_CLOSE, function () {
         document.body.style.opacity = 0.2;
         //debug.info('wamp close ' + app.wamp.socket.url, app.wamp, {tags: ['close', 'wamp']});
     });
@@ -46,7 +46,7 @@ module.exports = function ( callback ) {
         fnHashList.push(id);
     });
 
-    app.wamp.once('connection:open', function () {
+    app.wamp.once(app.wamp.EVENT_OPEN, function () {
         // gather all data
         parallel(fnBodyList, function ( error, list ) {
             if ( error ) {
