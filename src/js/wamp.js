@@ -26,27 +26,7 @@ module.exports = function ( callback ) {
 
     app.wamp = new Wamp('ws://' + (app.query.wampHost || location.hostname) + ':' + app.query.wampPort + '/client');
 
-    app.wamp.addListener(app.wamp.EVENT_OPEN, function () {
-        document.body.style.opacity = 1;
-        //debug.info('wamp open ' + app.wamp.socket.url, app.wamp, {tags: ['open', 'wamp']});
-    });
-
-    app.wamp.addListener(app.wamp.EVENT_CLOSE, function () {
-        document.body.style.opacity = 0.2;
-        //debug.info('wamp close ' + app.wamp.socket.url, app.wamp, {tags: ['close', 'wamp']});
-    });
-
-    Object.keys(fnNameList).forEach(function ( id ) {
-        // prepare async method
-        fnBodyList.push(function ( done ) {
-            app.wamp.call(fnNameList[id], {}, done);
-        });
-
-        // build hash table
-        fnHashList.push(id);
-    });
-
-    app.wamp.once(app.wamp.EVENT_OPEN, function () {
+    app.wamp.onopen = function () {
         // gather all data
         parallel(fnBodyList, function ( error, list ) {
             if ( error ) {
@@ -60,7 +40,29 @@ module.exports = function ( callback ) {
 
             callback();
         });
+
+        // redefine
+        app.wamp.onopen = function () {
+            document.body.style.opacity = 1;
+            //debug.info('wamp open ' + app.wamp.socket.url, app.wamp, {tags: ['open', 'wamp']});
+        };
+    };
+
+    app.wamp.onclose = function () {
+        document.body.style.opacity = 0.2;
+        //debug.info('wamp close ' + app.wamp.socket.url, app.wamp, {tags: ['close', 'wamp']});
+    };
+
+    Object.keys(fnNameList).forEach(function ( id ) {
+        // prepare async method
+        fnBodyList.push(function ( done ) {
+            app.wamp.call(fnNameList[id], {}, done);
+        });
+
+        // build hash table
+        fnHashList.push(id);
     });
+
 };
 
 
