@@ -8,7 +8,7 @@
 'use strict';
 
 var Button  = require('spa-component-button'),
-    TabItem = require('spa-component-tab-item'),
+    TabItem = require('spa-component-tab'),
     Console = require('./../modules/console'),
     keys    = require('spa-keys');
 

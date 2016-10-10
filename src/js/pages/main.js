@@ -7,7 +7,7 @@
 var app       = require('spa-app'),
     Page      = require('spa-component-page'),
     //Button    = require('spa-component-button'),
-    //TabItem   = require('spa-component-tab-item'),
+    //TabItem   = require('spa-component-tab'),
     //Console   = require('./../modules/console'),
     //TaskList  = require('./../modules/task.list'),
     TabList   = require('./../modules/tab.list'),
