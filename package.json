@@ -20,7 +20,7 @@
     },
     "devDependencies": {
         "eslint": "3.*.*",
-        "cjs-async": "cjssdk/async",
+        "cjs-async": "1.*.*",
         "spa-app": "spasdk/app",
         "spa-component-button": "spasdk/component-button",
         "spa-component-page": "spasdk/component-page",
