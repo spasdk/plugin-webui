@@ -25,7 +25,7 @@
         "spa-component-button": "spasdk/component-button",
         "spa-component-page": "spasdk/component-page",
         "spa-component-tab": "spasdk/component-tab",
-        "spa-eslint-config": "spasdk/eslint-config",
+        "spa-eslint-config": "1.*.*",
         "spa-keys": "spasdk/keys",
         "spa-wamp": "spasdk/wamp"
     },
