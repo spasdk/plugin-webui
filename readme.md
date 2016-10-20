@@ -1,9 +1,10 @@
 Web Application for SDK management
 ==================================
 
-[![Build Status](https://img.shields.io/travis/spasdk/webui.svg?style=flat-square)](https://travis-ci.org/spasdk/webui)
-[![NPM version](https://img.shields.io/npm/v/spa-webui.svg?style=flat-square)](https://www.npmjs.com/package/spa-webui)
-[![Dependencies Status](https://img.shields.io/david/spasdk/webui.svg?style=flat-square)](https://david-dm.org/spasdk/webui)
+[![build status](https://img.shields.io/travis/spasdk/webui.svg?style=flat-square)](https://travis-ci.org/spasdk/webui)
+[![npm version](https://img.shields.io/npm/v/spa-webui.svg?style=flat-square)](https://www.npmjs.com/package/spa-webui)
+[![dependencies status](https://img.shields.io/david/spasdk/webui.svg?style=flat-square)](https://david-dm.org/spasdk/webui)
+[![devDependencies status](https://img.shields.io/david/dev/spasdk/webui.svg?style=flat-square)](https://david-dm.org/spasdk/webui?type=dev)
 [![Gitter](https://img.shields.io/badge/gitter-join%20chat-blue.svg?style=flat-square)](https://gitter.im/DarkPark/spasdk)
 
 
