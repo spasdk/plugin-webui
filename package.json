@@ -21,7 +21,7 @@
     "devDependencies": {
         "eslint": "3.*.*",
         "cjs-async": "1.*.*",
-        "spa-app": "spasdk/app",
+        "spa-app": "1.*.*",
         "spa-component-button": "spasdk/component-button",
         "spa-component-page": "spasdk/component-page",
         "spa-component-tab": "spasdk/component-tab",
