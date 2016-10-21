@@ -27,7 +27,7 @@
         "spa-component-tab": "spasdk/component-tab",
         "spa-eslint-config": "1.*.*",
         "spa-keys": "spasdk/keys",
-        "spa-wamp": "spasdk/wamp"
+        "spa-wamp": "1.*.*"
     },
     "license": "GPL-3.0"
 }
