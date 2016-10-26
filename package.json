@@ -24,7 +24,7 @@
         "spa-app": "1.*.*",
         "spa-component-button": "1.*.*",
         "spa-component-page": "1.*.*",
-        "spa-component-tab": "spasdk/component-tab",
+        "spa-component-tab": "1.*.*",
         "spa-eslint-config": "1.*.*",
         "spa-keys": "1.*.*",
         "spa-wamp": "1.*.*"
