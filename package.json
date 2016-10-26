@@ -22,7 +22,7 @@
         "eslint": "3.*.*",
         "cjs-async": "1.*.*",
         "spa-app": "1.*.*",
-        "spa-component-button": "spasdk/component-button",
+        "spa-component-button": "1.*.*",
         "spa-component-page": "spasdk/component-page",
         "spa-component-tab": "spasdk/component-tab",
         "spa-eslint-config": "1.*.*",
