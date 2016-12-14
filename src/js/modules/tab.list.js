@@ -30,10 +30,16 @@ function TabList ( config ) {
     console.assert(typeof this === 'object', 'must be constructed via new');
 
     if ( DEVELOP ) {
-        if ( typeof config !== 'object' ) { throw new Error(__filename + ': wrong config type'); }
+        if ( typeof config !== 'object' ) {
+            throw new Error(__filename + ': wrong config type');
+        }
         // init parameters checks
-        if ( config.className && typeof config.className !== 'string' ) { throw new Error(__filename + ': wrong or empty config.className'); }
-        if ( !config.wamp ) { throw new Error(__filename + ': config.wamp must be given'); }
+        if ( 'className' in config && (!config.className || typeof config.className !== 'string') ) {
+            throw new Error(__filename + ': wrong or empty config.className');
+        }
+        if ( !config.wamp ) {
+            throw new Error(__filename + ': config.wamp must be given');
+        }
     }
 
     // set default className if classList property empty or undefined

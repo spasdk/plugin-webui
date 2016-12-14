@@ -50,14 +50,14 @@
 	/**
 	 * Main application entry point.
 	 */
-	
+
 	'use strict';
-	
+
 	var app      = __webpack_require__(/*! spa-app */ 1),
 	    //Wamp     = require('spa-wamp'),
 	    parallel = __webpack_require__(/*! cjs-async/parallel */ 17);
-	
-	
+
+
 	parallel([
 	    function ( done ) {
 	        app.once('load', function () {
@@ -66,31 +66,31 @@
 	                init: __webpack_require__(/*! ./pages/init */ 18),
 	                main: __webpack_require__(/*! ./pages/main */ 21)
 	            };
-	
+
 	            done();
 	        });
 	    },
 	    __webpack_require__(/*! ./wamp */ 29)
 	    /*function ( done ) {
 	        app.wamp = new Wamp('ws://' + (app.query.wampHost || location.hostname) + ':' + app.query.wampPort + '/client');
-	
+
 	        app.wamp.addListener('connection:open', function () {
 	            document.body.style.opacity = 1;
 	            debug.info('wamp open ' + app.wamp.socket.url, app.wamp, {tags: ['open', 'wamp']});
 	        });
-	
+
 	        app.wamp.addListener('connection:close', function () {
 	            document.body.style.opacity = 0.2;
 	            debug.info('wamp close ' + app.wamp.socket.url, app.wamp, {tags: ['close', 'wamp']});
 	        });
-	
+
 	        app.wamp.once('connection:open', done);
 	    }*/
 	], function ( error ) {
 	    if ( error ) {
 	        debug.fail(error);
 	    }
-	
+
 	    // show the main page
 	    app.route(app.pages.main);
 	});
@@ -107,37 +107,37 @@
 	 * @license The MIT License (MIT)
 	 * @copyright Stanislav Kalashnik <darkpark.main@gmail.com>
 	 */
-	
+
 	/* eslint no-path-concat: 0 */
-	
+
 	'use strict';
-	
+
 	var //Emitter = require('cjs-emitter'),
 	    //router  = require('spa-router'),
 	    //parse   = require('cjs-query').parse,
 	    app    = __webpack_require__(/*! ./lib/core */ 2),
 	    events = __webpack_require__(/*! ./lib/events */ 6);
-	
-	
+
+
 	// early return
 	//module.exports = app;
-	
-	
+
+
 	// url request params
 	//app.query = parse(document.location.search.substring(1));
-	
-	
+
+
 	// activate development mechanisms and tools
 	if ( true ) {
 	    __webpack_require__(/*! ./lib/develop/main */ 7);
 	}
-	
-	
+
+
 	// global application configuration
 	// in config.js file in js root
 	//app.config = require('app:config');
-	
-	
+
+
 	/*app.data = {
 	    /!**
 	     * Timestamps data.
@@ -152,15 +152,15 @@
 	    //     load: 0,
 	    //     done: 0
 	    // }
-	
+
 	    // parameters from get request
 	    //query: parse(document.location.search.substring(1))
 	};*/
-	
-	
+
+
 	//app.activePage = null;
-	
-	
+
+
 	// /**
 	//  * Make the given inactive/hidden page active/visible.
 	//  * Pass some data to the page and trigger the corresponding event.
@@ -280,17 +280,17 @@
 	//     // nothing was done
 	//     return false;
 	// };
-	
+
 	//app.route = require('./lib/route');
-	
-	
+
+
 	/*app.defaultEvents = {
 	    DOMContentLoaded: function ( event ) {
 	        //debug.event(event);
 	        //console.log(event);
-	
+
 	        debug.info('app event: ' + event.type, event, {tags: [event.type, 'event']});
-	
+
 	        // there are some listeners
 	        if ( app.events['dom'] ) {
 	            // notify listeners
@@ -298,7 +298,7 @@
 	            //console.log('DOMContentLoaded');
 	        }
 	    },
-	
+
 	    /!**
 	     * The load event is fired when a resource and its dependent resources have finished loading.
 	     *
@@ -313,36 +313,36 @@
 	     *!/
 	    load: function ( event ) {
 	        //var path;
-	
+
 	        //debug.event(event);
 	        //console.log(event);
-	
+
 	        // time mark
 	        //app.data.time.load = event.timeStamp;
-	
+
 	        debug.info('app event: ' + event.type, event, {tags: [event.type, 'event']});
-	
+
 	        // global handler
 	        // there are some listeners
 	        if ( app.events[event.type] ) {
 	            // notify listeners
 	            app.emit(event.type, event);
 	        }
-	
+
 	        // local handler on each page
 	        /!*router.pages.forEach(function forEachPages ( page ) {
 	            debug.log('component ' + page.constructor.name + '.' + page.id + ' load', 'green');
-	
+
 	            // there are some listeners
 	            if ( page.events[event.type] ) {
 	                // notify listeners
 	                page.emit(event.type, event);
 	            }
 	        });*!/
-	
+
 	        // time mark
 	        //app.data.time.done = +new Date();
-	
+
 	        // everything is ready
 	        // and there are some listeners
 	        // if ( app.events['done'] ) {
@@ -350,7 +350,7 @@
 	        //     app.emit('done', event);
 	        // }
 	    },
-	
+
 	    /!**
 	     * The unload event is fired when the document or a child resource is being unloaded.
 	     *
@@ -365,20 +365,20 @@
 	    unload: function ( event ) {
 	        //debug.event(event);
 	        console.log(event);
-	
+
 	        debug.info('app event: ' + event.type, event, {tags: [event.type, 'event']});
-	
+
 	        // global handler
 	        // there are some listeners
 	        if ( app.events[event.type] ) {
 	            // notify listeners
 	            app.emit(event.type, event);
 	        }
-	
+
 	        // local handler on each page
 	        /!*router.pages.forEach(function forEachPages ( page ) {
 	            debug.log('component ' + page.constructor.name + '.' + page.id + ' unload', 'red');
-	
+
 	            // there are some listeners
 	            if ( page.events[event.type] ) {
 	                // notify listeners
@@ -386,7 +386,7 @@
 	            }
 	        });*!/
 	    },
-	
+
 	    /!**
 	     * The error event is fired when a resource failed to load.
 	     *
@@ -399,7 +399,7 @@
 	        //console.log(event);
 	        debug.fail('app event: ' + event.message, event, {tags: [event.type, 'event']});
 	    },
-	
+
 	    /!**
 	     * The keydown event is fired when a key is pressed down.
 	     * Set event.stop to true in order to prevent bubbling.
@@ -416,28 +416,28 @@
 	    keydown: function ( event ) {
 	        var page = app.activePage,
 	            activeComponent;
-	
+
 	        if ( DEVELOP ) {
 	            if ( !page ) { throw new Error(__filename + ': app should have at least one page'); }
 	        }
-	
+
 	        // filter phantoms
 	        //if ( event.keyCode === 0 ) { return; }
-	
+
 	        // combined key code
 	        //event.code = event.keyCode;
-	
+
 	        // apply key modifiers
 	        //if ( event.shiftKey ) { event.code += 1000; }
 	        //if ( event.altKey )   { event.code += 2000; }
-	
+
 	        //debug.event(event);
 	        //console.log(event);
 	        debug.info('app event: ' + event.type, event, {tags: [event.type, 'event']});
-	
+
 	        // page.activeComponent can be set to null in event handles
 	        activeComponent = page.activeComponent;
-	
+
 	        // current component handler
 	        if ( activeComponent && activeComponent !== page ) {
 	            // component is available and not page itself
@@ -445,7 +445,7 @@
 	                // there are some listeners
 	                activeComponent.emit(event.type, event);
 	            }
-	
+
 	            // todo: bubble event recursively
 	            // bubbling
 	            /!*if (
@@ -457,7 +457,7 @@
 	                activeComponent.parent.emit(event.type, event);
 	            }*!/
 	        }
-	
+
 	        // page handler
 	        if ( !event.stop ) {
 	            // not prevented
@@ -465,7 +465,7 @@
 	                // there are some listeners
 	                page.emit(event.type, event);
 	            }
-	
+
 	            // global app handler
 	            if ( !event.stop ) {
 	                // not prevented
@@ -475,13 +475,13 @@
 	                }
 	            }
 	        }
-	
+
 	        //// suppress non-printable keys in stb device (not in your browser)
 	        //if ( app.data.host && keyCodes[event.code] ) {
 	        //    event.preventDefault();
 	        //}
 	    },
-	
+
 	    /!**
 	     * The keypress event is fired when press a printable character.
 	     * Delivers the event only to activeComponent at active page.
@@ -493,14 +493,14 @@
 	     *!/
 	    keypress: function ( event ) {
 	        var page = app.activePage;
-	
+
 	        if ( DEVELOP ) {
 	            if ( page === null || page === undefined ) { throw new Error(__filename + ': app should have at least one page'); }
 	        }
-	
+
 	        //debug.event(event);
 	        debug.info('app event: ' + event.type, event, {tags: [event.type, 'event']});
-	
+
 	        // current component handler
 	        if ( page.activeComponent && page.activeComponent !== page ) {
 	            // component is available and not page itself
@@ -510,7 +510,7 @@
 	            }
 	        }
 	    },
-	
+
 	    /!**
 	     * The click event is fired when a pointing device button (usually a mouse button) is pressed and released on a single element.
 	     *
@@ -523,7 +523,7 @@
 	        //console.log(event);
 	        debug.info('app event: ' + event.type, event, {tags: [event.type, 'event']});
 	    },*!/
-	
+
 	    /!**
 	     * The contextmenu event is fired when the right button of the mouse is clicked (before the context menu is displayed),
 	     * or when the context menu key is pressed (in which case the context menu is displayed at the bottom left of the focused
@@ -535,28 +535,28 @@
 	     *!/
 	    /!*contextmenu: function ( event ) {
 	        //var kbEvent = {}; //Object.create(document.createEvent('KeyboardEvent'));
-	
+
 	        //debug.event(event);
 	        //console.log(event);
 	        debug.info('app event: ' + event.type, event, {tags: [event.type, 'event']});
-	
+
 	        //kbEvent.type    = 'keydown';
 	        //kbEvent.keyCode = 8;
-	
+
 	        //debug.log(kbEvent.type);
-	
+
 	        //globalEventListenerKeydown(kbEvent);
 	        //var event = document.createEvent('KeyboardEvent');
 	        //event.initEvent('keydown', true, true);
-	
+
 	        //document.dispatchEvent(kbEvent);
-	
+
 	        if ( !DEVELOP ) {
 	            // disable right click in release mode
 	            event.preventDefault();
 	        }
 	    },*!/
-	
+
 	    /!**
 	     * The wheel event is fired when a wheel button of a pointing device (usually a mouse) is rotated.
 	     *
@@ -566,15 +566,15 @@
 	     *!/
 	    mousewheel: function ( event ) {
 	        var page = app.activePage;
-	
+
 	        if ( DEVELOP ) {
 	            if ( page === null || page === undefined ) { throw new Error(__filename + ': app should have at least one page'); }
 	        }
-	
+
 	        //debug.event(event);
 	        //console.log(event);
 	        debug.info('app event: ' + event.type, event, {tags: [event.type, 'event']});
-	
+
 	        // current component handler
 	        if ( page.activeComponent && page.activeComponent !== page ) {
 	            // component is available and not page itself
@@ -583,7 +583,7 @@
 	                page.activeComponent.emit(event.type, event);
 	            }
 	        }
-	
+
 	        // page handler
 	        if ( !event.stop ) {
 	            // not prevented
@@ -594,16 +594,16 @@
 	        }
 	    }
 	};*/
-	
+
 	//events = require('./lib/events');
-	
-	
+
+
 	// apply DOM events
 	Object.keys(events).forEach(function ( name ) {
 	    window.addEventListener(name, events[name]);
 	});
-	
-	
+
+
 	// public
 	module.exports = app;
 
@@ -619,16 +619,16 @@
 	 * @license The MIT License (MIT)
 	 * @copyright Stanislav Kalashnik <darkpark.main@gmail.com>
 	 */
-	
+
 	/* eslint no-path-concat: 0 */
-	
+
 	'use strict';
-	
+
 	var Emitter = __webpack_require__(/*! cjs-emitter */ 3),
 	    parse   = __webpack_require__(/*! cjs-query */ 4).parse,
 	    app     = new Emitter();
-	
-	
+
+
 	/**
 	 * Make the given inactive/hidden page active/visible.
 	 * Pass some data to the page and trigger the corresponding event.
@@ -645,26 +645,26 @@
 	        page.$node.classList.add('active');
 	        page.active = true;
 	        app.activePage = page;
-	
+
 	        debug.info('show component ' + page.constructor.name + '#' + page.id, null, {
 	            tags: ['show', 'component', page.constructor.name, page.id]
 	        });
 	        //console.log('component ' + page.constructor.name + '.' + page.id + ' show', 'green');
-	
+
 	        // there are some listeners
 	        if ( page.events['show'] ) {
 	            // notify listeners
 	            page.emit('show', {page: page, data: data});
 	        }
-	
+
 	        return true;
 	    }
-	
+
 	    // nothing was done
 	    return false;
 	}
-	
-	
+
+
 	/**
 	 * Make the given active/visible page inactive/hidden and trigger the corresponding event.
 	 *
@@ -679,39 +679,39 @@
 	        page.$node.classList.remove('active');
 	        page.active  = false;
 	        app.activePage = null;
-	
+
 	        debug.info('hide component ' + page.constructor.name + '#' + page.id, null, {
 	            tags: ['hide', 'component', page.constructor.name, page.id]
 	        });
 	        //console.log('component ' + page.constructor.name + '.' + page.id + ' hide', 'grey');
-	
+
 	        // there are some listeners
 	        if ( page.events['hide'] ) {
 	            // notify listeners
 	            page.emit('hide', {page: page});
 	        }
-	
+
 	        return true;
 	    }
-	
+
 	    // nothing was done
 	    return false;
 	}
-	
-	
+
+
 	// url request params
 	app.query = parse(document.location.search.substring(1));
-	
-	
+
+
 	// global application configuration
 	// in config.js file in js root
 	app.config = __webpack_require__(/*! app:config */ 5);
-	
-	
+
+
 	// the only visible page
 	app.activePage = null;
-	
-	
+
+
 	/**
 	 * Browse to a given page.
 	 * Do nothing if the link is invalid. Otherwise hide the current, show new and update the "previous" link.
@@ -723,49 +723,49 @@
 	 */
 	app.route = function ( pageTo, data ) {
 	    var pageFrom = app.activePage;
-	
+
 	    if ( true ) {
 	        //if ( router.pages.length > 0 ) {
 	        if ( !pageTo || typeof pageTo !== 'object' ) { throw new Error(__filename + ': wrong pageTo type'); }
 	        if ( !('active' in pageTo) ) { throw new Error(__filename + ': missing field "active" in pageTo'); }
 	        //}
 	    }
-	
+
 	    // valid not already active page
 	    if ( pageTo && !pageTo.active ) {
 	        //debug.log('router.navigate: ' + pageTo.id, pageTo === pageFrom ? 'grey' : 'green');
 	        debug.info('app route: ' + pageTo.id, null, {tags: ['route', 'page', pageTo.id]});
-	
+
 	        // update url
 	        //location.hash = this.stringify(name, data);
-	
+
 	        // apply visibility
 	        hidePage(app.activePage);
 	        showPage(pageTo, data);
-	
+
 	        // there are some listeners
 	        if ( this.events['route'] ) {
 	            // notify listeners
 	            this.emit('route', {from: pageFrom, to: pageTo});
 	        }
-	
+
 	        // store
 	        //this.history.push(pageTo);
-	
+
 	        return true;
 	    }
-	
+
 	    debug.warn('invalid page to route: ' + pageTo.id, null, {tags: ['route', 'page', pageTo.id]});
 	    //console.log('router.navigate: ' + pageTo.id, 'red');
-	
+
 	    // nothing was done
 	    return false;
 	};
-	
-	
+
+
 	// public
 	module.exports = app;
-	
+
 	/* WEBPACK VAR INJECTION */}.call(exports, "../app/lib/core.js"))
 
 /***/ },
@@ -779,12 +779,12 @@
 	 * @license The MIT License (MIT)
 	 * @copyright Stanislav Kalashnik <darkpark.main@gmail.com>
 	 */
-	
+
 	/* eslint no-path-concat: 0 */
-	
+
 	'use strict';
-	
-	
+
+
 	/**
 	 * Base Events Emitter implementation.
 	 *
@@ -796,11 +796,11 @@
 	 */
 	function Emitter () {
 	    console.assert(typeof this === 'object', 'must be constructed via new');
-	
+
 	    // if ( DEVELOP ) {
 	    //     if ( typeof this !== 'object' ) { throw new Error(__filename + ': must be constructed via new'); }
 	    // }
-	
+
 	    /**
 	     * Inner hash table for event names and linked callbacks.
 	     * Manual editing should be avoided.
@@ -820,8 +820,8 @@
 	     **/
 	    this.events = {};
 	}
-	
-	
+
+
 	Emitter.prototype = {
 	    /**
 	     * Bind an event to the given callback function.
@@ -840,20 +840,20 @@
 	        console.assert(typeof name === 'string', 'wrong name type');
 	        console.assert(name.length > 0, 'empty name');
 	        console.assert(typeof callback === 'function', 'callback should be a function');
-	
+
 	        // if ( DEVELOP ) {
 	        //     if ( arguments.length !== 2 ) { throw new Error(__filename + ': wrong arguments number'); }
 	        //     if ( typeof name !== 'string' || name.length === 0 ) { throw new Error(__filename + ': wrong or empty name'); }
 	        //     if ( typeof callback !== 'function' ) { throw new Error(__filename + ': wrong callback type'); }
 	        // }
-	
+
 	        // initialization may be required
 	        this.events[name] = this.events[name] || [];
 	        // append this new event to the list
 	        this.events[name].push(callback);
 	    },
-	
-	
+
+
 	    /**
 	     * Add a one time listener for the event.
 	     * This listener is invoked only the next time the event is fired, after which it is removed.
@@ -867,13 +867,13 @@
 	    once: function ( name, callback ) {
 	        // current execution context
 	        var self = this;
-	
+
 	        if ( true ) {
 	            if ( arguments.length !== 2 ) { throw new Error(__filename + ': wrong arguments number'); }
 	            if ( typeof name !== 'string' || name.length === 0 ) { throw new Error(__filename + ': wrong or empty name'); }
 	            if ( typeof callback !== 'function' ) { throw new Error(__filename + ': wrong callback type'); }
 	        }
-	
+
 	        // initialization may be required
 	        this.events[name] = this.events[name] || [];
 	        // append this new event to the list
@@ -882,8 +882,8 @@
 	            self.removeListener(name, onceWrapper);
 	        });
 	    },
-	
-	
+
+
 	    /**
 	     * Apply multiple listeners at once.
 	     *
@@ -897,21 +897,21 @@
 	     */
 	    addListeners: function ( callbacks ) {
 	        var name;
-	
+
 	        if ( true ) {
 	            if ( arguments.length !== 1 ) { throw new Error(__filename + ': wrong arguments number'); }
 	            if ( typeof callbacks !== 'object' ) { throw new Error(__filename + ': wrong callbacks type'); }
 	            if ( Object.keys(callbacks).length === 0 ) { throw new Error(__filename + ': no callbacks given'); }
 	        }
-	
+
 	        for ( name in callbacks ) {
 	            if ( callbacks.hasOwnProperty(name) ) {
 	                this.addListener(name, callbacks[name]);
 	            }
 	        }
 	    },
-	
-	
+
+
 	    /**
 	     * Remove all instances of the given callback.
 	     *
@@ -928,7 +928,7 @@
 	            if ( typeof callback !== 'function' ) { throw new Error(__filename + ': wrong callback type'); }
 	            if ( this.events[name] && !Array.isArray(this.events[name]) ) { throw new Error(__filename + ': corrupted inner data'); }
 	        }
-	
+
 	        // the event exists and should have some callbacks
 	        if ( this.events[name] ) {
 	            // rework the callback list to exclude the given one
@@ -940,8 +940,8 @@
 	            }
 	        }
 	    },
-	
-	
+
+
 	    /**
 	     * Remove all callbacks for the given event name.
 	     * Without event name clears all events.
@@ -960,7 +960,7 @@
 	                throw new Error(__filename + ': wrong or empty name');
 	            }
 	        }
-	
+
 	        // check input
 	        if ( arguments.length === 0 ) {
 	            // no arguments so remove everything
@@ -969,14 +969,14 @@
 	            if ( DEVELOP ) {
 	                if ( this.events[name] ) { throw new Error(__filename + ': event is not removed'); }
 	            }
-	
+
 	            // only name is given so remove all callbacks for the given event
 	            // but object structure modification should be avoided
 	            this.events[name] = undefined;
 	        }
 	    },*/
-	
-	
+
+
 	    /**
 	     * Execute each of the listeners in the given order with the supplied arguments.
 	     *
@@ -995,38 +995,38 @@
 	    emit: function ( name ) {
 	        var event = this.events[name],
 	            index;
-	
+
 	        if ( true ) {
 	            if ( arguments.length < 1 ) { throw new Error(__filename + ': wrong arguments number'); }
 	            if ( typeof name !== 'string' || name.length === 0 ) { throw new Error(__filename + ': wrong or empty name'); }
 	        }
-	
+
 	        // the event exists and should have some callbacks
 	        if ( event ) {
 	            if ( true ) {
 	                if ( !Array.isArray(event) ) { throw new Error(__filename + ': wrong event type'); }
 	            }
-	
+
 	            for ( index = 0; index < event.length; index++ ) {
 	                if ( true ) {
 	                    if ( typeof event[index] !== 'function' ) { throw new Error(__filename + ': wrong event callback type'); }
 	                }
-	
+
 	                // invoke the callback with parameters
 	                event[index].apply(this, Array.prototype.slice.call(arguments, 1));
 	            }
 	        }
 	    }
 	};
-	
-	
+
+
 	// correct constructor name
 	Emitter.prototype.constructor = Emitter;
-	
-	
+
+
 	// public
 	module.exports = Emitter;
-	
+
 	/* WEBPACK VAR INJECTION */}.call(exports, "../../cjssdk/emitter/index.js"))
 
 /***/ },
@@ -1040,9 +1040,9 @@
 	 * @license The MIT License (MIT)
 	 * @copyright Stanislav Kalashnik <darkpark.main@gmail.com>
 	 */
-	
+
 	'use strict';
-	
+
 	module.exports = {
 	    /**
 	     * Parse the given location search string into object.
@@ -1053,7 +1053,7 @@
 	     */
 	    parse: function ( query ) {
 	        var data = {};
-	
+
 	        // parse and fill the data
 	        query.split('&').forEach(function ( part ) {
 	            part = part.split('=');
@@ -1062,11 +1062,11 @@
 	                data[part[0]] = decodeURIComponent(part[1]);
 	            }
 	        });
-	
+
 	        return data;
 	    },
-	
-	
+
+
 		/**
 	     * Make uri query part in a string form.
 	     *
@@ -1076,11 +1076,11 @@
 	     */
 	    stringify: function ( params ) {
 	        var data = [];
-	
+
 	        Object.keys(params).forEach(function ( name ) {
 	            data.push(name + '=' + encodeURIComponent(params[name]));
 	        });
-	
+
 	        return data.join('&');
 	    }
 	};
@@ -1098,9 +1098,9 @@
 	 * Can store run-time options, API urls, paths, execution flags and so on.
 	 * Automatically loaded on application initialization and available as app.config.
 	 */
-	
+
 	'use strict';
-	
+
 	// public
 	module.exports = {};
 
@@ -1116,22 +1116,22 @@
 	 * @license The MIT License (MIT)
 	 * @copyright Stanislav Kalashnik <darkpark.main@gmail.com>
 	 */
-	
+
 	/* eslint no-path-concat: 0 */
-	
+
 	'use strict';
-	
+
 	var app = __webpack_require__(/*! ./core */ 2);
-	
-	
+
+
 	// public
 	module.exports = {
 	    DOMContentLoaded: function ( event ) {
 	        //debug.event(event);
 	        //console.log(event);
-	
+
 	        debug.info('app event: ' + event.type, event, {tags: [event.type, 'event']});
-	
+
 	        // there are some listeners
 	        if ( app.events['dom'] ) {
 	            // notify listeners
@@ -1139,7 +1139,7 @@
 	            //console.log('DOMContentLoaded');
 	        }
 	    },
-	
+
 	    /**
 	     * The load event is fired when a resource and its dependent resources have finished loading.
 	     *
@@ -1154,36 +1154,36 @@
 	     */
 	    load: function ( event ) {
 	        //var path;
-	
+
 	        //debug.event(event);
 	        //console.log(event);
-	
+
 	        // time mark
 	        //app.data.time.load = event.timeStamp;
-	
+
 	        debug.info('app event: ' + event.type, event, {tags: [event.type, 'event']});
-	
+
 	        // global handler
 	        // there are some listeners
 	        if ( app.events[event.type] ) {
 	            // notify listeners
 	            app.emit(event.type, event);
 	        }
-	
+
 	        // local handler on each page
 	        /*router.pages.forEach(function forEachPages ( page ) {
 	         debug.log('component ' + page.constructor.name + '.' + page.id + ' load', 'green');
-	
+
 	         // there are some listeners
 	         if ( page.events[event.type] ) {
 	         // notify listeners
 	         page.emit(event.type, event);
 	         }
 	         });*/
-	
+
 	        // time mark
 	        //app.data.time.done = +new Date();
-	
+
 	        // everything is ready
 	        // and there are some listeners
 	        // if ( app.events['done'] ) {
@@ -1191,7 +1191,7 @@
 	        //     app.emit('done', event);
 	        // }
 	    },
-	
+
 	    /**
 	     * The unload event is fired when the document or a child resource is being unloaded.
 	     *
@@ -1206,20 +1206,20 @@
 	    unload: function ( event ) {
 	        //debug.event(event);
 	        console.log(event);
-	
+
 	        debug.info('app event: ' + event.type, event, {tags: [event.type, 'event']});
-	
+
 	        // global handler
 	        // there are some listeners
 	        if ( app.events[event.type] ) {
 	            // notify listeners
 	            app.emit(event.type, event);
 	        }
-	
+
 	        // local handler on each page
 	        /*router.pages.forEach(function forEachPages ( page ) {
 	         debug.log('component ' + page.constructor.name + '.' + page.id + ' unload', 'red');
-	
+
 	         // there are some listeners
 	         if ( page.events[event.type] ) {
 	         // notify listeners
@@ -1227,7 +1227,7 @@
 	         }
 	         });*/
 	    },
-	
+
 	    /**
 	     * The error event is fired when a resource failed to load.
 	     *
@@ -1240,7 +1240,7 @@
 	        //console.log(event);
 	        debug.fail('app event: ' + event.message, event, {tags: [event.type, 'event']});
 	    },
-	
+
 	    /**
 	     * The keydown event is fired when a key is pressed down.
 	     * Set event.stop to true in order to prevent bubbling.
@@ -1257,28 +1257,28 @@
 	    keydown: function ( event ) {
 	        var page = app.activePage,
 	            activeComponent;
-	
+
 	        if ( true ) {
 	            if ( !page ) { throw new Error(__filename + ': app should have at least one page'); }
 	        }
-	
+
 	        // filter phantoms
 	        //if ( event.keyCode === 0 ) { return; }
-	
+
 	        // combined key code
 	        //event.code = event.keyCode;
-	
+
 	        // apply key modifiers
 	        //if ( event.shiftKey ) { event.code += 1000; }
 	        //if ( event.altKey )   { event.code += 2000; }
-	
+
 	        //debug.event(event);
 	        //console.log(event);
 	        debug.info('app event: ' + event.type, event, {tags: [event.type, 'event']});
-	
+
 	        // page.activeComponent can be set to null in event handles
 	        activeComponent = page.activeComponent;
-	
+
 	        // current component handler
 	        if ( activeComponent && activeComponent !== page ) {
 	            // component is available and not page itself
@@ -1286,7 +1286,7 @@
 	                // there are some listeners
 	                activeComponent.emit(event.type, event);
 	            }
-	
+
 	            // todo: bubble event recursively
 	            // bubbling
 	            if (
@@ -1298,7 +1298,7 @@
 	                activeComponent.parent.emit(event.type, event);
 	            }
 	        }
-	
+
 	        // page handler
 	        if ( !event.stop ) {
 	            // not prevented
@@ -1306,7 +1306,7 @@
 	                // there are some listeners
 	                page.emit(event.type, event);
 	            }
-	
+
 	            // global app handler
 	            if ( !event.stop ) {
 	                // not prevented
@@ -1316,13 +1316,13 @@
 	                }
 	            }
 	        }
-	
+
 	        //// suppress non-printable keys in stb device (not in your browser)
 	        //if ( app.data.host && keyCodes[event.code] ) {
 	        //    event.preventDefault();
 	        //}
 	    },
-	
+
 	    /**
 	     * The keypress event is fired when press a printable character.
 	     * Delivers the event only to activeComponent at active page.
@@ -1334,14 +1334,14 @@
 	     */
 	    keypress: function ( event ) {
 	        var page = app.activePage;
-	
+
 	        if ( true ) {
 	            if ( page === null || page === undefined ) { throw new Error(__filename + ': app should have at least one page'); }
 	        }
-	
+
 	        //debug.event(event);
 	        debug.info('app event: ' + event.type, event, {tags: [event.type, 'event']});
-	
+
 	        // current component handler
 	        if ( page.activeComponent && page.activeComponent !== page ) {
 	            // component is available and not page itself
@@ -1351,7 +1351,7 @@
 	            }
 	        }
 	    },
-	
+
 	    /**
 	     * The click event is fired when a pointing device button (usually a mouse button) is pressed and released on a single element.
 	     *
@@ -1364,7 +1364,7 @@
 	     //console.log(event);
 	     debug.info('app event: ' + event.type, event, {tags: [event.type, 'event']});
 	     },*/
-	
+
 	    /**
 	     * The contextmenu event is fired when the right button of the mouse is clicked (before the context menu is displayed),
 	     * or when the context menu key is pressed (in which case the context menu is displayed at the bottom left of the focused
@@ -1376,28 +1376,28 @@
 	     */
 	    /*contextmenu: function ( event ) {
 	     //var kbEvent = {}; //Object.create(document.createEvent('KeyboardEvent'));
-	
+
 	     //debug.event(event);
 	     //console.log(event);
 	     debug.info('app event: ' + event.type, event, {tags: [event.type, 'event']});
-	
+
 	     //kbEvent.type    = 'keydown';
 	     //kbEvent.keyCode = 8;
-	
+
 	     //debug.log(kbEvent.type);
-	
+
 	     //globalEventListenerKeydown(kbEvent);
 	     //var event = document.createEvent('KeyboardEvent');
 	     //event.initEvent('keydown', true, true);
-	
+
 	     //document.dispatchEvent(kbEvent);
-	
+
 	     if ( !DEVELOP ) {
 	     // disable right click in release mode
 	     event.preventDefault();
 	     }
 	     },*/
-	
+
 	    /**
 	     * The wheel event is fired when a wheel button of a pointing device (usually a mouse) is rotated.
 	     *
@@ -1407,15 +1407,15 @@
 	     */
 	    mousewheel: function ( event ) {
 	        var page = app.activePage;
-	
+
 	        if ( true ) {
 	            if ( page === null || page === undefined ) { throw new Error(__filename + ': app should have at least one page'); }
 	        }
-	
+
 	        //debug.event(event);
 	        //console.log(event);
 	        debug.info('app event: ' + event.type, event, {tags: [event.type, 'event']});
-	
+
 	        // current component handler
 	        if ( page.activeComponent && page.activeComponent !== page ) {
 	            // component is available and not page itself
@@ -1424,7 +1424,7 @@
 	                page.activeComponent.emit(event.type, event);
 	            }
 	        }
-	
+
 	        // page handler
 	        if ( !event.stop ) {
 	            // not prevented
@@ -1435,7 +1435,7 @@
 	        }
 	    }
 	};
-	
+
 	/* WEBPACK VAR INJECTION */}.call(exports, "../app/lib/events.js"))
 
 /***/ },
@@ -1449,21 +1449,21 @@
 	 * @license The MIT License (MIT)
 	 * @copyright Stanislav Kalashnik <darkpark.main@gmail.com>
 	 */
-	
+
 	'use strict';
-	
+
 	var app = __webpack_require__(/*! ../core */ 2);
-	
-	
+
+
 	// public app instance
 	window.app = app;
-	
+
 	// all development tools placeholder
 	app.develop = {};
-	
+
 	// browser logging
 	window.debug = __webpack_require__(/*! ./debug */ 8);
-	
+
 	// tools
 	__webpack_require__(/*! ./wamp */ 9);
 	__webpack_require__(/*! ./events */ 12);
@@ -1484,12 +1484,12 @@
 	 * @license The MIT License (MIT)
 	 * @copyright Stanislav Kalashnik <darkpark.main@gmail.com>
 	 */
-	
+
 	/* eslint no-path-concat: 0 */
 	/* eslint new-cap: 0 */
-	
+
 	'use strict';
-	
+
 	var //host      = require('../app').data.host,
 	    app       = __webpack_require__(/*! ../core */ 2),
 	    //util      = require('util'),
@@ -1498,13 +1498,13 @@
 	    debug     = {},
 	    links     = {},
 	    linkId    = 0;
-	
-	
+
+
 	// debug.config = {
 	//     depth: 3
 	// };
-	
-	
+
+
 	/**
 	 * Check condition and warn if not match.
 	 *
@@ -1516,65 +1516,65 @@
 	        console.assert(condition, title);
 	    }
 	};
-	
-	
+
+
 	debug.links = links;
-	
-	
+
+
 	function prepareConfig ( config ) {
 	    config = config || {};
-	
+
 	    config.tags = config.tags || [];
 	    config.tags.push('target');
-	
+
 	    return config;
 	}
-	
-	
+
+
 	function wrapData ( data ) {
 	    var result = {
 	        type: typeof data
 	    };
-	
+
 	    if ( data && result.type === 'object' ) {
 	        result.link = linkId++;
 	        links[result.link] = data;
-	
+
 	        if ( data.constructor && data.constructor.name ) {
 	            result.name = data.constructor.name;
 	        }
-	
+
 	        if ( 'length' in data ) {
 	            result.size = data.length;
 	        }
 	    } else {
 	        result.value = data;
 	    }
-	
+
 	    return result;
 	}
-	
-	
+
+
 	// todo: remove setTimeout hack
 	setTimeout(function () {
 	    app.develop.wamp.addListener('getLinkData', function ( params, callback ) {
 	        var link = links[params.id],
 	            data = {};
-	
+
 	        console.log('incoming getLinkData', params);
 	        //console.log(link);
-	
+
 	        if ( link ) {
 	            Object.keys(link).forEach(function ( name ) {
 	                data[name] = wrapData(link[name]);
 	            });
 	        }
-	
+
 	        callback(null, data);
 	    });
 	}, 1000);
-	
-	
+
+
 	/**
 	 * Print a plain colored string.
 	 *
@@ -1585,10 +1585,10 @@
 	    // message = (message + '') || '(empty message)';
 		//
 	    // console.log('%c%s', 'color:' + (color || 'black'), message);
-	
+
 	    // sanitize
 	    config = config || {};
-	
+
 	    config.info = info;
 	    //config.data = data ? util.inspect(data, {depth: debug.config.depth}) : null;
 	    config.data = data !== undefined ? wrapData(data) : undefined;
@@ -1596,7 +1596,7 @@
 	    config.time = Date.now();
 	    config.targetId = app.query.wampTargetId;
 	    //config.tags = config.tags.sort();
-	
+
 	    if ( app.develop.wamp.open ) {
 	        if ( buffer.length ) {
 	            buffer.forEach(function ( bufItem ) {
@@ -1604,14 +1604,14 @@
 	            });
 	            buffer = [];
 	        }
-	
+
 	        app.develop.wamp.call('sendMessage', config);
 	    } else {
 	        buffer.push(config);
 	    }
 	};
-	
-	
+
+
 	/**
 	 * Print the given var with caption.
 	 *
@@ -1621,7 +1621,7 @@
 	debug.info = function ( info, data, config ) {
 	    /*var type = Object.prototype.toString.call(data).match(/\s([a-zA-Z]+)/)[1].toLowerCase(),
 	        args;
-	
+
 	    args = ['color:' + (type === 'error' ? 'red' : 'green'), type];
 	    if ( title ) {
 	        args.unshift('%c%s\t%c%s\t');
@@ -1633,33 +1633,33 @@
 	    args.push(data);
 	    // output
 	    console.log.apply(console, args);*/
-	
+
 	    config = prepareConfig(config);
 	    //config.tags.push('info');
 	    config.type = 'info';
-	
+
 	    debug.log(info, data, config);
 	};
-	
-	
+
+
 	debug.warn = function ( info, data, config ) {
 	    config = prepareConfig(config);
 	    //config.tags.push('warn');
 	    config.type = 'warn';
-	
+
 	    debug.log(info, data, config);
 	};
-	
-	
+
+
 	debug.fail = function ( info, data, config ) {
 	    config = prepareConfig(config);
 	    //config.tags.push('fail');
 	    config.type = 'fail';
-	
+
 	    debug.log(info, data, config);
 	};
-	
-	
+
+
 	/**
 	 * Print the given complex var with level restriction.
 	 *
@@ -1668,8 +1668,8 @@
 	debug.inspect = function ( data ) {
 	    console.log(data);
 	};
-	
-	
+
+
 	/**
 	 * Print the given event object in some special way.
 	 *
@@ -1678,7 +1678,7 @@
 	debug.event = function ( data ) {
 	    var type  = data.type.toUpperCase(),
 	        color = type === 'ERROR' ? 'red' : 'green';
-	
+
 	    switch ( type ) {
 	        case 'KEYDOWN':
 	        case 'KEYPRESS':
@@ -1693,8 +1693,8 @@
 	            console.log('%o\t%c%s', data, 'color:' + color + ';font-weight:bold', type);
 	    }
 	};
-	
-	
+
+
 	/**
 	 * Start specific timer.
 	 * Use to calculate time of some actions.
@@ -1716,11 +1716,11 @@
 	 */
 	debug.time = function ( name, title ) {
 	    var time = Date.now();
-	
+
 	    // sanitize
 	    name  = name  || '';
 	    title = title || '';
-	
+
 	    // is this mark exist
 	    if ( timeMarks[name] ) {
 	        // already set
@@ -1729,12 +1729,12 @@
 	        // create a new mark
 	        timeMarks[name] = {init: time};
 	    }
-	
+
 	    // update with the current value
 	    timeMarks[name].last = time;
 	};
-	
-	
+
+
 	/**
 	 * End specific timer.
 	 * Use to calculate time of some actions.
@@ -1756,25 +1756,25 @@
 	 */
 	debug.timeEnd = function ( name, title ) {
 	    var time = Date.now();
-	
+
 	    // sanitize
 	    name  = name  || '';
 	    title = title || 'total';
-	
+
 	    // is this mark exist
 	    if ( timeMarks[name] ) {
 	        debug.log((name || 'time') + ' (' + title + '): ' + (time - timeMarks[name].init) + 'ms', 'blue');
-	
+
 	        delete timeMarks[name];
 	    } else {
 	        throw new Error(__filename + ': no started timer for "' + name + '"');
 	    }
 	};
-	
-	
+
+
 	// public
 	module.exports = debug;
-	
+
 	/* WEBPACK VAR INJECTION */}.call(exports, "../app/lib/develop/debug.js"))
 
 /***/ },
@@ -1788,25 +1788,25 @@
 	 * @license The MIT License (MIT)
 	 * @copyright Stanislav Kalashnik <darkpark.main@gmail.com>
 	 */
-	
+
 	'use strict';
-	
+
 	var app       = __webpack_require__(/*! ../core */ 2),
 	    Wamp      = __webpack_require__(/*! spa-wamp */ 10),
 	    stringify = __webpack_require__(/*! cjs-query */ 4).stringify;
-	
-	
+
+
 	if ( app.query.wampPort ) {
 	    // correct type
 	    app.query.wampTargetId = parseInt(app.query.wampTargetId, 10);
-	
+
 	    app.develop.wamp = new Wamp(
 	        'ws://' + (app.query.wampHost || location.hostname) + ':' + app.query.wampPort + '/target/' + (app.query.wampTargetId || '')
 	    );
-	
+
 	    app.develop.wamp.addListener('connection:open', function () {
 	        debug.info('wamp open ' + app.develop.wamp.socket.url, null, {tags: ['open', 'wamp']});
-	
+
 	        // get target connection id
 	        app.develop.wamp.call('getConnectionInfo', {}, function ( error, data ) {
 	            // check if already linked
@@ -1820,14 +1820,14 @@
 	            }
 	        });
 	    });
-	
+
 	    app.develop.wamp.addListener('connection:close', function () {
 	        debug.info('wamp close ' + app.develop.wamp.socket.url, null, {tags: ['close', 'wamp']});
 	    });
-	
+
 	    app.develop.wamp.addListener('evalCode', function ( params, callback ) {
 	        console.log('incoming evalCode', params);
-	
+
 	        /* eslint no-eval: 0 */
 	        callback(null, {eval: eval(params.code)});
 	    });
@@ -1845,17 +1845,17 @@
 	 * @license The MIT License (MIT)
 	 * @copyright Stanislav Kalashnik <darkpark.main@gmail.com>
 	 */
-	
+
 	'use strict';
-	
+
 	var CjsWamp = __webpack_require__(/*! cjs-wamp */ 11),
 	    timeout = 5000,
 	    events  = {
 	        open:  'connection:open',
 	        close: 'connection:close'
 	    };
-	
-	
+
+
 	/**
 	 * WAMP implementation wrapper.
 	 *
@@ -1865,30 +1865,30 @@
 	 */
 	function Wamp ( uri ) {
 	    var self = this;
-	
+
 	    function getSocket () {
 	        var socket = new WebSocket(uri);
-	
+
 	        socket.onopen = function () {
 	            // there are some listeners
 	            if ( self.events[events.open] ) {
 	                self.emit(events.open);
 	            }
-	
+
 	            // set activity flag
 	            self.open = true;
 	        };
-	
+
 	        // reconnect
 	        socket.onclose = function () {
 	            // there are some listeners and it's the first time
 	            if ( self.events[events.close] && self.open ) {
 	                self.emit(events.close);
 	            }
-	
+
 	            // mark as closed
 	            self.open = false;
-	
+
 	            setTimeout(function () {
 	                // recreate connection
 	                self.socket = getSocket();
@@ -1898,25 +1898,25 @@
 	                };
 	            }, timeout);
 	        };
-	
+
 	        return socket;
 	    }
-	
+
 	    console.assert(typeof this === 'object', 'must be constructed via new');
-	
+
 	    // connection state
 	    this.open = false;
-	
+
 	    // parent constructor call
 	    CjsWamp.call(this, getSocket());
 	}
-	
-	
+
+
 	// inheritance
 	Wamp.prototype = Object.create(CjsWamp.prototype);
 	Wamp.prototype.constructor = Wamp;
-	
-	
+
+
 	// public
 	module.exports = Wamp;
 
@@ -1932,15 +1932,15 @@
 	 * @license The MIT License (MIT)
 	 * @copyright Stanislav Kalashnik <darkpark.main@gmail.com>
 	 */
-	
+
 	'use strict';
-	
+
 	/** @private */
 	var Emitter   = __webpack_require__(/*! cjs-emitter */ 3),
 	    messageId = 0,
 	    callbacks = {};
-	
-	
+
+
 	/**
 	 * Lightweight WAMP implementation based on WebSockets.
 	 *
@@ -1951,14 +1951,14 @@
 	 */
 	function Wamp ( socket ) {
 	    var self = this;
-	
+
 	    console.assert(typeof this === 'object', 'must be constructed via new');
-	    
+
 	    // parent constructor call
 	    Emitter.call(this);
-	
+
 	    this.socket = socket;
-	
+
 	    if ( 'on' in socket ) {
 	        // server-side
 	        socket.on('message', function ( message ) {
@@ -1971,8 +1971,8 @@
 	        };
 	    }
 	}
-	
-	
+
+
 	/**
 	 * Send data through the given socket.
 	 *
@@ -1984,17 +1984,17 @@
 	    if ( socket.readyState === 1 ) {
 	        // protocol version
 	        message.jsonrpc = '2.0';
-	
+
 	        socket.send(JSON.stringify(message));
 	    }
 	}
-	
-	
+
+
 	// inheritance
 	Wamp.prototype = Object.create(Emitter.prototype);
 	Wamp.prototype.constructor = Wamp;
-	
-	
+
+
 	/**
 	 * Internal method to handle messages.
 	 *
@@ -2005,7 +2005,7 @@
 	Wamp.prototype.router = function ( message ) {
 	    var self = this,
 	        data;
-	
+
 	    try {
 	        data = JSON.parse(message);
 	    } catch ( error ) {
@@ -2013,10 +2013,10 @@
 	            error: {code: -32700, message: 'Parse error'},
 	            id: null
 	        });
-	
+
 	        return;
 	    }
-	
+
 	    if ( 'id' in data && !('method' in data) ) {
 	        // incoming answer for previous request
 	        if ( data.id in callbacks ) {
@@ -2055,8 +2055,8 @@
 	        });
 	    }
 	};
-	
-	
+
+
 	/**
 	 * Send message to execute remotely or notify (without `callback` argument).
 	 *
@@ -2069,18 +2069,18 @@
 	        method: method,
 	        params: params
 	    };
-	
+
 	    // execution mode with callback
 	    // notification mode otherwise
 	    if ( typeof callback === 'function' ) {
 	        message.id = ++messageId;
 	        callbacks[messageId] = callback;
 	    }
-	
+
 	    send(this.socket, message);
 	};
-	
-	
+
+
 	// public
 	module.exports = Wamp;
 
@@ -2098,11 +2098,11 @@
 	 * @license The MIT License (MIT)
 	 * @copyright Stanislav Kalashnik <darkpark.main@gmail.com>
 	 */
-	
+
 	'use strict';
-	
+
 	/* eslint new-cap: 0 */
-	
+
 	var //util    = require('util'),
 	    app      = __webpack_require__(/*! ../core */ 2),
 	    //Wamp     = require('spa-wamp'),
@@ -2112,51 +2112,51 @@
 	    //app;
 	    //dom     = require('spa-dom'),
 	    //grid    = require('./grid');
-	
-	
+
+
 	events.load = function () {
 	    // app instance
 	    //window.app = app = require('spa-app');
-	
+
 	    /*if ( app.query.wampPort ) {
 	        //console.log('connect to WAMP server');
 	        app.develop.wamp = new Wamp(
 	            //new WebSocket('ws://' + (app.query.wampHost || location.hostname) + ':' + app.query.wampPort + '/target')
 	            'ws://' + (app.query.wampHost || location.hostname) + ':' + app.query.wampPort + '/target'
 	        );
-	
+
 	        app.develop.wamp.addListener('connection:open', function () {
 	            console.log('wamp open ' + app.develop.wamp.socket.url);
 	        });
-	
+
 	        app.develop.wamp.addListener('connection:close', function () {
 	            console.log('wamp close ' + app.develop.wamp.socket.url);
 	        });
-	
+
 	        // ready
 	        /!*window.app.wamp.socket.onopen = function () {
 	            console.log('wamp is ready!');
 	        };*!/
 	    }*/
-	
+
 	    // export to globals div for develop HTML elements
 	    /*window.$develop = document.body.appendChild(document.createElement('div'));
 	    window.$develop.className = 'develop';/**/
-	
+
 	    // apply dev css
 	    document.body.classList.add('develop');
-	
+
 	    //grid.init();
-	
+
 	    //if ( localStorage.getItem('grid.active') ) {
 	    //    grid.show();
 	    //}
-	
+
 	    // stress-testing
 	    app.develop.horde = gremlins.createHorde();
 	};
-	
-	
+
+
 	events.keydown = function ( event ) {
 	    switch ( event.keyCode ) {
 	        // numpad 0
@@ -2165,7 +2165,7 @@
 	            location.hash = '';
 	            location.reload();
 	            break;
-	
+
 	        // numpad 5
 	        //case 101:
 	        //    // debug grid
@@ -2177,13 +2177,13 @@
 	        //    debug.log('show grid: ' + grid.active, 'red');
 	        //    localStorage.setItem('grid.active', grid.active);
 	        //    break;
-	
+
 	        // numpad 6
 	        case 102:
 	            // stress-testing
 	            app.develop.horde.unleash({nb: 500});
 	            break;
-	
+
 	        // numpad 7
 	        /*case 103:
 	            //if ( !app.data.host ) {
@@ -2206,7 +2206,7 @@
 	                        localStorage.setItem('spyjs.active', true);
 	                        debug.log('SpyJS: enable', 'red');
 	                        debug.log('SpyJS: set proxy to ' + location.hostname + ':' + 3546);
-	
+
 	                        gSTB.SetWebProxy(location.hostname, 3546, '', '', '');
 	                        location.reload();
 	                    },
@@ -2217,7 +2217,7 @@
 	            }
 	            //}
 	            break;*/
-	
+
 	        //// numpad 8
 	        //case 104:
 	        //    // FireBug Lite
@@ -2233,14 +2233,14 @@
 	        //        }
 	        //    }));
 	        //    break;
-	
+
 	        // numpad 9
 	        case 105:
 	            // outline components and inner structures
 	            debug.info('toggle develop css layout', null, {tags: ['css', 'toggle']});
 	            document.body.classList.toggle('develop');
 	            break;
-	
+
 	        // numpad .
 	        case 110:
 	            // CSS reload
@@ -2253,13 +2253,13 @@
 	            break;
 	    }
 	};
-	
-	
+
+
 	// additional top-level key handlers
 	window.addEventListener('load',    events.load);
 	window.addEventListener('keydown', events.keydown);
-	
-	
+
+
 	// public
 	module.exports = events;
 
@@ -2285,36 +2285,36 @@
 	 * @license The MIT License (MIT)
 	 * @copyright Stanislav Kalashnik <darkpark.main@gmail.com>
 	 */
-	
+
 	/* eslint no-path-concat: 0 */
-	
+
 	'use strict';
-	
+
 	var getElementById = document.getElementById,
 	    querySelector  = document.querySelector;
-	
-	
+
+
 	document.getElementById = function ( id ) {
 	    var el = getElementById.call(document, id);
-	
+
 	    if ( !el ) {
 	        throw new Error(__filename + ': no element with id ' + id);
 	    }
-	
+
 	    return el;
 	};
-	
-	
+
+
 	document.querySelector = function ( selector ) {
 	    var el = querySelector.call(document, selector);
-	
+
 	    if ( !el ) {
 	        throw new Error(__filename + ': no element with selector: ' + selector);
 	    }
-	
+
 	    return el;
 	};
-	
+
 	/* WEBPACK VAR INJECTION */}.call(exports, "../app/lib/develop/hooks.js"))
 
 /***/ },
@@ -2330,12 +2330,12 @@
 	 * @license The MIT License (MIT)
 	 * @copyright Stanislav Kalashnik <darkpark.main@gmail.com>
 	 */
-	
+
 	'use strict';
-	
+
 	//var tag = require('spa-dom').tag;
-	
-	
+
+
 	//window.LiveReloadOptions = {port: LIVERELOAD.port};
 	window.LiveReloadOptions = {
 	    host: location.hostname,
@@ -2343,9 +2343,9 @@
 	};
 	//console.log(require('spa-gulp-livereload/config').default.tinylr);
 	//console.log(LIVERELOAD);
-	
+
 	__webpack_require__(/*! livereload-js/dist/livereload.js */ 16);
-	
+
 	// livereload activation
 	//if ( config.livereload ) {
 	    // load external script
@@ -2366,11 +2366,11 @@
 	(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 	(function() {
 	  var Connector, PROTOCOL_6, PROTOCOL_7, Parser, Version, _ref;
-	
+
 	  _ref = require('./protocol'), Parser = _ref.Parser, PROTOCOL_6 = _ref.PROTOCOL_6, PROTOCOL_7 = _ref.PROTOCOL_7;
-	
+
 	  Version = '2.2.2';
-	
+
 	  exports.Connector = Connector = (function() {
 	    function Connector(options, WebSocket, Timer, handlers) {
 	      this.options = options;
@@ -2422,11 +2422,11 @@
 	      })(this));
 	      this.connect();
 	    }
-	
+
 	    Connector.prototype._isSocketConnected = function() {
 	      return this.socket && this.socket.readyState === this.WebSocket.OPEN;
 	    };
-	
+
 	    Connector.prototype.connect = function() {
 	      this._connectionDesired = true;
 	      if (this._isSocketConnected()) {
@@ -2458,7 +2458,7 @@
 	        };
 	      })(this);
 	    };
-	
+
 	    Connector.prototype.disconnect = function() {
 	      this._connectionDesired = false;
 	      this._reconnectTimer.stop();
@@ -2468,7 +2468,7 @@
 	      this._disconnectionReason = 'manual';
 	      return this.socket.close();
 	    };
-	
+
 	    Connector.prototype._scheduleReconnection = function() {
 	      if (!this._connectionDesired) {
 	        return;
@@ -2478,24 +2478,24 @@
 	        return this._nextDelay = Math.min(this.options.maxdelay, this._nextDelay * 2);
 	      }
 	    };
-	
+
 	    Connector.prototype.sendCommand = function(command) {
 	      if (this.protocol == null) {
 	        return;
 	      }
 	      return this._sendCommand(command);
 	    };
-	
+
 	    Connector.prototype._sendCommand = function(command) {
 	      return this.socket.send(JSON.stringify(command));
 	    };
-	
+
 	    Connector.prototype._closeOnError = function() {
 	      this._handshakeTimeout.stop();
 	      this._disconnectionReason = 'error';
 	      return this.socket.close();
 	    };
-	
+
 	    Connector.prototype._onopen = function(e) {
 	      var hello;
 	      this.handlers.socketConnected();
@@ -2517,29 +2517,29 @@
 	      this._sendCommand(hello);
 	      return this._handshakeTimeout.start(this.options.handshake_timeout);
 	    };
-	
+
 	    Connector.prototype._onclose = function(e) {
 	      this.protocol = 0;
 	      this.handlers.disconnected(this._disconnectionReason, this._nextDelay);
 	      return this._scheduleReconnection();
 	    };
-	
+
 	    Connector.prototype._onerror = function(e) {};
-	
+
 	    Connector.prototype._onmessage = function(e) {
 	      return this.protocolParser.process(e.data);
 	    };
-	
+
 	    return Connector;
-	
+
 	  })();
-	
+
 	}).call(this);
-	
+
 	},{"./protocol":6}],2:[function(require,module,exports){
 	(function() {
 	  var CustomEvents;
-	
+
 	  CustomEvents = {
 	    bind: function(element, eventName, handler) {
 	      if (element.addEventListener) {
@@ -2570,27 +2570,27 @@
 	      }
 	    }
 	  };
-	
+
 	  exports.bind = CustomEvents.bind;
-	
+
 	  exports.fire = CustomEvents.fire;
-	
+
 	}).call(this);
-	
+
 	},{}],3:[function(require,module,exports){
 	(function() {
 	  var LessPlugin;
-	
+
 	  module.exports = LessPlugin = (function() {
 	    LessPlugin.identifier = 'less';
-	
+
 	    LessPlugin.version = '1.0';
-	
+
 	    function LessPlugin(window, host) {
 	      this.window = window;
 	      this.host = host;
 	    }
-	
+
 	    LessPlugin.prototype.reload = function(path, options) {
 	      if (this.window.less && this.window.less.refresh) {
 	        if (path.match(/\.less$/i)) {
@@ -2602,7 +2602,7 @@
 	      }
 	      return false;
 	    };
-	
+
 	    LessPlugin.prototype.reloadLess = function(path) {
 	      var link, links, _i, _len;
 	      links = (function() {
@@ -2628,32 +2628,32 @@
 	      this.window.less.refresh(true);
 	      return true;
 	    };
-	
+
 	    LessPlugin.prototype.analyze = function() {
 	      return {
 	        disable: !!(this.window.less && this.window.less.refresh)
 	      };
 	    };
-	
+
 	    return LessPlugin;
-	
+
 	  })();
-	
+
 	}).call(this);
-	
+
 	},{}],4:[function(require,module,exports){
 	(function() {
 	  var Connector, LiveReload, Options, Reloader, Timer,
 	    __hasProp = {}.hasOwnProperty;
-	
+
 	  Connector = require('./connector').Connector;
-	
+
 	  Timer = require('./timer').Timer;
-	
+
 	  Options = require('./options').Options;
-	
+
 	  Reloader = require('./reloader').Reloader;
-	
+
 	  exports.LiveReload = LiveReload = (function() {
 	    function LiveReload(window) {
 	      var k, v, _ref;
@@ -2755,15 +2755,15 @@
 	      });
 	      this.initialized = true;
 	    }
-	
+
 	    LiveReload.prototype.on = function(eventName, handler) {
 	      return this.listeners[eventName] = handler;
 	    };
-	
+
 	    LiveReload.prototype.log = function(message) {
 	      return this.console.log("" + message);
 	    };
-	
+
 	    LiveReload.prototype.performReload = function(message) {
 	      var _ref, _ref1;
 	      this.log("LiveReload received reload request: " + (JSON.stringify(message, null, 2)));
@@ -2775,11 +2775,11 @@
 	        serverURL: "http://" + this.options.host + ":" + this.options.port
 	      });
 	    };
-	
+
 	    LiveReload.prototype.performAlert = function(message) {
 	      return alert(message.message);
 	    };
-	
+
 	    LiveReload.prototype.shutDown = function() {
 	      var _base;
 	      if (!this.initialized) {
@@ -2789,11 +2789,11 @@
 	      this.log("LiveReload disconnected.");
 	      return typeof (_base = this.listeners).shutdown === "function" ? _base.shutdown() : void 0;
 	    };
-	
+
 	    LiveReload.prototype.hasPlugin = function(identifier) {
 	      return !!this.pluginIdentifiers[identifier];
 	    };
-	
+
 	    LiveReload.prototype.addPlugin = function(pluginClass) {
 	      var plugin;
 	      if (!this.initialized) {
@@ -2818,7 +2818,7 @@
 	      this.plugins.push(plugin);
 	      this.reloader.addPlugin(plugin);
 	    };
-	
+
 	    LiveReload.prototype.analyze = function() {
 	      var plugin, pluginData, pluginsData, _i, _len, _ref;
 	      if (!this.initialized) {
@@ -2840,17 +2840,17 @@
 	        url: this.window.location.href
 	      });
 	    };
-	
+
 	    return LiveReload;
-	
+
 	  })();
-	
+
 	}).call(this);
-	
+
 	},{"./connector":1,"./options":5,"./reloader":7,"./timer":9}],5:[function(require,module,exports){
 	(function() {
 	  var Options;
-	
+
 	  exports.Options = Options = (function() {
 	    function Options() {
 	      this.https = false;
@@ -2863,7 +2863,7 @@
 	      this.maxdelay = 60000;
 	      this.handshake_timeout = 5000;
 	    }
-	
+
 	    Options.prototype.set = function(name, value) {
 	      if (typeof value === 'undefined') {
 	        return;
@@ -2873,11 +2873,11 @@
 	      }
 	      return this[name] = value;
 	    };
-	
+
 	    return Options;
-	
+
 	  })();
-	
+
 	  Options.extract = function(document) {
 	    var element, keyAndValue, m, mm, options, pair, src, _i, _j, _len, _len1, _ref, _ref1;
 	    _ref = document.getElementsByTagName('script');
@@ -2906,37 +2906,37 @@
 	    }
 	    return null;
 	  };
-	
+
 	}).call(this);
-	
+
 	},{}],6:[function(require,module,exports){
 	(function() {
 	  var PROTOCOL_6, PROTOCOL_7, Parser, ProtocolError,
 	    __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
-	
+
 	  exports.PROTOCOL_6 = PROTOCOL_6 = 'http://livereload.com/protocols/official-6';
-	
+
 	  exports.PROTOCOL_7 = PROTOCOL_7 = 'http://livereload.com/protocols/official-7';
-	
+
 	  exports.ProtocolError = ProtocolError = (function() {
 	    function ProtocolError(reason, data) {
 	      this.message = "LiveReload protocol error (" + reason + ") after receiving data: \"" + data + "\".";
 	    }
-	
+
 	    return ProtocolError;
-	
+
 	  })();
-	
+
 	  exports.Parser = Parser = (function() {
 	    function Parser(handlers) {
 	      this.handlers = handlers;
 	      this.reset();
 	    }
-	
+
 	    Parser.prototype.reset = function() {
 	      return this.protocol = null;
 	    };
-	
+
 	    Parser.prototype.process = function(data) {
 	      var command, e, message, options, _ref;
 	      try {
@@ -2982,7 +2982,7 @@
 	        }
 	      }
 	    };
-	
+
 	    Parser.prototype._parseMessage = function(data, validCommands) {
 	      var e, message, _ref;
 	      try {
@@ -2999,17 +2999,17 @@
 	      }
 	      return message;
 	    };
-	
+
 	    return Parser;
-	
+
 	  })();
-	
+
 	}).call(this);
-	
+
 	},{}],7:[function(require,module,exports){
 	(function() {
 	  var IMAGE_STYLES, Reloader, numberOfMatchingSegments, pathFromUrl, pathsMatch, pickBestMatch, splitUrl;
-	
+
 	  splitUrl = function(url) {
 	    var hash, index, params;
 	    if ((index = url.indexOf('#')) >= 0) {
@@ -3030,7 +3030,7 @@
 	      hash: hash
 	    };
 	  };
-	
+
 	  pathFromUrl = function(url) {
 	    var path;
 	    url = splitUrl(url).url;
@@ -3041,7 +3041,7 @@
 	    }
 	    return decodeURIComponent(path);
 	  };
-	
+
 	  pickBestMatch = function(path, objects, pathFunc) {
 	    var bestMatch, object, score, _i, _len;
 	    bestMatch = {
@@ -3063,7 +3063,7 @@
 	      return null;
 	    }
 	  };
-	
+
 	  numberOfMatchingSegments = function(path1, path2) {
 	    var comps1, comps2, eqCount, len;
 	    path1 = path1.replace(/^\/+/, '').toLowerCase();
@@ -3080,11 +3080,11 @@
 	    }
 	    return eqCount;
 	  };
-	
+
 	  pathsMatch = function(path1, path2) {
 	    return numberOfMatchingSegments(path1, path2) > 0;
 	  };
-	
+
 	  IMAGE_STYLES = [
 	    {
 	      selector: 'background',
@@ -3094,7 +3094,7 @@
 	      styleNames: ['borderImage', 'webkitBorderImage', 'MozBorderImage']
 	    }
 	  ];
-	
+
 	  exports.Reloader = Reloader = (function() {
 	    function Reloader(window, console, Timer) {
 	      this.window = window;
@@ -3104,15 +3104,15 @@
 	      this.importCacheWaitPeriod = 200;
 	      this.plugins = [];
 	    }
-	
+
 	    Reloader.prototype.addPlugin = function(plugin) {
 	      return this.plugins.push(plugin);
 	    };
-	
+
 	    Reloader.prototype.analyze = function(callback) {
 	      return results;
 	    };
-	
+
 	    Reloader.prototype.reload = function(path, options) {
 	      var plugin, _base, _i, _len, _ref;
 	      this.options = options;
@@ -3141,11 +3141,11 @@
 	      }
 	      return this.reloadPage();
 	    };
-	
+
 	    Reloader.prototype.reloadPage = function() {
 	      return this.window.document.location.reload();
 	    };
-	
+
 	    Reloader.prototype.reloadImages = function(path) {
 	      var expando, img, selector, styleNames, styleSheet, _i, _j, _k, _l, _len, _len1, _len2, _len3, _ref, _ref1, _ref2, _ref3, _results;
 	      expando = this.generateUniqueString();
@@ -3176,7 +3176,7 @@
 	        return _results;
 	      }
 	    };
-	
+
 	    Reloader.prototype.reloadStylesheetImages = function(styleSheet, path, expando) {
 	      var e, rule, rules, styleNames, _i, _j, _len, _len1;
 	      try {
@@ -3204,7 +3204,7 @@
 	        }
 	      }
 	    };
-	
+
 	    Reloader.prototype.reloadStyleImages = function(style, styleNames, path, expando) {
 	      var newValue, styleName, value, _i, _len;
 	      for (_i = 0, _len = styleNames.length; _i < _len; _i++) {
@@ -3226,7 +3226,7 @@
 	        }
 	      }
 	    };
-	
+
 	    Reloader.prototype.reloadStylesheet = function(path) {
 	      var imported, link, links, match, style, _i, _j, _k, _l, _len, _len1, _len2, _len3, _ref, _ref1;
 	      links = (function() {
@@ -3283,7 +3283,7 @@
 	      }
 	      return true;
 	    };
-	
+
 	    Reloader.prototype.collectImportedStylesheets = function(link, styleSheet, result) {
 	      var e, index, rule, rules, _i, _len;
 	      try {
@@ -3312,7 +3312,7 @@
 	        }
 	      }
 	    };
-	
+
 	    Reloader.prototype.waitUntilCssLoads = function(clone, func) {
 	      var callbackExecuted, executeCallback, poll;
 	      callbackExecuted = false;
@@ -3346,11 +3346,11 @@
 	      }
 	      return this.Timer.start(this.options.stylesheetReloadTimeout, executeCallback);
 	    };
-	
+
 	    Reloader.prototype.linkHref = function(link) {
 	      return link.href || link.getAttribute('data-href');
 	    };
-	
+
 	    Reloader.prototype.reattachStylesheetLink = function(link) {
 	      var clone, parent;
 	      if (link.__LiveReload_pendingRemoval) {
@@ -3392,7 +3392,7 @@
 	        };
 	      })(this));
 	    };
-	
+
 	    Reloader.prototype.reattachImportedRule = function(_arg) {
 	      var href, index, link, media, newRule, parent, rule, tempLink;
 	      rule = _arg.rule, index = _arg.index, link = _arg.link;
@@ -3430,11 +3430,11 @@
 	        };
 	      })(this));
 	    };
-	
+
 	    Reloader.prototype.generateUniqueString = function() {
 	      return 'livereload=' + Date.now();
 	    };
-	
+
 	    Reloader.prototype.generateCacheBustUrl = function(url, expando) {
 	      var hash, oldParams, originalUrl, params, _ref;
 	      if (expando == null) {
@@ -3460,51 +3460,51 @@
 	      }
 	      return url + params + hash;
 	    };
-	
+
 	    return Reloader;
-	
+
 	  })();
-	
+
 	}).call(this);
-	
+
 	},{}],8:[function(require,module,exports){
 	(function() {
 	  var CustomEvents, LiveReload, k;
-	
+
 	  CustomEvents = require('./customevents');
-	
+
 	  LiveReload = window.LiveReload = new (require('./livereload').LiveReload)(window);
-	
+
 	  for (k in window) {
 	    if (k.match(/^LiveReloadPlugin/)) {
 	      LiveReload.addPlugin(window[k]);
 	    }
 	  }
-	
+
 	  LiveReload.addPlugin(require('./less'));
-	
+
 	  LiveReload.on('shutdown', function() {
 	    return delete window.LiveReload;
 	  });
-	
+
 	  LiveReload.on('connect', function() {
 	    return CustomEvents.fire(document, 'LiveReloadConnect');
 	  });
-	
+
 	  LiveReload.on('disconnect', function() {
 	    return CustomEvents.fire(document, 'LiveReloadDisconnect');
 	  });
-	
+
 	  CustomEvents.bind(document, 'LiveReloadShutDown', function() {
 	    return LiveReload.shutDown();
 	  });
-	
+
 	}).call(this);
-	
+
 	},{"./customevents":2,"./less":3,"./livereload":4}],9:[function(require,module,exports){
 	(function() {
 	  var Timer;
-	
+
 	  exports.Timer = Timer = (function() {
 	    function Timer(func) {
 	      this.func = func;
@@ -3518,7 +3518,7 @@
 	        };
 	      })(this);
 	    }
-	
+
 	    Timer.prototype.start = function(timeout) {
 	      if (this.running) {
 	        clearTimeout(this.id);
@@ -3526,7 +3526,7 @@
 	      this.id = setTimeout(this._handler, timeout);
 	      return this.running = true;
 	    };
-	
+
 	    Timer.prototype.stop = function() {
 	      if (this.running) {
 	        clearTimeout(this.id);
@@ -3534,17 +3534,17 @@
 	        return this.id = null;
 	      }
 	    };
-	
+
 	    return Timer;
-	
+
 	  })();
-	
+
 	  Timer.start = function(timeout, func) {
 	    return setTimeout(func, timeout);
 	  };
-	
+
 	}).call(this);
-	
+
 	},{}]},{},[8]);
 
 
@@ -3559,9 +3559,9 @@
 	 * @license The MIT License (MIT)
 	 * @copyright Stanislav Kalashnik <darkpark.main@gmail.com>
 	 */
-	
+
 	'use strict';
-	
+
 	/**
 	 * Parallel tasks execution.
 	 *
@@ -3572,26 +3572,26 @@
 	    var isError = false,
 	        counter = 0,
 	        results = [];
-	
+
 	    function handler ( task, index ) {
 	        var done = function ( error, result ) {
 	            if ( error ) {
 	                // exit this task
 	                // and prevent other to callback
 	                isError = true;
-	
+
 	                if ( typeof callback === 'function' ) {
 	                    callback(error);
 	                }
-	
+
 	                return;
 	            }
-	
+
 	            // fill results
 	            results[index] = result;
-	
+
 	            counter++;
-	
+
 	            // all tasks are processed
 	            if ( counter === tasks.length && typeof callback === 'function' ) {
 	                callback(null, results);
@@ -3599,13 +3599,13 @@
 	                throw Error('done callback invoked more than one time in function with ' + index + ' position in tasks array');
 	            }
 	        };
-	
+
 	        // error happened in some other task
 	        if ( isError ) {
 	            // callback was already used
 	            return;
 	        }
-	
+
 	        // actual call condition
 	        if ( task.length === 0 ) {
 	            done(null, task());
@@ -3613,10 +3613,10 @@
 	            task(done);
 	        }
 	    }
-	
+
 	    // sanitize
 	    tasks = Array.isArray(tasks) ? tasks : [];
-	
+
 	    // no tasks were given
 	    if ( tasks.length === 0 ) {
 	        if ( typeof callback === 'function' ) {
@@ -3640,13 +3640,13 @@
 	/**
 	 * Loading page implementation.
 	 */
-	
+
 	'use strict';
-	
+
 	var Page = __webpack_require__(/*! spa-component-page */ 19),
 	    page = new Page({$node: window.pageInit});
-	
-	
+
+
 	// public
 	module.exports = page;
 
@@ -3662,14 +3662,14 @@
 	 * @license The MIT License (MIT)
 	 * @copyright Stanislav Kalashnik <darkpark.main@gmail.com>
 	 */
-	
+
 	/* eslint no-path-concat: 0 */
-	
+
 	'use strict';
-	
+
 	var Component = __webpack_require__(/*! spa-component */ 20);
-	
-	
+
+
 	/**
 	 * Base page implementation.
 	 *
@@ -3694,15 +3694,19 @@
 	function Page ( config ) {
 	    // sanitize
 	    config = config || {};
-	
+
 	    console.assert(typeof this === 'object', 'must be constructed via new');
-	    
+
 	    if ( true ) {
-	        if ( typeof config !== 'object' ) { throw new Error(__filename + ': wrong config type'); }
-	        // init parameters checks
-	        if ( config.className && typeof config.className !== 'string' ) { throw new Error(__filename + ': wrong or empty config.className'); }
+            if ( typeof config !== 'object' ) {
+                throw new Error(__filename + ': wrong config type');
+            }
+            // init parameters checks
+            if ( 'className' in config && (!config.className || typeof config.className !== 'string') ) {
+                throw new Error(__filename + ': wrong or empty config.className');
+            }
 	    }
-	
+
 	    /**
 	     * Page visibility/active state flag.
 	     *
@@ -3710,7 +3714,7 @@
 	     * @type {boolean}
 	     */
 	    this.active = false;
-	
+
 	    /**
 	     * Link to the currently active component with focus.
 	     *
@@ -3718,34 +3722,34 @@
 	     * @type {Component}
 	     */
 	    this.activeComponent = null;
-	
+
 	    // set default className if classList property empty or undefined
 	    config.className = 'page ' + (config.className || '');
-	
+
 	    // parent constructor call
 	    Component.call(this, config);
-	
+
 	    // state flag
 	    this.active = this.$node.classList.contains('active');
-	
+
 	    // correct DOM parent/child connection if necessary
 	    if ( this.$node.parentNode === null ) {
 	        document.body.appendChild(this.$node);
 	    }
-	
+
 	    // always itself
 	    this.page = this;
 	}
-	
-	
+
+
 	// inheritance
 	Page.prototype = Object.create(Component.prototype);
 	Page.prototype.constructor = Page;
-	
-	
+
+
 	// public
 	module.exports = Page;
-	
+
 	/* WEBPACK VAR INJECTION */}.call(exports, "../component-page/index.js"))
 
 /***/ },
@@ -3759,16 +3763,16 @@
 	 * @license The MIT License (MIT)
 	 * @copyright Stanislav Kalashnik <darkpark.main@gmail.com>
 	 */
-	
+
 	/* eslint no-path-concat: 0 */
-	
+
 	'use strict';
-	
+
 	var app     = __webpack_require__(/*! spa-app/lib/core */ 2),
 	    Emitter = __webpack_require__(/*! cjs-emitter */ 3),
 	    counter = 0;
-	
-	
+
+
 	/**
 	 * Base component implementation.
 	 *
@@ -3809,23 +3813,37 @@
 	    // current execution context
 	    var self = this,
 	        name;
-	
+
 	    // sanitize
 	    config = config || {};
-	
+
 	    console.assert(typeof this === 'object', 'must be constructed via new');
-	
+
 	    if ( true ) {
-	        if ( typeof config !== 'object' ) { throw new Error(__filename + ': wrong config type'); }
-	        // init parameters checks
-	        if ( config.id        && typeof config.id !== 'string'         ) { throw new Error(__filename + ': wrong or empty config.id'); }
-	        if ( config.className && typeof config.className !== 'string'  ) { throw new Error(__filename + ': wrong or empty config.className'); }
-	        if ( config.$node     && !(config.$node instanceof Element)    ) { throw new Error(__filename + ': wrong config.$node type'); }
-	        if ( config.$body     && !(config.$body instanceof Element)    ) { throw new Error(__filename + ': wrong config.$body type'); }
-	        if ( config.parent    && !(config.parent instanceof Component) ) { throw new Error(__filename + ': wrong config.parent type'); }
-	        if ( config.children  && !Array.isArray(config.children)       ) { throw new Error(__filename + ': wrong config.children type'); }
+            if ( typeof config !== 'object' ) {
+                throw new Error(__filename + ': wrong config type');
+            }
+            // init parameters checks
+            if ( config.id && typeof config.id !== 'string' ) {
+                throw new Error(__filename + ': wrong or empty config.id');
+            }
+            if ( 'className' in config && (!config.className || typeof config.className !== 'string') ) {
+                throw new Error(__filename + ': wrong or empty config.className');
+            }
+            if ( config.$node && !(config.$node instanceof Element) ) {
+                throw new Error(__filename + ': wrong config.$node type');
+            }
+            if ( config.$body && !(config.$body instanceof Element) ) {
+                throw new Error(__filename + ': wrong config.$body type');
+            }
+            if ( config.parent && !(config.parent instanceof Component) ) {
+                throw new Error(__filename + ': wrong config.parent type');
+            }
+            if ( config.children && !Array.isArray(config.children) ) {
+                throw new Error(__filename + ': wrong config.children type');
+            }
 	    }
-	
+
 	    /**
 	     * Component visibility state flag.
 	     *
@@ -3833,21 +3851,21 @@
 	     * @type {boolean}
 	     */
 	    this.visible = true;
-	
+
 	    /**
 	     * Component can accept focus or not.
 	     *
 	     * @type {boolean}
 	     */
 	    this.focusable = true;
-	
+
 	    /**
 	     * DOM outer handle.
 	     *
 	     * @type {Element}
 	     */
 	    this.$node = null;
-	
+
 	    /**
 	     * DOM inner handle.
 	     * In simple cases is the same as $node.
@@ -3855,21 +3873,21 @@
 	     * @type {Element}
 	     */
 	    this.$body = null;
-	
+
 	    /**
 	     * Link to the parent component which has this component as a child.
 	     *
 	     * @type {Component}
 	     */
 	    this.parent = null;
-	
+
 	    /**
 	     * List of all children components.
 	     *
 	     * @type {Component[]}
 	     */
 	    this.children = [];
-	
+
 	    /**
 	     * allow to emit events to the parent component
 	     *
@@ -3877,76 +3895,76 @@
 	     * @type {boolean}
 	     */
 	    this.propagate = !!config.propagate;
-	
+
 	    // parent constructor call
 	    Emitter.call(this, config.data);
-	
+
 	    // outer handle - empty div in case nothing is given
 	    this.$node = config.$node || document.createElement('div');
-	
+
 	    // inner handle - the same as outer handler in case nothing is given
 	    this.$body = config.$body || this.$node;
-	
+
 	    // set CSS class names
 	    this.$node.className += ' component ' + (config.className || '');
-	
+
 	    // apply component id if given, generate otherwise
 	    this.id = config.id || this.$node.id || 'cid' + counter++;
-	
+
 	    // apply hierarchy
 	    if ( config.parent ) {
 	        // add to parent component
 	        config.parent.add(this);
 	    }
-	
+
 	    // apply given visibility
 	    if ( config.visible === false ) {
 	        // default state is visible
 	        this.hide();
 	    }
-	
+
 	    // apply focus handling method
 	    if ( config.focusable === false ) {
 	        // can't accept focus
 	        this.focusable = false;
 	    }
-	
+
 	    // a descendant defined own events
 	    if ( this.defaultEvents ) {
 	        // sanitize
 	        config.events = config.events || {};
-	
+
 	        if ( true ) {
 	            if ( typeof config.events !== 'object' ) { throw new Error(__filename + ': wrong config.events type'); }
 	            if ( typeof this.defaultEvents !== 'object' ) { throw new Error(__filename + ': wrong this.defaultEvents type'); }
 	        }
-	
+
 	        for ( name in this.defaultEvents ) {
 	            // overwrite default events with user-defined
 	            config.events[name] = config.events[name] || this.defaultEvents[name];
 	        }
 	    }
-	
+
 	    if ( config.events ) {
 	        // apply all given events
 	        Object.keys(config.events).forEach(function ( name ) {
 	            self.addListener(name, config.events[name]);
 	        });
 	    }
-	
+
 	    // apply the given children components
 	    if ( config.children ) {
 	        // apply
 	        this.add.apply(this, config.children);
 	    }
-	
+
 	    // component activation by mouse
 	    this.$node.addEventListener('click', function ( event ) {
 	        // left mouse button
 	        //if ( event.button === 0 ) {
 	        // activate if possible
 	        self.focus();
-	
+
 	        // there are some listeners
 	        if ( self.events['click'] ) {
 	            /**
@@ -3960,7 +3978,7 @@
 	            self.emit('click', event);
 	        }
 	        //}
-	
+
 	        if ( true ) {
 	            // middle mouse button
 	            if ( event.button === 1 ) {
@@ -3970,39 +3988,39 @@
 	                self.$node.classList.toggle('wired');
 	            }
 	        }
-	
+
 	        event.stopPropagation();
 	    });
-	
+
 	    if ( true ) {
 	        // expose inner ID to global scope
 	        window[self.id] = self.$node;
-	
+
 	        // expose a link
 	        this.$node.component = this.$body.component = this;
 	        this.$node.title = 'component ' + this.constructor.name + '#' + this.id + ' (outer)';
 	        this.$body.title = 'component ' + this.constructor.name + '#' + this.id + ' (inner)';
 	    }
-	
+
 	    debug.info('create component ' + this.constructor.name + '#' + this.id, null, {
 	        tags: ['create', 'component', this.constructor.name, this.id]
 	    });
 	}
-	
-	
+
+
 	// inheritance
 	Component.prototype = Object.create(Emitter.prototype);
 	Component.prototype.constructor = Component;
-	
-	
+
+
 	/**
 	 * List of all default event callbacks.
 	 *
 	 * @type {Object.<string, function>}
 	 */
 	Component.prototype.defaultEvents = null;
-	
-	
+
+
 	/**
 	 * Add a new component as a child.
 	 *
@@ -4018,28 +4036,28 @@
 	 */
 	Component.prototype.add = function ( child ) {
 	    var index;
-	
+
 	    // walk through all the given elements
 	    for ( index = 0; index < arguments.length; index++ ) {
 	        child = arguments[index];
-	
+
 	        if ( true ) {
 	            if ( !(child instanceof Component) ) { throw new Error(__filename + ': wrong child type'); }
 	        }
-	
+
 	        // apply
 	        this.children.push(child);
 	        child.parent = this;
-	
+
 	        // correct DOM parent/child connection if necessary
 	        if ( child.$node && child.$node.parentNode === null ) {
 	            this.$body.appendChild(child.$node);
 	        }
-	
+
 	        debug.info('add component ' + child.constructor.name + '#' + child.id + ' to ' + this.constructor.name + '#' + this.id, null, {
 	            tags: ['add', 'component', this.constructor.name, this.id, child.constructor.name, child.id]
 	        });
-	
+
 	        // there are some listeners
 	        if ( this.events['add'] ) {
 	            /**
@@ -4052,12 +4070,12 @@
 	             */
 	            this.emit('add', {item: child});
 	        }
-	
+
 	        //debug.log('component ' + this.constructor.name + '#' + this.id + ' new child: ' + child.constructor.name + '#' + child.id);
 	    }
 	};
-	
-	
+
+
 	/* @todo: consider activation in future */
 	///**
 	// * Insert component into the specific position.
@@ -4089,8 +4107,8 @@
 	//        child.parent = this;
 	//    }
 	//};
-	
-	
+
+
 	/**
 	 * Delete this component and clear all associated events.
 	 *
@@ -4102,7 +4120,7 @@
 	        if ( true ) {
 	            if ( !(this.parent instanceof Component) ) { throw new Error(__filename + ': wrong this.parent type'); }
 	        }
-	
+
 	        // active at the moment
 	        if ( app.activePage.activeComponent === this ) {
 	            this.blur();
@@ -4110,21 +4128,21 @@
 	        }
 	        this.parent.children.splice(this.parent.children.indexOf(this), 1);
 	    }
-	
+
 	    // remove all children
 	    this.children.forEach(function ( child ) {
 	        if ( true ) {
 	            if ( !(child instanceof Component) ) { throw new Error(__filename + ': wrong child type'); }
 	        }
-	
+
 	        child.remove();
 	    });
-	
+
 	    // remove all listeners
 	    this.events = {};
-	
+
 	    this.$node.parentNode.removeChild(this.$node);
-	
+
 	    // there are some listeners
 	    if ( this.events['remove'] ) {
 	        /**
@@ -4134,14 +4152,14 @@
 	         */
 	        this.emit('remove');
 	    }
-	
+
 	    //debug.log('component ' + this.constructor.name + '#' + this.id + ' remove', 'red');
 	    debug.info('remove component ' + this.constructor.name + '#' + this.id, null, {
 	        tags: ['remove', 'component', this.constructor.name, this.id]
 	    });
 	};
-	
-	
+
+
 	/**
 	 * Activate the component.
 	 * Notify the owner-page and apply CSS class.
@@ -4155,24 +4173,24 @@
 	Component.prototype.focus = function ( data ) {
 	    var activePage = app.activePage,
 	        activeItem = activePage.activeComponent;
-	
+
 	    // this is a visual component on a page
 	    // not already focused and can accept focus
 	    if ( this.focusable && this !== activeItem ) {
 	        // notify the current active component
 	        if ( activeItem ) { activeItem.blur(); }
-	
+
 	        /* eslint consistent-this: 0 */
-	
+
 	        // apply
 	        activePage.activeComponent = activeItem = this;
 	        activeItem.$node.classList.add('focus');
-	
+
 	        //debug.log('component ' + this.constructor.name + '#' + this.id + ' focus');
 	        debug.info('focus component ' + this.constructor.name + '#' + this.id, null, {
 	            tags: ['focus', 'component', this.constructor.name, this.id]
 	        });
-	
+
 	        // there are some listeners
 	        if ( activeItem.events['focus'] ) {
 	            /**
@@ -4182,15 +4200,15 @@
 	             */
 	            activeItem.emit('focus', data);
 	        }
-	
+
 	        return true;
 	    }
-	
+
 	    // nothing was done
 	    return false;
 	};
-	
-	
+
+
 	/**
 	 * Remove focus.
 	 * Change page.activeComponent and notify subscribers.
@@ -4202,19 +4220,19 @@
 	Component.prototype.blur = function () {
 	    var activePage = app.activePage,
 	        activeItem = activePage.activeComponent;
-	
+
 	    // apply visuals anyway
 	    this.$node.classList.remove('focus');
-	
+
 	    // this is the active component
 	    if ( this === activeItem ) {
 	        activePage.activeComponent = null;
-	
+
 	        //debug.log('component ' + this.constructor.name + '#' + this.id + ' blur', 'grey');
 	        debug.info('blur component ' + this.constructor.name + '#' + this.id, null, {
 	            tags: ['blur', 'component', this.constructor.name, this.id]
 	        });
-	
+
 	        // there are some listeners
 	        if ( this.events['blur'] ) {
 	            /**
@@ -4224,19 +4242,19 @@
 	             */
 	            this.emit('blur');
 	        }
-	
+
 	        return true;
 	    }
-	
+
 	    debug.warn('component ' + this.constructor.name + '#' + this.id + ' attempt to blur without link to a page', null, {
 	        tags: ['blur', 'component', this.constructor.name, this.id]
 	    });
-	
+
 	    // nothing was done
 	    return false;
 	};
-	
-	
+
+
 	/**
 	 * Make the component visible and notify subscribers.
 	 *
@@ -4253,11 +4271,11 @@
 	        this.$node.classList.remove('hidden');
 	        // flag
 	        this.visible = true;
-	
+
 	        debug.info('show component ' + this.constructor.name + '#' + this.id, null, {
 	            tags: ['show', 'component', this.constructor.name, this.id]
 	        });
-	
+
 	        // there are some listeners
 	        if ( this.events['show'] ) {
 	            /**
@@ -4267,15 +4285,15 @@
 	             */
 	            this.emit('show', data);
 	        }
-	
+
 	        return true;
 	    }
-	
+
 	    // nothing was done
 	    return true;
 	};
-	
-	
+
+
 	/**
 	 * Make the component hidden and notify subscribers.
 	 *
@@ -4290,11 +4308,11 @@
 	        this.$node.classList.add('hidden');
 	        // flag
 	        this.visible = false;
-	
+
 	        debug.info('hide component ' + this.constructor.name + '#' + this.id, null, {
 	            tags: ['hide', 'component', this.constructor.name, this.id]
 	        });
-	
+
 	        // there are some listeners
 	        if ( this.events['hide'] ) {
 	            /**
@@ -4304,18 +4322,18 @@
 	             */
 	            this.emit('hide');
 	        }
-	
+
 	        return true;
 	    }
-	
+
 	    // nothing was done
 	    return true;
 	};
-	
-	
+
+
 	// public
 	module.exports = Component;
-	
+
 	/* WEBPACK VAR INJECTION */}.call(exports, "../component/index.js"))
 
 /***/ },
@@ -4328,9 +4346,9 @@
 	/**
 	 * Main page implementation.
 	 */
-	
+
 	'use strict';
-	
+
 	var app       = __webpack_require__(/*! spa-app */ 1),
 	    Page      = __webpack_require__(/*! spa-component-page */ 19),
 	    //Button    = require('spa-component-button'),
@@ -4344,8 +4362,8 @@
 	    targets   = {},
 	    taskList, taskLogs, devConsole, tabList,
 	    tabSystem;
-	
-	
+
+
 	function addSystemTab () {
 	    // var button = new Button({
 	    //     value: 'system',
@@ -4355,19 +4373,19 @@
 	    //         }
 	    //     }
 	    // });
-	
+
 	    //window.pageMainHeader.appendChild(button.$node);
-	
+
 	    // taskList = new TaskList({
 	    //     $node: window.pageMainTaskList,
 	    //     wamp: app.wamp
 	    // });
-	
+
 	    // taskLogs = new Console({
 	    //     $node: window.pageMainTaskLogs,
 	    //     events: {}
 	    // });
-	
+
 	    tabSystem = new TabSystem({
 	        parent: page,
 	        wamp: app.wamp
@@ -4375,28 +4393,28 @@
 	    /*tabSystem = new TabItem({
 	        parent: page
 	    });*/
-	
+
 	    tabList.add({
 	        tab: tabSystem
 	    });
-	
+
 	    tabSystem.show();
 	}
-	
+
 	function addTargetTab ( data ) {
 	    // data.tab = new TabTarget({
 	    //     parent: page,
 	    //     wamp: app.wamp
 	    // });
-	
+
 	    data.tab = new TabTarget({
 	        targetId: parseInt(data.id, 10),
 	        parent: page,
 	        wamp: app.wamp
 	    });
-	
+
 	    tabList.add(data);
-	
+
 	    if ( !(data.id in targets) ) {
 	        // data.button = new Button({
 	        //     value: 'target #' + data.id,
@@ -4406,22 +4424,22 @@
 	        //         }
 	        //     }
 	        // });
-	
+
 	        //window.pageMainHeader.appendChild(data.button.$node);
 	        targets[data.id] = data;
 	    }
-	
+
 	    tabList.online(data.id, true);
 	}
-	
+
 	// function removeTargetTab ( data ) {
 	//     targets[data.id].button.remove();
 	// }
-	
-	
+
+
 	app.addListener('load', function load () {
 	    var timeout;
-	
+
 	    // var /*buttonSystem = new Button({
 	    //         //$node: window.pageMainButtonSystem,
 	    //         value: 'system',
@@ -4446,19 +4464,19 @@
 	    //         $node: window.pageMainTabConsole,
 	    //         events: {}
 	    //     });
-	
+
 	    tabList = new TabList({
 	        $node: window.pageMainTabList,
 	        wamp: app.wamp
 	    });
-	
+
 	    // devConsole = new Console({
 	    //     $node: window.pageMainTabConsole,
 	    //     events: {}
 	    // });
-	
+
 	    addSystemTab();
-	
+
 	    // window.pageMainLinkClear.addEventListener('click', function () {
 	    //     devConsole.clear();
 	    // });
@@ -4470,17 +4488,17 @@
 	    //     devConsole.excludeTags = [];
 	    //     devConsole.applyFilter();
 	    // });
-	
+
 	    /*function applyFilter () {
 	        var node        = window.pageMainTabTargetList.children,
 	            tagsInclude = window.pageMainTagsInclude.value.split(' '),
 	            tagsExclude = window.pageMainTagsExclude.value.split(' '),
 	            index, visible, item;
-	
+
 	        for ( index = node.length; index--; ) {
 	            item = node[index];
 	            visible = true;
-	
+
 	            if ( window.pageMainFilterText.value && node[index].innerText.indexOf(window.pageMainFilterText.value) === -1 ) {
 	                visible = false;
 	            } else {
@@ -4489,7 +4507,7 @@
 	                        visible = false;
 	                    }
 	                });
-	
+
 	                if ( visible ) {
 	                    tagsExclude.forEach(function ( tag ) {
 	                        if ( tag && item.tags.indexOf(tag) !== -1 ) {
@@ -4498,11 +4516,11 @@
 	                    });
 	                }
 	            }
-	
+
 	            item.style.display = visible ? 'block' : 'none';
 	        }
 	    }*/
-	
+
 	    // window.pageMainTaskFilter.onkeydown = function ( event ) {
 	    //     // Clear the timeout if it has already been set.
 	    //     // This will prevent the previous task from executing
@@ -4518,7 +4536,7 @@
 		//
 	    //     event.stopPropagation();
 	    // };
-	
+
 	    // window.pageMainFilterText.onkeydown = window.pageMainTagsInclude.onkeydown = window.pageMainTagsExclude.onkeydown = function ( event ) {
 	    //     event.stopPropagation();
 	    //     if ( event.keyCode === 13 ) {
@@ -4528,14 +4546,14 @@
 	    //         devConsole.applyFilter();
 	    //     }
 	    // };
-	
+
 	    // window.pageMainFilterText.onkeypress = window.pageMainTagsInclude.onkeypress = window.pageMainTagsExclude.onkeypress = function ( event ) {
 	    //     event.stopPropagation();
 	    // };
-	
+
 	    //app.wamp.once('connection:open', function () {
 	        // info
-	
+
 	        // app.wamp.call('getConnectionInfo', {}, function ( error, data ) {
 	        //     console.log('connection info', data);
 	        // });
@@ -4565,13 +4583,13 @@
 	        // app.wamp.call('getPlugins', {}, function ( error, data ) {
 	        //     console.log('plugins', data);
 	        // });
-	
+
 	        // notifications
-	
+
 	        //app.wamp.addListener('eventTargetOnline', function ( event ) {
 	        //    console.log('new target', event);
 	        //});
-	
+
 	        // app.wamp.addListener('eventTaskStart', function ( event ) {
 	        //     console.log('task start', event);
 	        //     window[event.id].classList.add('running');
@@ -4581,50 +4599,50 @@
 	        //     console.log('task finish', event);
 	        //     window[event.id].classList.remove('running');
 	        // });
-	
+
 	        //app.wamp.addListener('eventTargetMessage', function ( event ) {
 	            //console.log(event);
-	
+
 	            // if ( event.tags.indexOf('target') === -1 ) {
 	            //     taskLogs.add(event);
 	            // } else {
 	            //     devConsole.add(event);
 	            // }
-	
-	
+
+
 	            /*var item = document.createElement('div'),
 	                info = document.createElement('div');
-	
+
 	            item.className = 'item';
-	
+
 	            event.tags = event.tags || [];
 	            event.tags.push(event.type);
 	            event.tags.forEach(function ( tag ) {
 	                var div = document.createElement('div');
-	
+
 	                div.className = 'tag';
 	                div.innerText = tag;
-	
+
 	                item.appendChild(div);
-	
+
 	                // if ( ['info', 'warn', 'fail'].indexOf(tag) !== -1 ) {
 	                //     item.classList.add(tag);
 	                // }
-	
+
 	                div.addEventListener('click', function ( event ) {
 	                    if ( event.ctrlKey ) {
 	                        window.pageMainTagsExclude.value = window.pageMainTagsExclude.value + (window.pageMainTagsExclude.value ? ' ' : '') + tag;
 	                    } else {
 	                        window.pageMainTagsInclude.value = window.pageMainTagsInclude.value + (window.pageMainTagsInclude.value ? ' ' : '') + tag;
 	                    }
-	
+
 	                    applyFilter();
-	
+
 	                    /!*var length = window.pageMainTabTargetList.children.length,
 	                        index, node;
-	
+
 	                    console.log(tag);
-	
+
 	                    for ( index = 0; index < length; index++ ) {
 	                        node = window.pageMainTabTargetList.children[index];
 	                        //console.log(index, node);
@@ -4634,34 +4652,34 @@
 	            });
 	            item.classList.add(event.type);
 	            item.tags = event.tags;
-	
+
 	            info.className = 'info';
 	            console.log(event.data);
 	            info.innerText = getTime(event.time) + (event.data && 'link' in  event.data ? ' + ' : ' - ') +
 	                event.info /!*+ (event.data ? ' :: ' + event.data : '')*!/;
-	
+
 	            item.addEventListener('click', function () {
 	                //console.log(event.data.link);
 	                app.wamp.call('getLinkData', {targetId: 128, linkId: event.data.link}, function ( error, data ) {
 	                    console.log(error, data);
 	                });
 	            });
-	
+
 	            item.appendChild(info);
-	
+
 	            //console.log('target message', event);
-	
+
 	            window.pageMainTabTargetList.appendChild(item);
-	
+
 	            if ( window.pageMainTabTargetList.children.length >= 250 ) {
 	                window.pageMainTabTargetList.removeChild(window.pageMainTabTargetList.firstChild);
 	            }*/
 	        //});
-	
+
 	        /*app.wamp.addListener('message', function ( event ) {
 	            console.log('message', event);
 	        });*/
-	
+
 	        // app.wamp.call('getTargets', {}, function ( error, data ) {
 	        //     Object.keys(data).forEach(function ( id ) {
 	        //         var target = data[id];
@@ -4673,10 +4691,10 @@
 	        //     });
 	        // });
 	    //});
-	
+
 	    app.wamp.addListener('eventTargetOffline', function ( target ) {
 	        console.log('remove target', target);
-	
+
 	        //removeTargetTab(target);
 	        //tabList.data[target.id].$node.classList.remove('online');
 	        tabList.online(target.id, false);
@@ -4685,34 +4703,34 @@
 	            value: 'target #' + target.id + ' (' + target.host + ')'
 	        }).$node);*/
 	    });
-	
+
 	    app.wamp.addListener('eventTargetOnline', function ( target ) {
 	        console.log('new target', target);
-	
+
 	        addTargetTab(target);
-	
+
 	        //tabList.data[target.id].$node.classList.add('online');
 	        /*window.pageMainHeader.appendChild(new Button({
 	            value: 'target #' + target.id + ' (' + target.host + ')'
 	        }).$node);*/
 	    });
 	});
-	
-	
+
+
 	page.addListener('show', function load () {
 	    //taskList.init({data: app.data.tasks});
 	    tabSystem.taskList.init({data: app.data.tasks});
-	
+
 	    window.pageMainHeaderLink.href = window.pageMainHeaderLink.innerText = 'http://' + app.data.project.host + ':8080/app/develop.html?wampPort=' + app.query.wampPort;
-	
+
 	    Object.keys(app.data.targets).forEach(function ( id ) {
 	        app.data.targets[id].id = id;
 	        addTargetTab(app.data.targets[id]);
 	    });
-	
+
 	    app.wamp.addListener('eventTargetMessage', function ( event ) {
 	        console.log(event);
-	
+
 	        if ( event.tags.indexOf('target') === -1 ) {
 	            tabSystem.taskLogs.add(event);
 	        } else {
@@ -4721,13 +4739,13 @@
 	            tabList.data[event.targetId].tab.logs.add(event);
 	        }
 	    });
-	
+
 	    /*app.wamp.call('getTasks', {}, function ( error, data ) {
 	        var groups  = {},
 	            general = [];
-	
+
 	        console.log('tasks', data);
-	
+
 	        taskList = new TaskList({
 	            $node: window.pageMainTaskList,
 	            data: data,
@@ -4741,10 +4759,10 @@
 	                }*!/
 	            }
 	        });
-	
+
 	        Object.keys(data).forEach(function ( id ) {
 	            var parts = id.split(':');
-	
+
 	            if ( parts.length === 1 ) {
 	                general.push(id);
 	            } else {
@@ -4752,27 +4770,27 @@
 	                groups[parts[0]].push(id);
 	            }
 	        });
-	
+
 	        console.log(groups, general);
-	
+
 	        Object.keys(groups).forEach(function ( group ) {
 	            var divGroup = document.createElement('div'),
 	                divTitle = document.createElement('div'),
 	                divTasks = document.createElement('div');
-	
+
 	            divTitle.innerText = group;
 	            divGroup.className = 'group';
 	            divTitle.className = 'title';
 	            divTasks.className = 'tasks';
-	
+
 	            window.pageMainTabSystem.appendChild(divGroup);
 	            divGroup.appendChild(divTitle);
 	            divGroup.appendChild(divTasks);
-	
+
 	            groups[group].sort().forEach(function ( id ) {
 	                var divTask = document.createElement('div'),
 	                    parts   = id.split(':');
-	
+
 	                divTask.id = id;
 	                divTask.innerText = parts.slice(1).join(':');
 	                divTask.className =
@@ -4786,28 +4804,28 @@
 	                        //console.log('run task', div.innerText, data);
 	                    });
 	                });
-	
+
 	                divTasks.appendChild(divTask);
 	            });
 	        });
-	
+
 	        ['general'].forEach(function ( group ) {
 	            var divGroup = document.createElement('div'),
 	                divTitle = document.createElement('div'),
 	                divTasks = document.createElement('div');
-	
+
 	            divTitle.innerText = group;
 	            divGroup.className = 'group';
 	            divTitle.className = 'title';
 	            divTasks.className = 'tasks';
-	
+
 	            window.pageMainTabSystem.appendChild(divGroup);
 	            divGroup.appendChild(divTitle);
 	            divGroup.appendChild(divTasks);
-	
+
 	            general.sort().forEach(function ( id ) {
 	                var divTask = document.createElement('div');
-	
+
 	                divTask.id = id;
 	                divTask.innerText = id;
 	                divTask.className = 'button' + (data[id].running ? ' running' : '');
@@ -4816,14 +4834,14 @@
 	                        //console.log('run task', div.innerText, data);
 	                    });
 	                });
-	
+
 	                divTasks.appendChild(divTask);
 	            });
 	        });
 	    });*/
 	});
-	
-	
+
+
 	// public
 	module.exports = page;
 
@@ -4839,14 +4857,14 @@
 	 * @license The MIT License (MIT)
 	 * @copyright Stanislav Kalashnik <darkpark.main@gmail.com>
 	 */
-	
+
 	/* eslint no-path-concat: 0 */
-	
+
 	'use strict';
-	
+
 	var Component = __webpack_require__(/*! spa-component */ 20);
-	
-	
+
+
 	/**
 	 * Tab item implementation.
 	 * This component has redefined methods 'show' and 'hide', use them to switch between tabs.
@@ -4881,33 +4899,37 @@
 	function TabItem ( config ) {
 	    // sanitize
 	    config = config || {};
-	
-	    if ( true ) {
-	        if ( typeof config !== 'object' ) { throw new Error(__filename + ': wrong config type'); }
-	        if ( config.className && typeof config.className !== 'string' ) { throw new Error(__filename + ': wrong or empty config.className'); }
-	    }
-	
+
+        if ( true ) {
+            if ( typeof config !== 'object' ) {
+                throw new Error(__filename + ': wrong config type');
+            }
+            if ( 'className' in config && (!config.className || typeof config.className !== 'string') ) {
+                throw new Error(__filename + ': wrong or empty config.className');
+            }
+        }
+
 	    // can't accept focus
 	    config.focusable = config.focusable || false;
-	
+
 	    // set default className if classList property empty or undefined
 	    config.className = 'tabItem hidden ' + (config.className || '');
-	
+
 	    // prevent parent hiding
 	    config.visible = null;
-	
+
 	    // parent constructor call
 	    Component.call(this, config);
-	
+
 	    this.visible = false;
 	}
-	
-	
+
+
 	// inheritance
 	TabItem.prototype = Object.create(Component.prototype);
 	TabItem.prototype.constructor = TabItem;
-	
-	
+
+
 	/**
 	 * Make the tab visible, i.e. set active tab, and notify subscribers.
 	 * Hide previous visible tab if exists.
@@ -4920,13 +4942,13 @@
 	 */
 	TabItem.prototype.show = function ( data ) {
 	    var prev = null;
-	
+
 	    if ( true ) {
 	        if ( !this.parent ) { throw new Error(__filename + ': no parent for tab item'); }
 	        //if ( this.parent.constructor.name !== 'TabList' ) { throw new Error(__filename + ': wrong parent for tab item'); }
 	        if ( this.parent.currentTabItem && !(this.parent.currentTabItem instanceof TabItem) ) { throw new Error(__filename + ': wrong current tab item type'); }
 	    }
-	
+
 	    // is it hidden
 	    if ( !this.visible ) {
 	        // hide previous tab
@@ -4934,23 +4956,23 @@
 	            prev = this.parent.currentTabItem;
 	            prev.hide(data);
 	        }
-	
+
 	        Component.prototype.show.call(this, data);
 	        this.parent.currentTabItem = this;
-	
+
 	        /*// there are some listeners
 	         if ( this.parent.events['switch'] ) {
 	         this.parent.emit('switch', {prev: prev, curr: this});
 	         }*/
-	
+
 	        return true;
 	    }
-	
+
 	    // nothing was done
 	    return true;
 	};
-	
-	
+
+
 	/**
 	 * Make the tab hidden and notify subscribers.
 	 *
@@ -4964,21 +4986,21 @@
 	        //if ( this.parent.constructor.name !== 'TabList' ) { throw new Error(__filename + ': wrong parent for tab item'); }
 	        if ( this.parent.currentTabItem && !(this.parent.currentTabItem instanceof TabItem) ) { throw new Error(__filename + ': wrong current tab item type'); }
 	    }
-	
+
 	    if ( Component.prototype.hide.call(this) ) {
 	        this.parent.currentTabItem = null;
-	
+
 	        return true;
 	    }
-	
+
 	    // nothing was done
 	    return true;
 	};
-	
-	
+
+
 	// public
 	module.exports = TabItem;
-	
+
 	/* WEBPACK VAR INJECTION */}.call(exports, "../component-tab-item/index.js"))
 
 /***/ },
@@ -4992,14 +5014,14 @@
 	 * @author Stanislav Kalashnik <darkpark.main@gmail.com>
 	 * @license GNU GENERAL PUBLIC LICENSE Version 3
 	 */
-	
+
 	/* eslint no-path-concat: 0 */
-	
+
 	'use strict';
-	
+
 	var Component = __webpack_require__(/*! spa-component */ 20);
-	
-	
+
+
 	/**
 	 * Development console implementation.
 	 *
@@ -5019,149 +5041,155 @@
 	function Console ( config ) {
 	    var self = this,
 	        timeout;
-	
+
 	    // sanitize
 	    config = config || {};
-	
+
 	    console.assert(typeof this === 'object', 'must be constructed via new');
-	
+
 	    if ( true ) {
-	        if ( typeof config !== 'object' ) { throw new Error(__filename + ': wrong config type'); }
-	        // init parameters checks
-	        if ( config.className && typeof config.className !== 'string' ) { throw new Error(__filename + ': wrong or empty config.className'); }
-	        if ( config.type      && Number(config.type) !== config.type  ) { throw new Error(__filename + ': config.type must be a number'); }
+            if ( typeof config !== 'object' ) {
+                throw new Error(__filename + ': wrong config type');
+            }
+            // init parameters checks
+            if ( 'className' in config && (!config.className || typeof config.className !== 'string') ) {
+                throw new Error(__filename + ': wrong or empty config.className');
+            }
+            if ( config.type && Number(config.type) !== config.type ) {
+                throw new Error(__filename + ': config.type must be a number');
+            }
 	    }
-	
+
 	    // set default className if classList property empty or undefined
 	    config.className = 'console ' + (config.className || '');
-	
+
 	    // parent constructor call
 	    Component.call(this, config);
-	
+
 	    this.$logsInclude = config.$logsInclude;
 	    this.$tagsInclude = config.$tagsInclude;
 	    this.$tagsExclude = config.$tagsExclude;
-	
+
 	    config.$logsInclude.onkeydown = config.$tagsInclude.onkeydown = config.$tagsExclude.onkeydown = function ( event ) {
 	        clearTimeout(timeout);
-	
+
 	        timeout = setTimeout(function () {
 	            self.filterText  = config.$logsInclude.value;
 	            self.includeTags = config.$tagsInclude.value.split(' ');
 	            self.excludeTags = config.$tagsExclude.value.split(' ');
 	            self.applyFilter();
 	        }, 300);
-	
+
 	        event.stopPropagation();
 	    };
-	
+
 	    this.filterText = '';
 	    this.includeTags = [];
 	    this.excludeTags = [];
 	}
-	
-	
+
+
 	function getTime ( timestamp ) {
 	    var date   = new Date(timestamp),
 	        hPart  = date.getHours(),
 	        mPart  = date.getMinutes(),
 	        msPart = date.getMilliseconds();
-	
+
 	    if ( msPart === 0 ) { msPart = '000'; }
 	    else if ( msPart < 10  ) { msPart = '00' + msPart; }
 	    else if ( msPart < 100 ) { msPart = '0'  + msPart; }
-	
+
 	    return (hPart > 9 ? '' : '0') + hPart + ':' + (mPart > 9 ? '' : '0') + mPart + '.' + msPart;
 	}
-	
-	
+
+
 	// inheritance
 	Console.prototype = Object.create(Component.prototype);
 	Console.prototype.constructor = Console;
-	
-	
+
+
 	/**
 	 * List of all default event callbacks.
 	 *
 	 * @type {Object.<string, function>}
 	 */
 	Console.prototype.defaultEvents = {
-	
+
 	};
-	
-	
+
+
 	Console.prototype.matchFilter = function ( node ) {
 	    var length, tag;
-	
+
 	    if ( this.filterText && node.innerText.indexOf(this.filterText) === -1 ) {
 	        return false;
 	    }
-	
+
 	    // prepare
 	    length = this.includeTags.length;
 	    // check
 	    while ( length-- ) {
 	        tag = this.includeTags[length];
-	
+
 	        if ( tag && node.tags.indexOf(tag) === -1 ) {
 	            return false;
 	        }
 	    }
-	
+
 	    // prepare
 	    length = this.excludeTags.length;
 	    // check
 	    while ( length-- ) {
 	        tag = this.excludeTags[length];
-	
+
 	        if ( tag && node.tags.indexOf(tag) !== -1 ) {
 	            return false;
 	        }
 	    }
-	
+
 	    return true;
 	};
-	
-	
+
+
 	Console.prototype.applyFilter = function () {
 	    var nodes = this.$body.children,
 	        length, item;
-	
+
 	    // prepare
 	    length = nodes.length;
 	    // check
 	    while ( length-- ) {
 	        item = nodes[length];
-	
+
 	        item.style.display = this.matchFilter(item) ? 'block' : 'none';
 	    }
 	};
-	
-	
+
+
 	Console.prototype.add = function ( data ) {
 	    var self = this,
 	        item = document.createElement('div'),
 	        time = document.createElement('div'),
 	        info = document.createElement('div');
-	
+
 	    item.className = 'item';
-	
+
 	    data.time = data.time || Date.now();
 	    data.tags = data.tags || [];
 	    data.type = data.type || 'info';
 	    data.tags.push(data.type);
 	    data.tags.forEach(function ( tag ) {
 	        var div = document.createElement('div');
-	
+
 	        div.className = 'tag';
 	        div.innerText = tag;
-	
+
 	        item.appendChild(div);
-	
+
 	        // if ( ['info', 'warn', 'fail'].indexOf(tag) !== -1 ) {
 	        //     item.classList.add(tag);
 	        // }
-	
+
 	        div.addEventListener('click', function ( event ) {
 	            if ( event.ctrlKey ) {
 	                self.excludeTags.push(tag);
@@ -5170,16 +5198,16 @@
 	                self.includeTags.push(tag);
 	                self.$tagsInclude.value = self.$tagsInclude.value + (self.$tagsInclude.value ? ' ' : '') + tag;
 	            }
-	
+
 	            self.applyFilter();
-	
+
 	            event.stopPropagation();
-	
+
 	            /*var length = window.pageMainTabTargetList.children.length,
 	             index, node;
-	
+
 	             console.log(tag);
-	
+
 	             for ( index = 0; index < length; index++ ) {
 	             node = window.pageMainTabTargetList.children[index];
 	             //console.log(index, node);
@@ -5189,73 +5217,73 @@
 	    });
 	    item.classList.add(data.type);
 	    item.tags = data.tags;
-	
+
 	    time.className = 'time';
 	    info.className = 'info';
-	
+
 	    //console.log(data.data);
 	    // data.data can be a string which can give:
 	    // Uncaught TypeError: Cannot use 'in' operator to search for 'link' in ENOENT: no such file or directory, unlink 'app/css/develop.css'
 	    /*if ( data.data && 'link' in data.data ) {
 	        item.classList.add('data');
 	    }*/
-	
+
 	    time.innerText = getTime(data.time);
-	
+
 	    info.innerText = /*(data.data && 'link' in  data.data ? '+ ' : '- ') + getTime(data.time) + ' :: ' +*/ data.info /*+ (data.data ? ' :: ' + data.data : '')*/;
-	
+
 	    item.addEventListener('click', function () {
 	        //console.log(data.data.link);
 	        app.wamp.call('getLinkData', {targetId: 128, linkId: data.data.link}, function ( error, data ) {
 	            console.log(error, data);
 	        });
 	    });
-	
+
 	    item.appendChild(time);
 	    item.appendChild(info);
-	
+
 	    //console.log('target message', data);
-	
+
 	    if ( !this.matchFilter(item) ) {
 	        item.style.display = 'none';
 	    }
-	
+
 	    //this.$node.insertBefore(item, this.$input);
 	    this.$body.appendChild(item);
-	
+
 	    if ( this.$body.children.length >= 250 ) {
 	        this.$body.removeChild(this.$body.firstChild);
 	    }
-	
+
 	    this.$body.scrollTop = this.$body.scrollHeight;
 	};
-	
-	
+
+
 	Console.prototype.clear = function () {
 	    var body = this.$body;
-	
+
 	    while ( body.lastChild ) {
 	        body.removeChild(body.lastChild);
 	    }
 	};
-	
-	
+
+
 	Console.prototype.resetFilters = function () {
 	    this.$logsInclude.value = '';
 	    this.$tagsInclude.value = '';
 	    this.$tagsExclude.value = '';
-	
+
 	    this.filterText  = '';
 	    this.includeTags = [];
 	    this.excludeTags = [];
-	
+
 	    this.applyFilter();
 	};
-	
-	
+
+
 	// public
 	module.exports = Console;
-	
+
 	/* WEBPACK VAR INJECTION */}.call(exports, "src/js/modules/console.js"))
 
 /***/ },
@@ -5269,14 +5297,14 @@
 	 * @author Stanislav Kalashnik <darkpark.main@gmail.com>
 	 * @license GNU GENERAL PUBLIC LICENSE Version 3
 	 */
-	
+
 	/* eslint no-path-concat: 0 */
-	
+
 	'use strict';
-	
+
 	var Component = __webpack_require__(/*! spa-component */ 20);
-	
-	
+
+
 	/**
 	 * Development task list implementation.
 	 *
@@ -5290,31 +5318,37 @@
 	function TaskList ( config ) {
 	    // current execution context
 	    var self = this;
-	
+
 	    // sanitize
 	    config = config || {};
-	
+
 	    console.assert(typeof this === 'object', 'must be constructed via new');
-	
+
 	    if ( true ) {
-	        if ( typeof config !== 'object' ) { throw new Error(__filename + ': wrong config type'); }
-	        // init parameters checks
-	        if ( config.className && typeof config.className !== 'string' ) { throw new Error(__filename + ': wrong or empty config.className'); }
-	        if ( !config.wamp ) { throw new Error(__filename + ': config.wamp must be given'); }
+            if ( typeof config !== 'object' ) {
+                throw new Error(__filename + ': wrong config type');
+            }
+            // init parameters checks
+            if ( 'className' in config && (!config.className || typeof config.className !== 'string') ) {
+                throw new Error(__filename + ': wrong or empty config.className');
+            }
+            if ( !config.wamp ) {
+                throw new Error(__filename + ': config.wamp must be given');
+            }
 	    }
-	
+
 	    // set default className if classList property empty or undefined
 	    config.className = 'taskList ' + (config.className || '');
-	
+
 	    // parent constructor call
 	    Component.call(this, config);
-	
+
 	    this.filterText = '';
 	    this.wamp = config.wamp;
-	
+
 	    // component setup
 	    this.init(config);
-	
+
 	    // forward click to the specific item
 	    this.addListener('click', function ( event ) {
 	        // there are some listeners
@@ -5322,20 +5356,20 @@
 	            // notify listeners
 	            self.emit('click:item', {$item: event.target});
 	        }*/
-	
+
 	        //console.log(event.$item);
 	        self.wamp.call('runTask', {id: event.target.taskId}, function ( error, data ) {
 	            console.log('run task', error, data);
 	        });
 	    });
-	
+
 	    this.wamp.addListener('eventTaskStart', function ( event ) {
 	        console.log('task start', event);
 	        //window[event.id].classList.add('running');
 	        console.log(self);
 	        self.data[event.id].$node.classList.add('running');
 	    });
-	
+
 	    this.wamp.addListener('eventTaskFinish', function ( event ) {
 	        console.log('task finish', event);
 	        //window[event.id].classList.remove('running');
@@ -5343,23 +5377,23 @@
 	        self.data[event.id].$node.classList.add('ok');
 	    });
 	}
-	
-	
+
+
 	// inheritance
 	TaskList.prototype = Object.create(Component.prototype);
 	TaskList.prototype.constructor = TaskList;
-	
-	
+
+
 	/**
 	 * List of all default event callbacks.
 	 *
 	 * @type {Object.<string, function>}
 	 */
 	TaskList.prototype.defaultEvents = {
-	
+
 	};
-	
-	
+
+
 	/**
 	 * Init or re-init of the component inner structures and HTML.
 	 *
@@ -5367,71 +5401,71 @@
 	 */
 	TaskList.prototype.init = function ( config ) {
 	    var self = this;
-	
+
 	    if ( true ) {
 	        if ( arguments.length !== 1 ) { throw new Error(__filename + ': wrong arguments number'); }
 	        if ( typeof config !== 'object' ) { throw new Error(__filename + ': wrong config type'); }
 	    }
-	
+
 	    // save
 	    this.data = config.data || {};
-	
+
 	    // apply
 	    Object.keys(this.data).forEach(function ( id ) {
 	        var item = document.createElement('div'),
 	            data = self.data[id];
-	
+
 	        item.innerText = item.taskId = id;
 	        item.className = 'item' + (data.running ? ' running' : '');
-	
+
 	        data.$node = item;
-	
+
 	        self.$node.appendChild(item);
 	    });
 	};
-	
-	
+
+
 	TaskList.prototype.matchFilter = function ( node ) {
 	    return !(this.filterText && node.innerText.indexOf(this.filterText) === -1);
 	};
-	
-	
+
+
 	TaskList.prototype.applyFilter = function () {
 	    var nodes = this.$body.children,
 	        length, item;
-	
+
 	    // prepare
 	    length = nodes.length;
 	    // check
 	    while ( length-- ) {
 	        item = nodes[length];
-	
+
 	        item.style.display = this.matchFilter(item) ? 'block' : 'none';
 	    }
 	};
-	
-	
+
+
 	TaskList.prototype.add = function ( data ) {
 	    var self = this,
 	        item = document.createElement('div'),
 	        info = document.createElement('div');
-	
+
 	    item.className = 'item';
-	
+
 	    data.tags = data.tags || [];
 	    data.tags.push(data.type);
 	    data.tags.forEach(function ( tag ) {
 	        var div = document.createElement('div');
-	
+
 	        div.className = 'tag';
 	        div.innerText = tag;
-	
+
 	        item.appendChild(div);
-	
+
 	        // if ( ['info', 'warn', 'fail'].indexOf(tag) !== -1 ) {
 	        //     item.classList.add(tag);
 	        // }
-	
+
 	        div.addEventListener('click', function ( event ) {
 	            if ( event.ctrlKey ) {
 	                self.excludeTags.push(tag);
@@ -5440,14 +5474,14 @@
 	                self.includeTags.push(tag);
 	                window.pageMainTagsInclude.value = window.pageMainTagsInclude.value + (window.pageMainTagsInclude.value ? ' ' : '') + tag;
 	            }
-	
+
 	            self.applyFilter();
-	
+
 	            /*var length = window.pageMainTabTargetList.children.length,
 	             index, node;
-	
+
 	             console.log(tag);
-	
+
 	             for ( index = 0; index < length; index++ ) {
 	             node = window.pageMainTabTargetList.children[index];
 	             //console.log(index, node);
@@ -5457,33 +5491,33 @@
 	    });
 	    item.classList.add(data.type);
 	    item.tags = data.tags;
-	
+
 	    info.className = 'info';
 	    console.log(data.data);
 	    info.innerText = (data.data && 'link' in  data.data ? '+ ' : '- ') + getTime(data.time) + ' :: ' + data.info /*+ (data.data ? ' :: ' + data.data : '')*/;
-	
+
 	    item.addEventListener('click', function () {
 	        //console.log(data.data.link);
 	        app.wamp.call('getLinkData', {targetId: 128, linkId: data.data.link}, function ( error, data ) {
 	            console.log(error, data);
 	        });
 	    });
-	
+
 	    item.appendChild(info);
-	
+
 	    //console.log('target message', data);
-	
+
 	    if ( !this.matchFilter(item) ) {
 	        item.style.display = 'none';
 	    }
-	
+
 	    this.$body.appendChild(item);
 	};
-	
-	
+
+
 	// public
 	module.exports = TaskList;
-	
+
 	/* WEBPACK VAR INJECTION */}.call(exports, "src/js/modules/task.list.js"))
 
 /***/ },
@@ -5497,14 +5531,14 @@
 	 * @author Stanislav Kalashnik <darkpark.main@gmail.com>
 	 * @license GNU GENERAL PUBLIC LICENSE Version 3
 	 */
-	
+
 	/* eslint no-path-concat: 0 */
-	
+
 	'use strict';
-	
+
 	var Component = __webpack_require__(/*! spa-component */ 20);
-	
-	
+
+
 	/**
 	 * Development task list implementation.
 	 *
@@ -5518,46 +5552,52 @@
 	function TabList ( config ) {
 	    // current execution context
 	    var self = this;
-	
+
 	    // sanitize
 	    config = config || {};
-	
+
 	    console.assert(typeof this === 'object', 'must be constructed via new');
-	
+
 	    if ( true ) {
-	        if ( typeof config !== 'object' ) { throw new Error(__filename + ': wrong config type'); }
-	        // init parameters checks
-	        if ( config.className && typeof config.className !== 'string' ) { throw new Error(__filename + ': wrong or empty config.className'); }
-	        if ( !config.wamp ) { throw new Error(__filename + ': config.wamp must be given'); }
+            if ( typeof config !== 'object' ) {
+                throw new Error(__filename + ': wrong config type');
+            }
+            // init parameters checks
+            if ( 'className' in config && (!config.className || typeof config.className !== 'string') ) {
+                throw new Error(__filename + ': wrong or empty config.className');
+            }
+            if ( !config.wamp ) {
+                throw new Error(__filename + ': config.wamp must be given');
+            }
 	    }
-	
+
 	    // set default className if classList property empty or undefined
 	    config.className = 'tabList ' + (config.className || '');
-	
+
 	    // parent constructor call
 	    Component.call(this, config);
-	
+
 	    //this.filterText = '';
 	    this.wamp = config.wamp;
-	
+
 	    this.data = {};
-	
+
 	    this.$focus = null;
-	
+
 	    // component setup
 	    //this.init(config);
-	
+
 	    // forward click to the specific item
 	    this.addListener('click', function ( event ) {
 	        var data = self.data[event.target.tabId];
-	
+
 	        // there are some listeners
 	        /*if ( self.events['click:item'] ) {
 	            // notify listeners
 	            self.emit('click:item', {$item: event.target});
 	        }*/
 	        //console.log(event);
-	
+
 	        if ( event.button === 0 ) {
 	            // left mouse button
 	            /*self.wamp.call('runTask', {id: event.target.taskId}, function ( error, data ) {
@@ -5577,7 +5617,7 @@
 	            }
 	        }
 	    });
-	
+
 	    // this.wamp.addListener('eventTargetOnline', function ( target ) {
 	    //     //self.data[target.id].$node.classList.add('active');
 	    // });
@@ -5585,26 +5625,26 @@
 	    // this.wamp.addListener('eventTargetOffline', function ( target ) {
 	    //     //self.data[target.id].$node.classList.remove('active');
 	    // });
-	
+
 	    /*this.wamp.addListener('eventTaskStart', function ( event ) {
 	        console.log('task start', event);
 	        //window[event.id].classList.add('running');
 	        self.data[event.id].$node.classList.add('running');
 	    });
-	
+
 	    this.wamp.addListener('eventTaskFinish', function ( event ) {
 	        console.log('task finish', event);
 	        //window[event.id].classList.remove('running');
 	        self.data[event.id].$node.classList.remove('running');
 	    });*/
 	}
-	
-	
+
+
 	// inheritance
 	TabList.prototype = Object.create(Component.prototype);
 	TabList.prototype.constructor = TabList;
-	
-	
+
+
 	/**
 	 * List of all default event callbacks.
 	 *
@@ -5613,8 +5653,8 @@
 	// TabList.prototype.defaultEvents = {
 	//
 	// };
-	
-	
+
+
 	/**
 	 * Init or re-init of the component inner structures and HTML.
 	 *
@@ -5622,35 +5662,35 @@
 	 */
 	/*TabList.prototype.init = function ( config ) {
 	    var self = this;
-	
+
 	    if ( DEVELOP ) {
 	        if ( arguments.length !== 1 ) { throw new Error(__filename + ': wrong arguments number'); }
 	        if ( typeof config !== 'object' ) { throw new Error(__filename + ': wrong config type'); }
 	    }
-	
+
 	    // save
 	    this.data = config.data || {};
-	
+
 	    // apply
 	    Object.keys(this.data).forEach(function ( id ) {
 	        var item = document.createElement('div'),
 	            data = self.data[id];
-	
+
 	        item.innerText = item.taskId = id;
 	        item.className = 'item' + (data.running ? ' running' : '');
-	
+
 	        data.$node = item;
-	
+
 	        self.$node.appendChild(item);
 	    });
 	};*/
-	
-	
+
+
 	// TabList.prototype.matchFilter = function ( node ) {
 	//     return !(this.filterText && node.innerText.indexOf(this.filterText) === -1);
 	// };
-	
-	
+
+
 	// TabList.prototype.applyFilter = function () {
 	//     var nodes = this.$body.children,
 	//         length, item;
@@ -5664,14 +5704,14 @@
 	//         item.style.display = this.matchFilter(item) ? 'block' : 'none';
 	//     }
 	// };
-	
-	
+
+
 	TabList.prototype.online = function ( id, state ) {
 	    var data = this.data[id];
-	
+
 	    if ( data ) {
 	        data.online = state;
-	
+
 	        if ( state ) {
 	            data.$node.classList.add('online');
 	        } else {
@@ -5679,20 +5719,20 @@
 	        }
 	    }
 	};
-	
-	
+
+
 	TabList.prototype.add = function ( data ) {
 	    var //self = this,
 	        item;
 	        //info = document.createElement('div');
-	
+
 	    data = data || {};
-	
+
 	    if ( !(data.id in this.data) ) {
 	        item = document.createElement('div');
 	        item.className = 'item online';
 	        item.tabId = data.id;
-	
+
 	        if ( data.id ) {
 	            // target
 	            //item.innerText = 'target #' + data.id;
@@ -5705,15 +5745,15 @@
 	            item.className += ' active';
 	            this.$focus = item;
 	        }
-	
+
 	        data.$node  = item;
 	        data.online = true;
 	        this.data[data.id] = data;
-	
+
 	        this.$body.appendChild(item);
 	    }
-	
-	
+
+
 	    // data.tags = data.tags || [];
 	    // data.tags.push(data.type);
 	    // data.tags.forEach(function ( tag ) {
@@ -5751,47 +5791,47 @@
 	    //          }*/
 	    //     });
 	    // });
-	
+
 	    //item.classList.add(data.type);
 	    //item.tags = data.tags;
-	
+
 	    // info.className = 'info';
 	    // console.log(data.data);
 	    // info.innerText = (data.data && 'link' in  data.data ? '+ ' : '- ') + getTime(data.time) + ' :: ' + data.info /*+ (data.data ? ' :: ' + data.data : '')*/;
-	
+
 	    // item.addEventListener('click', function () {
 	    //     //console.log(data.data.link);
 	    //     app.wamp.call('getLinkData', {targetId: 128, linkId: data.data.link}, function ( error, data ) {
 	    //         console.log(error, data);
 	    //     });
 	    // });
-	
+
 	    //item.appendChild(info);
-	
+
 	    //console.log('target message', data);
-	
+
 	    // if ( !this.matchFilter(item) ) {
 	    //     item.style.display = 'none';
 	    // }
-	
-	
+
+
 	};
-	
-	
+
+
 	TabList.prototype.close = function ( id ) {
 	    var data = this.data[id];
-	
+
 	    if ( data ) {
 	        data.$node.parentNode.removeChild(data.$node);
 	        data.tab.remove();
 	        delete this.data[id];
 	    }
 	};
-	
-	
+
+
 	// public
 	module.exports = TabList;
-	
+
 	/* WEBPACK VAR INJECTION */}.call(exports, "src/js/modules/tab.list.js"))
 
 /***/ },
@@ -5805,17 +5845,17 @@
 	 * @author Stanislav Kalashnik <darkpark.main@gmail.com>
 	 * @license GNU GENERAL PUBLIC LICENSE Version 3
 	 */
-	
+
 	/* eslint no-path-concat: 0 */
-	
+
 	'use strict';
-	
+
 	var Button   = __webpack_require__(/*! spa-component-button */ 27),
 	    TabItem  = __webpack_require__(/*! spa-component-tab-item */ 22),
 	    TaskList = __webpack_require__(/*! ./../modules/task.list */ 24),
 	    Console  = __webpack_require__(/*! ./../modules/console */ 23);
-	
-	
+
+
 	/**
 	 * System tab.
 	 *
@@ -5834,47 +5874,47 @@
 	        $tagsExclude = document.createElement('input'),
 	        $taskExec    = document.createElement('input'),
 	        timeout, button;
-	
+
 	    // sanitize
 	    config = config || {};
-	
+
 	    // set default className if classList property empty or undefined
 	    config.className = 'tabSystem ' + (config.className || '');
-	
+
 	    //config.$node = table;
-	
+
 	    // parent constructor call
 	    TabItem.call(this, config);
-	
+
 	    this.wamp = config.wamp;
-	
+
 	    $taskFilter.type = 'text';
 	    $taskFilter.placeholder = 'filter tasks by name';
 	    this.$taskListFilters = document.createElement('div');
 	    this.$taskListFilters.className = 'taskListFilters';
 	    this.$taskListFilters.appendChild($taskFilter);
 	    this.$body.appendChild(this.$taskListFilters);
-	
+
 	    this.taskList = new TaskList({
 	        parent: this,
 	        wamp: this.wamp
 	    });
-	
+
 	    $taskFilter.onkeydown = function ( event ) {
 	        clearTimeout(timeout);
-	
+
 	        timeout = setTimeout(function () {
 	            self.taskList.filterText = $taskFilter.value;
 	            self.taskList.applyFilter();
 	        }, 300);
-	
+
 	        event.stopPropagation();
 	    };
-	
+
 	    this.$taskLogsFilters = document.createElement('div');
 	    this.$taskLogsFilters.className = 'taskLogsFilters';
 	    this.$body.appendChild(this.$taskLogsFilters);
-	
+
 	    button = new Button({
 	        className: 'side',
 	        events: {
@@ -5884,7 +5924,7 @@
 	        }
 	    });
 	    this.$taskLogsFilters.appendChild(button.$node);
-	
+
 	    button = new Button({
 	        className: 'clear',
 	        events: {
@@ -5894,7 +5934,7 @@
 	        }
 	    });
 	    this.$taskLogsFilters.appendChild(button.$node);
-	
+
 	    button = new Button({
 	        className: 'reset',
 	        events: {
@@ -5912,22 +5952,22 @@
 	        }
 	    });
 	    this.$taskLogsFilters.appendChild(button.$node);
-	
+
 	    $logsInclude.type = 'text';
 	    $logsInclude.placeholder = 'filter text';
 	    $logsInclude.className = 'logsInclude';
 	    this.$taskLogsFilters.appendChild($logsInclude);
-	
+
 	    $tagsInclude.type = 'text';
 	    $tagsInclude.placeholder = 'enter include tags';
 	    $tagsInclude.className = 'tagsInclude';
 	    this.$taskLogsFilters.appendChild($tagsInclude);
-	
+
 	    $tagsExclude.type = 'text';
 	    $tagsExclude.placeholder = 'enter exclude tags';
 	    $tagsExclude.className = 'tagsExclude';
 	    this.$taskLogsFilters.appendChild($tagsExclude);
-	
+
 	    // $logsInclude.onkeydown = $tagsInclude.onkeydown = $tagsExclude.onkeydown = function ( event ) {
 	    //     clearTimeout(timeout);
 		//
@@ -5940,7 +5980,7 @@
 		//
 	    //     event.stopPropagation();
 	    // };
-	
+
 	    this.taskLogs = new Console({
 	        parent: this,
 	        wamp: this.wamp,
@@ -5948,7 +5988,7 @@
 	        $tagsInclude: $tagsInclude,
 	        $tagsExclude: $tagsExclude
 	    });
-	
+
 	    $taskExec.type = 'text';
 	    $taskExec.placeholder = 'type task name to execute';
 	    $taskExec.onkeydown = function ( event ) {
@@ -5956,7 +5996,7 @@
 	            self.wamp.call('runTask', {id: $taskExec.value}, function ( error, data ) {
 	                console.log('run task', error, data);
 	            });
-	            
+
 	            // prepare for a new run
 	            $taskExec.value = '';
 	        }
@@ -5966,13 +6006,13 @@
 	    this.taskExec.appendChild($taskExec);
 	    this.$body.appendChild(this.taskExec);
 	}
-	
-	
+
+
 	// inheritance
 	TabSystem.prototype = Object.create(TabItem.prototype);
 	TabSystem.prototype.constructor = TabSystem;
-	
-	
+
+
 	// public
 	module.exports = TabSystem;
 
@@ -5988,14 +6028,14 @@
 	 * @license The MIT License (MIT)
 	 * @copyright Stanislav Kalashnik <darkpark.main@gmail.com>
 	 */
-	
+
 	/* eslint no-path-concat: 0 */
-	
+
 	'use strict';
-	
+
 	var Component = __webpack_require__(/*! spa-component */ 20);
-	
-	
+
+
 	/**
 	 * Base button implementation.
 	 *
@@ -6032,55 +6072,63 @@
 	function Button ( config ) {
 	    // current execution context
 	    //var self = this;
-	
+
 	    // sanitize
 	    config = config || {};
-	
+
 	    console.assert(typeof this === 'object', 'must be constructed via new');
-	    
+
 	    if ( true ) {
-	        if ( typeof config !== 'object' ) { throw new Error(__filename + ': wrong config type'); }
-	        // init parameters checks
-	        if ( config.className && typeof config.className !== 'string' ) { throw new Error(__filename + ': wrong or empty config.className'); }
-	        if ( config.icon      && typeof config.icon      !== 'string' ) { throw new Error(__filename + ': wrong or empty config.icon'); }
-	        if ( config.value     && typeof config.value     !== 'string' ) { throw new Error(__filename + ': wrong or empty config.value'); }
+            if ( typeof config !== 'object' ) {
+                throw new Error(__filename + ': wrong config type');
+            }
+            // init parameters checks
+            if ( 'className' in config && (!config.className || typeof config.className !== 'string') ) {
+                throw new Error(__filename + ': wrong or empty config.className');
+            }
+            if ( config.icon && typeof config.icon !== 'string' ) {
+                throw new Error(__filename + ': wrong or empty config.icon');
+            }
+            if ( config.value && typeof config.value !== 'string' ) {
+                throw new Error(__filename + ': wrong or empty config.value');
+            }
 	    }
-	
+
 	    config.name = 'spa-component-button' + (config.className || '');
-	    
+
 	    // set default className if classList property empty or undefined
 	    config.className = 'button ' + (config.className || '');
-	
+
 	    // parent constructor call
 	    Component.call(this, config);
-	
+
 	    // optional dom
 	    if ( config.icon ) {
 	        // insert icon
 	        this.$icon = this.$body.appendChild(document.createElement('div'));
 	        this.$icon.className = 'icon ' + config.icon;
 	    }
-	
+
 	    // insert caption placeholder
 	    this.$text = this.$body.appendChild(document.createElement('div'));
 	    this.$text.classList.add('text');
-	
+
 	    if ( config.value ) {
 	        // fill it
 	        this.$text.innerText = config.value;
 	    }
 	}
-	
-	
+
+
 	// inheritance
 	Button.prototype = Object.create(Component.prototype);
 	Button.prototype.constructor = Button;
-	
-	
+
+
 	// time to apply "click" class, does not apply if 0
 	Button.prototype.clickDuration = 200;
-	
-	
+
+
 	/**
 	 * List of all default event callbacks.
 	 *
@@ -6093,14 +6141,14 @@
 	    click: function () {
 	        // current execution context
 	        var self = this;
-	
+
 	        this.$node.classList.add('click');
-	
+
 	        setTimeout(function () {
 	            self.$node.classList.remove('click');
 	        }, this.clickDuration);
 	    },
-	
+
 	    /**
 	     * Default method to handle keyboard keydown events.
 	     *
@@ -6125,11 +6173,11 @@
 	        }
 	    }
 	};
-	
-	
+
+
 	// public
 	module.exports = Button;
-	
+
 	/* WEBPACK VAR INJECTION */}.call(exports, "../component-button/index.js"))
 
 /***/ },
@@ -6143,16 +6191,16 @@
 	 * @author Stanislav Kalashnik <darkpark.main@gmail.com>
 	 * @license GNU GENERAL PUBLIC LICENSE Version 3
 	 */
-	
+
 	/* eslint no-path-concat: 0 */
-	
+
 	'use strict';
-	
+
 	var Button  = __webpack_require__(/*! spa-component-button */ 27),
 	    TabItem = __webpack_require__(/*! spa-component-tab-item */ 22),
 	    Console = __webpack_require__(/*! ./../modules/console */ 23);
-	
-	
+
+
 	/**
 	 * Target tab.
 	 *
@@ -6170,24 +6218,24 @@
 	        $tagsExclude = document.createElement('input'),
 	        $codeExec    = document.createElement('input'),
 	        button, timeout;
-	
+
 	    // sanitize
 	    config = config || {};
-	
+
 	    // set default className if classList property empty or undefined
 	    config.className = 'tabTarget ' + (config.className || '');
-	
+
 	    // parent constructor call
 	    TabItem.call(this, config);
-	
+
 	    this.wamp = config.wamp;
-	
+
 	    this.targetId = config.targetId;
-	
+
 	    this.$logsFilters = document.createElement('div');
 	    this.$logsFilters.className = 'logsFilters';
 	    this.$body.appendChild(this.$logsFilters);
-	
+
 	    button = new Button({
 	        className: 'clear',
 	        events: {
@@ -6197,7 +6245,7 @@
 	        }
 	    });
 	    this.$logsFilters.appendChild(button.$node);
-	
+
 	    button = new Button({
 	        className: 'reset',
 	        events: {
@@ -6215,22 +6263,22 @@
 	        }
 	    });
 	    this.$logsFilters.appendChild(button.$node);
-	
+
 	    $logsInclude.type = 'text';
 	    $logsInclude.placeholder = 'filter text';
 	    $logsInclude.className = 'logsInclude';
 	    this.$logsFilters.appendChild($logsInclude);
-	
+
 	    $tagsInclude.type = 'text';
 	    $tagsInclude.placeholder = 'enter include tags';
 	    $tagsInclude.className = 'tagsInclude';
 	    this.$logsFilters.appendChild($tagsInclude);
-	
+
 	    $tagsExclude.type = 'text';
 	    $tagsExclude.placeholder = 'enter exclude tags';
 	    $tagsExclude.className = 'tagsExclude';
 	    this.$logsFilters.appendChild($tagsExclude);
-	
+
 	    // $logsInclude.onkeydown = $tagsInclude.onkeydown = $tagsExclude.onkeydown = function ( event ) {
 	    //     clearTimeout(timeout);
 		//
@@ -6243,7 +6291,7 @@
 		//
 	    //     event.stopPropagation();
 	    // };
-	
+
 	    this.logs = new Console({
 	        parent: this,
 	        wamp: this.wamp,
@@ -6251,18 +6299,18 @@
 	        $tagsInclude: $tagsInclude,
 	        $tagsExclude: $tagsExclude
 	    });
-	
+
 	    $codeExec.type = 'text';
 	    $codeExec.placeholder = 'type JavaScript code to execute';
 	    $codeExec.onkeydown = function ( event ) {
 	        var code;
-	
+
 	        if ( event.keyCode === 13 ) {
 	            code = $codeExec.value;
-	
+
 	            self.wamp.call('evalCode', {targetId: self.targetId, code: code}, function ( error, data ) {
 	                console.log('eval code', error, data);
-	
+
 	                if ( !error ) {
 	                    self.logs.add({
 	                        info: code + ' = ' + data.eval,
@@ -6270,7 +6318,7 @@
 	                    });
 	                }
 	            });
-	
+
 	            // prepare for a new run
 	            $codeExec.value = '';
 	        }
@@ -6280,18 +6328,18 @@
 	    this.codeExec.appendChild($codeExec);
 	    this.$body.appendChild(this.codeExec);
 	}
-	
-	
+
+
 	// inheritance
 	TabTarget.prototype = Object.create(TabItem.prototype);
 	TabTarget.prototype.constructor = TabTarget;
-	
-	
+
+
 	// TabTarget.prototype.add = function ( data ) {
 	//
 	// };
-	
-	
+
+
 	// public
 	module.exports = TabTarget;
 
@@ -6306,14 +6354,14 @@
 	/**
 	 * Handle wamp init requests.
 	 */
-	
+
 	'use strict';
-	
+
 	var app      = __webpack_require__(/*! spa-app */ 1),
 	    Wamp     = __webpack_require__(/*! spa-wamp */ 10),
 	    parallel = __webpack_require__(/*! cjs-async/parallel */ 17);
-	
-	
+
+
 	// public
 	module.exports = function ( callback ) {
 	    var fnNameList = {
@@ -6326,118 +6374,118 @@
 	        },
 	        fnHashList = [],
 	        fnBodyList = [];
-	
+
 	    app.data = {};
-	
+
 	    app.wamp = new Wamp('ws://' + (app.query.wampHost || location.hostname) + ':' + app.query.wampPort + '/client');
-	
+
 	    app.wamp.addListener('connection:open', function () {
 	        document.body.style.opacity = 1;
 	        //debug.info('wamp open ' + app.wamp.socket.url, app.wamp, {tags: ['open', 'wamp']});
 	    });
-	
+
 	    app.wamp.addListener('connection:close', function () {
 	        document.body.style.opacity = 0.2;
 	        //debug.info('wamp close ' + app.wamp.socket.url, app.wamp, {tags: ['close', 'wamp']});
 	    });
-	
+
 	    Object.keys(fnNameList).forEach(function ( id ) {
 	        // prepare async method
 	        fnBodyList.push(function ( done ) {
 	            app.wamp.call(fnNameList[id], {}, done);
 	        });
-	
+
 	        // build hash table
 	        fnHashList.push(id);
 	    });
-	
+
 	    app.wamp.once('connection:open', function () {
 	        // gather all data
 	        parallel(fnBodyList, function ( error, list ) {
 	            if ( error ) {
 	                debug.fail(error);
 	            }
-	
+
 	            // build data
 	            list.forEach(function ( data, index ) {
 	                app.data[fnHashList[index]] = data;
 	            });
-	
+
 	            callback();
 	        });
 	    });
 	};
-	
-	
+
+
 	/*
 	var app   = require('spa-app'),
 	    Wamp  = require('cjs-wamp'),
 	    parse = require('cjs-query').parse;
-	
-	
+
+
 	function wamp () {
 	    app.wamp = new Wamp(
 	        new WebSocket('ws://localhost:' + parse(document.location.search.substring(1)).port + '/client')
 	    );
-	
+
 	    // ready
 	    app.wamp.socket.onopen = function () {
 	        console.log('wamp is ready!');
 	        document.body.style.opacity = 1;
-	
+
 	        // info
-	
+
 	        app.wamp.call('getInfo', {}, function ( error, data ) {
 	            console.log('info', data);
 	        });
-	
+
 	        app.wamp.call('getMemoryUsage', {}, function ( error, data ) {
 	            console.log('memory usage', data);
 	        });
-	
+
 	        app.wamp.call('getClients', {}, function ( error, data ) {
 	            console.log('clients', data);
 	        });
-	
+
 	        /!*app.wamp.call('getTargets', {}, function ( error, data ) {
 	            console.log('targets', data);
 	        });*!/
-	
+
 	        app.wamp.call('getPlugins', {}, function ( error, data ) {
 	            console.log('plugins', data);
 	        });
-	
+
 	        // notifications
-	
+
 	        //app.wamp.addListener('eventTargetOnline', function ( event ) {
 	        //    console.log('new target', event);
 	        //});
-	
+
 	        app.wamp.addListener('eventTaskStart', function ( event ) {
 	            console.log('task start', event);
 	            window[event.id].classList.add('running');
 	        });
-	
+
 	        app.wamp.addListener('eventTaskFinish', function ( event ) {
 	            console.log('task finish', event);
 	            window[event.id].classList.remove('running');
 	        });
-	
+
 	        app.wamp.addListener('message', function ( event ) {
 	            console.log('message', event);
 	        });
-	
+
 	        app.emit('wamp:open');
 	    };
-	
+
 	    // try to reconnect in 5 seconds on disconnect
 	    app.wamp.socket.onclose = function () {
 	        document.body.style.opacity = 0.2;
 	        setTimeout(wamp, 5000);
 	    };
 	}
-	
-	
+
+
 	// public
 	module.exports = wamp;
 	*/

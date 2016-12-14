@@ -36,10 +36,16 @@ function Console ( config ) {
     console.assert(typeof this === 'object', 'must be constructed via new');
 
     if ( DEVELOP ) {
-        if ( typeof config !== 'object' ) { throw new Error(__filename + ': wrong config type'); }
+        if ( typeof config !== 'object' ) {
+            throw new Error(__filename + ': wrong config type');
+        }
         // init parameters checks
-        if ( config.className && typeof config.className !== 'string' ) { throw new Error(__filename + ': wrong or empty config.className'); }
-        if ( config.type      && Number(config.type) !== config.type  ) { throw new Error(__filename + ': config.type must be a number'); }
+        if ( 'className' in config && (!config.className || typeof config.className !== 'string') ) {
+            throw new Error(__filename + ': wrong or empty config.className');
+        }
+        if ( config.type && Number(config.type) !== config.type ) {
+            throw new Error(__filename + ': config.type must be a number');
+        }
     }
 
     // set default className if classList property empty or undefined
