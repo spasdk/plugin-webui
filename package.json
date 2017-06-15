@@ -19,7 +19,7 @@
         "test": "npm run lint"
     },
     "devDependencies": {
-        "eslint": "3.*.*",
+        "eslint": "4.*.*",
         "cjs-async": "1.*.*",
         "spa-app": "1.*.*",
         "spa-component-button": "1.*.*",
