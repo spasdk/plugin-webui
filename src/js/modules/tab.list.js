@@ -92,7 +92,7 @@ function TabList ( config ) {
     // this.wamp.addListener('eventTargetOnline', function ( target ) {
     //     //self.data[target.id].$node.classList.add('active');
     // });
-	//
+    //
     // this.wamp.addListener('eventTargetOffline', function ( target ) {
     //     //self.data[target.id].$node.classList.remove('active');
     // });
@@ -229,16 +229,16 @@ TabList.prototype.add = function ( data ) {
     // data.tags.push(data.type);
     // data.tags.forEach(function ( tag ) {
     //     var div = document.createElement('div');
-	//
+    //
     //     div.className = 'tag';
     //     div.innerText = tag;
-	//
+    //
     //     item.appendChild(div);
-	//
+    //
     //     // if ( ['info', 'warn', 'fail'].indexOf(tag) !== -1 ) {
     //     //     item.classList.add(tag);
     //     // }
-	//
+    //
     //     div.addEventListener('click', function ( event ) {
     //         if ( event.ctrlKey ) {
     //             self.excludeTags.push(tag);
@@ -247,14 +247,14 @@ TabList.prototype.add = function ( data ) {
     //             self.includeTags.push(tag);
     //             window.pageMainTagsInclude.value = window.pageMainTagsInclude.value + (window.pageMainTagsInclude.value ? ' ' : '') + tag;
     //         }
-	//
+    //
     //         self.applyFilter();
-	//
+    //
     //         /*var length = window.pageMainTabTargetList.children.length,
     //          index, node;
-	//
+    //
     //          console.log(tag);
-	//
+    //
     //          for ( index = 0; index < length; index++ ) {
     //          node = window.pageMainTabTargetList.children[index];
     //          //console.log(index, node);

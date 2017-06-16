@@ -100,7 +100,7 @@ function TabSystem ( config ) {
                 // $logsInclude.value = '';
                 // $tagsInclude.value = '';
                 // $tagsExclude.value = '';
-				//
+                //
                 // self.taskLogs.filterText  = '';
                 // self.taskLogs.includeTags = [];
                 // self.taskLogs.excludeTags = [];
@@ -128,14 +128,14 @@ function TabSystem ( config ) {
 
     // $logsInclude.onkeydown = $tagsInclude.onkeydown = $tagsExclude.onkeydown = function ( event ) {
     //     clearTimeout(timeout);
-	//
+    //
     //     timeout = setTimeout(function () {
     //         self.taskLogs.filterText  = $logsInclude.value;
     //         self.taskLogs.includeTags = $tagsInclude.value.split(' ');
     //         self.taskLogs.excludeTags = $tagsExclude.value.split(' ');
     //         self.taskLogs.applyFilter();
     //     }, 300);
-	//
+    //
     //     event.stopPropagation();
     // };
 

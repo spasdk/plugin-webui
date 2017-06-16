@@ -24,7 +24,7 @@ function addSystemTab () {
     //     value: 'system',
     //     events: {
     //         click: function () {
-	//
+    //
     //         }
     //     }
     // });
@@ -75,7 +75,7 @@ function addTargetTab ( data ) {
         //     value: 'target #' + data.id,
         //     events: {
         //         click: function () {
-		//
+        //
         //         }
         //     }
         // });
@@ -135,7 +135,7 @@ app.addListener('load', function load () {
     // window.pageMainLinkClear.addEventListener('click', function () {
     //     devConsole.clear();
     // });
-	//
+    //
     // window.pageMainLinkReset.addEventListener('click', function () {
     //     window.pageMainFilterText.value = window.pageMainTagsInclude.value = window.pageMainTagsExclude.value = '';
     //     devConsole.filterText  = '';
@@ -181,14 +181,14 @@ app.addListener('load', function load () {
     //     // This will prevent the previous task from executing
     //     // if it has been less than <MILLISECONDS>
     //     clearTimeout(timeout);
-	//
+    //
     //     timeout = setTimeout(function () {
     //         //if ( event.keyCode === 13 ) {
     //         taskList.filterText = window.pageMainTaskFilter.value;
     //         taskList.applyFilter();
     //         //}
     //     }, 300);
-	//
+    //
     //     event.stopPropagation();
     // };
 
@@ -206,146 +206,146 @@ app.addListener('load', function load () {
     //     event.stopPropagation();
     // };
 
-    //app.wamp.once('connection:open', function () {
-        // info
-
-        // app.wamp.call('getConnectionInfo', {}, function ( error, data ) {
-        //     console.log('connection info', data);
-        // });
-		//
-        // app.wamp.call('getProjectInfo', {}, function ( error, data ) {
-        //     console.log('project info', data);
-        //     window.pageMainHeaderLink.href = window.pageMainHeaderLink.innerText = 'http://' + data.host + ':8080/app/develop.html?wampPort=' + app.query.wampPort;
-        // });
-		//
-        // app.wamp.call('getMemoryUsage', {}, function ( error, data ) {
-        //     //console.log('memory usage', data);
-        //     debug.info('memory usage', data, {tags: ['memory']});
-        // });
-		//
-        // app.wamp.call('getClients', {}, function ( error, data ) {
-        //     console.log('clients', data);
-        // });
-		//
-        // app.wamp.call('getTargets', {}, function ( error, data ) {
-        //     console.log('targets', data);
-		//
-        //     Object.keys(data).forEach(function ( id ) {
-        //         addTargetTab({id: id});
-        //     });
-        // });
-		//
-        // app.wamp.call('getPlugins', {}, function ( error, data ) {
-        //     console.log('plugins', data);
-        // });
-
-        // notifications
-
-        //app.wamp.addListener('eventTargetOnline', function ( event ) {
-        //    console.log('new target', event);
-        //});
-
-        // app.wamp.addListener('eventTaskStart', function ( event ) {
-        //     console.log('task start', event);
-        //     window[event.id].classList.add('running');
-        // });
-		//
-        // app.wamp.addListener('eventTaskFinish', function ( event ) {
-        //     console.log('task finish', event);
-        //     window[event.id].classList.remove('running');
-        // });
-
-        //app.wamp.addListener('eventTargetMessage', function ( event ) {
-            //console.log(event);
-
-            // if ( event.tags.indexOf('target') === -1 ) {
-            //     taskLogs.add(event);
-            // } else {
-            //     devConsole.add(event);
-            // }
-
-
-            /*var item = document.createElement('div'),
-                info = document.createElement('div');
-
-            item.className = 'item';
-
-            event.tags = event.tags || [];
-            event.tags.push(event.type);
-            event.tags.forEach(function ( tag ) {
-                var div = document.createElement('div');
-
-                div.className = 'tag';
-                div.innerText = tag;
-
-                item.appendChild(div);
-
-                // if ( ['info', 'warn', 'fail'].indexOf(tag) !== -1 ) {
-                //     item.classList.add(tag);
-                // }
-
-                div.addEventListener('click', function ( event ) {
-                    if ( event.ctrlKey ) {
-                        window.pageMainTagsExclude.value = window.pageMainTagsExclude.value + (window.pageMainTagsExclude.value ? ' ' : '') + tag;
-                    } else {
-                        window.pageMainTagsInclude.value = window.pageMainTagsInclude.value + (window.pageMainTagsInclude.value ? ' ' : '') + tag;
-                    }
-
-                    applyFilter();
-
-                    /!*var length = window.pageMainTabTargetList.children.length,
-                        index, node;
-
-                    console.log(tag);
-
-                    for ( index = 0; index < length; index++ ) {
-                        node = window.pageMainTabTargetList.children[index];
-                        //console.log(index, node);
-                        node.style.display = node.tags.indexOf(tag) === -1 ? 'none' : 'block';
-                    }*!/
-                });
-            });
-            item.classList.add(event.type);
-            item.tags = event.tags;
-
-            info.className = 'info';
-            console.log(event.data);
-            info.innerText = getTime(event.time) + (event.data && 'link' in  event.data ? ' + ' : ' - ') +
-                event.info /!*+ (event.data ? ' :: ' + event.data : '')*!/;
-
-            item.addEventListener('click', function () {
-                //console.log(event.data.link);
-                app.wamp.call('getLinkData', {targetId: 128, linkId: event.data.link}, function ( error, data ) {
-                    console.log(error, data);
-                });
-            });
-
-            item.appendChild(info);
-
-            //console.log('target message', event);
-
-            window.pageMainTabTargetList.appendChild(item);
-
-            if ( window.pageMainTabTargetList.children.length >= 250 ) {
-                window.pageMainTabTargetList.removeChild(window.pageMainTabTargetList.firstChild);
-            }*/
-        //});
-
-        /*app.wamp.addListener('message', function ( event ) {
-            console.log('message', event);
-        });*/
-
-        // app.wamp.call('getTargets', {}, function ( error, data ) {
-        //     Object.keys(data).forEach(function ( id ) {
-        //         var target = data[id];
-		//
-        //         console.log('target', target);
-        //         /*window.pageMainHeader.appendChild(new Button({
-        //             value: 'target #' + id + ' (' + target.host + ')'
-        //         }).$node);*/
-        //     });
-        // });
-    //});
+    // app.wamp.once('connection:open', function () {
+    //     // info
+    //
+    //     app.wamp.call('getConnectionInfo', {}, function ( error, data ) {
+    //         console.log('connection info', data);
+    //     });
+    //
+    //     app.wamp.call('getProjectInfo', {}, function ( error, data ) {
+    //         console.log('project info', data);
+    //         window.pageMainHeaderLink.href = window.pageMainHeaderLink.innerText = 'http://' + data.host + ':8080/app/develop.html?wampPort=' + app.query.wampPort;
+    //     });
+    //
+    //     app.wamp.call('getMemoryUsage', {}, function ( error, data ) {
+    //         //console.log('memory usage', data);
+    //         debug.info('memory usage', data, {tags: ['memory']});
+    //     });
+    //
+    //     app.wamp.call('getClients', {}, function ( error, data ) {
+    //         console.log('clients', data);
+    //     });
+    //
+    //     app.wamp.call('getTargets', {}, function ( error, data ) {
+    //         console.log('targets', data);
+    //
+    //         Object.keys(data).forEach(function ( id ) {
+    //             addTargetTab({id: id});
+    //         });
+    //     });
+    //
+    //     app.wamp.call('getPlugins', {}, function ( error, data ) {
+    //         console.log('plugins', data);
+    //     });
+    //
+    //     // notifications
+    //
+    //     app.wamp.addListener('eventTargetOnline', function ( event ) {
+    //         console.log('new target', event);
+    //     });
+    //
+    //     app.wamp.addListener('eventTaskStart', function ( event ) {
+    //         console.log('task start', event);
+    //         window[event.id].classList.add('running');
+    //     });
+    //
+    //     app.wamp.addListener('eventTaskFinish', function ( event ) {
+    //         console.log('task finish', event);
+    //         window[event.id].classList.remove('running');
+    //     });
+    //
+    //     app.wamp.addListener('eventTargetMessage', function ( event ) {
+    //         //console.log(event);
+    //
+    //         if ( event.tags.indexOf('target') === -1 ) {
+    //             taskLogs.add(event);
+    //         } else {
+    //             devConsole.add(event);
+    //         }
+    //
+    //
+    //         /*var item = document.createElement('div'),
+    //             info = document.createElement('div');
+    //
+    //         item.className = 'item';
+    //
+    //         event.tags = event.tags || [];
+    //         event.tags.push(event.type);
+    //         event.tags.forEach(function ( tag ) {
+    //             var div = document.createElement('div');
+    //
+    //             div.className = 'tag';
+    //             div.innerText = tag;
+    //
+    //             item.appendChild(div);
+    //
+    //             // if ( ['info', 'warn', 'fail'].indexOf(tag) !== -1 ) {
+    //             //     item.classList.add(tag);
+    //             // }
+    //
+    //             div.addEventListener('click', function ( event ) {
+    //                 if ( event.ctrlKey ) {
+    //                     window.pageMainTagsExclude.value = window.pageMainTagsExclude.value + (window.pageMainTagsExclude.value ? ' ' : '') + tag;
+    //                 } else {
+    //                     window.pageMainTagsInclude.value = window.pageMainTagsInclude.value + (window.pageMainTagsInclude.value ? ' ' : '') + tag;
+    //                 }
+    //
+    //                 applyFilter();
+    //
+    //                 /!*var length = window.pageMainTabTargetList.children.length,
+    //                     index, node;
+    //
+    //                 console.log(tag);
+    //
+    //                 for ( index = 0; index < length; index++ ) {
+    //                     node = window.pageMainTabTargetList.children[index];
+    //                     //console.log(index, node);
+    //                     node.style.display = node.tags.indexOf(tag) === -1 ? 'none' : 'block';
+    //                 }*!/
+    //             });
+    //         });
+    //         item.classList.add(event.type);
+    //         item.tags = event.tags;
+    //
+    //         info.className = 'info';
+    //         console.log(event.data);
+    //         info.innerText = getTime(event.time) + (event.data && 'link' in  event.data ? ' + ' : ' - ') +
+    //             event.info /!*+ (event.data ? ' :: ' + event.data : '')*!/;
+    //
+    //         item.addEventListener('click', function () {
+    //             //console.log(event.data.link);
+    //             app.wamp.call('getLinkData', {targetId: 128, linkId: event.data.link}, function ( error, data ) {
+    //                 console.log(error, data);
+    //             });
+    //         });
+    //
+    //         item.appendChild(info);
+    //
+    //         //console.log('target message', event);
+    //
+    //         window.pageMainTabTargetList.appendChild(item);
+    //
+    //         if ( window.pageMainTabTargetList.children.length >= 250 ) {
+    //             window.pageMainTabTargetList.removeChild(window.pageMainTabTargetList.firstChild);
+    //         }*/
+    //     });
+    //
+    //     /*app.wamp.addListener('message', function ( event ) {
+    //         console.log('message', event);
+    //     });*/
+    //
+    //     app.wamp.call('getTargets', {}, function ( error, data ) {
+    //         Object.keys(data).forEach(function ( id ) {
+    //             var target = data[id];
+    //
+    //             console.log('target', target);
+    //             /*window.pageMainHeader.appendChild(new Button({
+    //                 value: 'target #' + id + ' (' + target.host + ')'
+    //             }).$node);*/
+    //         });
+    //     });
+    // });
 
     app.wamp.addListener('eventTargetOffline', function ( target ) {
         console.log('remove target', target);

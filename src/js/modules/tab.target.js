@@ -65,7 +65,7 @@ function TabTarget ( config ) {
                 // $logsInclude.value = '';
                 // $tagsInclude.value = '';
                 // $tagsExclude.value = '';
-				//
+                //
                 // self.logs.filterText  = '';
                 // self.logs.includeTags = [];
                 // self.logs.excludeTags = [];
@@ -93,14 +93,14 @@ function TabTarget ( config ) {
 
     // $logsInclude.onkeydown = $tagsInclude.onkeydown = $tagsExclude.onkeydown = function ( event ) {
     //     clearTimeout(timeout);
-	//
+    //
     //     timeout = setTimeout(function () {
     //         self.logs.filterText  = $logsInclude.value;
     //         self.logs.includeTags = $tagsInclude.value.split(' ');
     //         self.logs.excludeTags = $tagsExclude.value.split(' ');
     //         self.logs.applyFilter();
     //     }, 300);
-	//
+    //
     //     event.stopPropagation();
     // };
 
