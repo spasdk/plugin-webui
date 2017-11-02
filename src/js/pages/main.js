@@ -13,7 +13,7 @@ var app       = require('spa-app'),
     TabList   = require('./../modules/tab.list'),
     TabSystem = require('./../modules/tab.system'),
     TabTarget = require('./../modules/tab.target'),
-    page      = new Page({$node: window.pageMain}),
+    page      = new Page({$node: document.getElementById('pageMain')}),
     targets   = {},
     /*taskList, taskLogs, devConsole, */tabList,
     tabSystem;
